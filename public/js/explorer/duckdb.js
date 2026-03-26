@@ -52,11 +52,15 @@ export async function initDuckDB(user) {
     try {
       const url = await storageRef.child(f.path).getDownloadURL();
       const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status} ${resp.statusText || ''}`.trim());
+      }
       const buffer = await resp.arrayBuffer();
       await _db.registerFileBuffer(`${f.table}.parquet`, new Uint8Array(buffer));
       await _conn.query(`CREATE TABLE ${f.table} AS SELECT * FROM '${f.table}.parquet'`);
     } catch (e) {
-      const msg = `Skipping ${f.path}: ${e.message}`;
+      const detail = e?.code ? `${e.code}: ${e.message}` : e?.message || String(e);
+      const msg = `Skipping ${f.path}: ${detail}`;
       console.warn(msg);
       warnings.push(msg);
     }

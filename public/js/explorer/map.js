@@ -92,20 +92,25 @@ function formatMetricVal(col, v) {
  * @param {import('/js/explorer/duckdb.js').runQuery} run
  */
 async function loadMarketRows(conn) {
-  const result = await runQuery(
-    conn,
-    `SELECT ms.*, COALESCE(p.cnt, 0)::BIGINT AS deal_count
-     FROM market_scores ms
-     LEFT JOIN (
-       SELECT fips, COUNT(*)::BIGINT AS cnt FROM properties GROUP BY fips
-     ) p ON CAST(ms.fips AS VARCHAR) = CAST(p.fips AS VARCHAR)`,
-  );
-  const byFips = new Map();
-  for (const row of result.toArray()) {
-    const f = normalizeFips(row.fips);
-    if (f) byFips.set(f, row);
+  try {
+    const result = await runQuery(
+      conn,
+      `SELECT ms.*, COALESCE(p.cnt, 0)::BIGINT AS deal_count
+       FROM market_scores ms
+       LEFT JOIN (
+         SELECT fips, COUNT(*)::BIGINT AS cnt FROM properties GROUP BY fips
+       ) p ON CAST(ms.fips AS VARCHAR) = CAST(p.fips AS VARCHAR)`,
+    );
+    const byFips = new Map();
+    for (const row of result.toArray()) {
+      const f = normalizeFips(row.fips);
+      if (f) byFips.set(f, row);
+    }
+    return byFips;
+  } catch (e) {
+    console.warn('market_scores query failed (missing Parquet or table):', e);
+    return new Map();
   }
-  return byFips;
 }
 
 function passesFilter(row, filterKey) {
@@ -171,11 +176,14 @@ class ExplorerMap {
 
     this.populateMetricSelect();
     this.map = L.map(el, { scrollWheelZoom: true }).setView([39.8283, -98.5795], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-      subdomains: 'abcd',
-      maxZoom: 19,
-    }).addTo(this.map);
+    // Single-host Carto dark (Fastly) — avoids {s}.basemaps.cartocdn.com rotation issues that can leave grey tiles.
+    L.tileLayer(
+      'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        maxZoom: 19,
+      },
+    ).addTo(this.map);
 
     this.byFips = await loadMarketRows(this.conn);
 
@@ -289,7 +297,7 @@ class ExplorerMap {
     });
 
     const zUrl = row
-      ? buildZillowUrl(fips, null, null, row.county || name, row.state || st)
+      ? buildZillowUrl(fips, null, null, row.county || name, row.state || '')
       : '';
 
     const ms = row?.market_score != null ? Number(row.market_score).toFixed(1) : '—';
