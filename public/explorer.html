@@ -218,7 +218,11 @@ async function initExplorer(user) {
   try {
     const DUCKDB_BUNDLES = duckdb.getJsDelivrBundles();
     const bundle = await duckdb.selectBundle(DUCKDB_BUNDLES);
-    const worker = new Worker(bundle.mainWorker);
+    // Fetch worker script as blob to avoid cross-origin Worker restriction
+    const workerResp = await fetch(bundle.mainWorker);
+    const workerBlob = new Blob([await workerResp.text()], { type: 'application/javascript' });
+    const workerUrl = URL.createObjectURL(workerBlob);
+    const worker = new Worker(workerUrl);
     const logger = new duckdb.ConsoleLogger();
     db = new duckdb.AsyncDuckDB(logger, worker);
     await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
