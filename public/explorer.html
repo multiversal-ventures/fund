@@ -145,6 +145,34 @@
         <div id="chart-states"></div>
       </div>
     </div>
+
+    <!-- Data Sources -->
+    <div class="config-panel" style="margin-top:16px;">
+      <span class="config-toggle" id="sources-toggle">&#9662; Data Sources</span>
+      <div id="sources-body" style="display:none; margin-top:16px;">
+        <table style="width:100%; font-size:12px;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:6px 12px;">Source</th>
+              <th style="text-align:left; padding:6px 12px;">Data</th>
+              <th style="text-align:left; padding:6px 12px;">Coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">Census ACS 5-Year</td><td style="padding:6px 12px;">Housing, vacancy, rent, occupancy, occupations</td><td style="padding:6px 12px; color:#64748b;">3,222 counties · 2021-2023</td></tr>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">HUD FHA Multifamily</td><td style="padding:6px 12px;">Insured properties, units, mortgage maturity, Section 8</td><td style="padding:6px 12px; color:#64748b;">17,484 properties</td></tr>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">USPS Vacancy</td><td style="padding:6px 12px;">Quarterly residential vacancy rates</td><td style="padding:6px 12px; color:#64748b;">County-level</td></tr>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">BLS OEWS</td><td style="padding:6px 12px;">Employment, wages by metro/occupation</td><td style="padding:6px 12px; color:#64748b;">Annual</td></tr>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">Frey &amp; Osborne (2017)</td><td style="padding:6px 12px;">Automation probability by occupation</td><td style="padding:6px 12px; color:#64748b;">702 SOC codes</td></tr>
+            <tr><td style="padding:6px 12px; color:#60a5fa;">Eloundou et al. (2023)</td><td style="padding:6px 12px;">LLM/AI exposure by occupation</td><td style="padding:6px 12px; color:#64748b;">~800 occupations</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px; padding:0 12px;">
+          <h3 style="font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Scoring Methodology</h3>
+          <p style="font-size:12px; color:#94a3b8; line-height:1.6;">Properties scored on 100-point scale: mortgage maturity proximity, vacancy trend (tightening markets), rent-to-owner-cost ratio, area vacancy optimality, population growth, and workforce automation resilience. Workforce resilience combines Frey &amp; Osborne physical automation risk with Eloundou et al. AI/LLM exposure into a per-county index using Census B24010 occupation data.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="footer">
@@ -186,6 +214,11 @@ document.getElementById('sign-in-btn').addEventListener('click', () => {
 
 document.getElementById('config-toggle').addEventListener('click', () => {
   document.getElementById('config-body').classList.toggle('open');
+});
+
+document.getElementById('sources-toggle').addEventListener('click', () => {
+  const body = document.getElementById('sources-body');
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
 });
 
 const weightInputs = ['w-maturity','w-vacancy','w-rent','w-area','w-pop'];
