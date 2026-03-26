@@ -9,6 +9,9 @@ __pycache__/
 .venv/
 scripts/.venv/
 
+# Secrets
+.env
+
 # Local data output
 data/
 
