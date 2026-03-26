@@ -93,3 +93,171 @@ tr:hover td { background:rgba(96,165,250,0.05); }
 @keyframes spin { to { transform:rotate(360deg); } }
 .footer { text-align:center; padding:20px; color:#475569; font-size:11px; }
 .view-toggle.active { background:#60a5fa !important; color:#0f172a !important; border-color:#60a5fa !important; }
+
+/* Task 3 — Dashboard: scenario bar, How We Score, stats, top lists */
+.scenario-bar {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:10px 0 16px;
+  margin-bottom:8px;
+  border-bottom:1px solid #1e293b;
+}
+.scenario-bar-label {
+  font-size:10px;
+  color:#64748b;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:600;
+}
+.scenario-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.scenario-pill {
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  cursor:pointer;
+  border:1px solid #334155;
+  background:transparent;
+  color:#94a3b8;
+  font-family:inherit;
+}
+.scenario-pill:hover { border-color:#60a5fa; color:#60a5fa; }
+.scenario-pill-active {
+  background:linear-gradient(135deg,#60a5fa,#a78bfa);
+  color:#0f172a!important;
+  border-color:transparent;
+}
+
+.how-we-score {
+  background:linear-gradient(135deg,rgba(96,165,250,0.06),rgba(167,139,250,0.06));
+  border:1px solid #1e293b;
+  border-radius:12px;
+  padding:12px 16px 16px;
+  margin-bottom:20px;
+}
+.how-we-score-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.how-we-score-title { font-size:15px; font-weight:600; color:#f1f5f9; }
+.how-scenario-pill {
+  font-size:11px;
+  color:#a78bfa;
+  background:rgba(167,139,250,0.15);
+  padding:3px 10px;
+  border-radius:12px;
+  font-weight:600;
+}
+.how-we-score-grid {
+  display:grid;
+  grid-template-columns:1fr 32px 1fr;
+  gap:8px;
+  align-items:start;
+}
+@media (max-width:900px) {
+  .how-we-score-grid { grid-template-columns:1fr; }
+  .how-merge { display:none; }
+}
+.how-layer {
+  background:#111827;
+  border:1px solid #1e293b;
+  border-radius:10px;
+  padding:12px 14px;
+}
+.how-layer-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.how-layer-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+.how-layer-title.market { color:#60a5fa; }
+.how-layer-title.deal { color:#a78bfa; }
+.how-layer-pct { font-size:20px; font-weight:700; color:#f1f5f9; }
+.how-layer-sub { font-size:11px; color:#64748b; margin-bottom:12px; }
+.how-merge { display:flex; align-items:center; justify-content:center; min-height:120px; font-size:1.25rem; color:#334155; }
+.how-weight-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.how-weight-label { font-size:11px; color:#94a3b8; width:130px; flex-shrink:0; }
+.how-weight-bar-wrap { flex:1; height:6px; background:#1e293b; border-radius:3px; overflow:hidden; }
+.how-weight-bar { height:100%; border-radius:3px; max-width:100%; }
+.how-weight-bar-market { background:linear-gradient(90deg,#60a5fa,#93c5fd); }
+.how-weight-bar-deal { background:linear-gradient(90deg,#a78bfa,#c4b5fd); }
+.how-weight-val { font-size:11px; color:#64748b; width:28px; text-align:right; flex-shrink:0; }
+.how-weight-explain { font-size:10px; color:#475569; margin:-2px 0 8px 138px; line-height:1.4; }
+.how-formula {
+  margin-top:14px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:12px;
+  color:#94a3b8;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+}
+.how-formula strong { color:#f1f5f9; }
+.how-formula-eq { margin-left:auto; font-family:monospace; font-size:11px; color:#34d399; }
+
+.dashboard-stat-row {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+@media (max-width:900px) {
+  .dashboard-stat-row { grid-template-columns:repeat(2,1fr); }
+}
+.stat-card {
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:10px;
+  padding:14px 16px;
+}
+.stat-card-label { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.stat-card-value { font-size:22px; font-weight:700; color:#f1f5f9; }
+.stat-card-value.stat-green { color:#34d399; }
+.stat-card-value.stat-blue { color:#60a5fa; }
+.stat-card-value.stat-purple { color:#a78bfa; }
+.stat-card-value.stat-pipeline { font-size:15px; }
+.stat-card-sub { font-size:11px; color:#64748b; margin-top:4px; }
+
+.dashboard-section { margin-bottom:20px; }
+.dashboard-section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.dashboard-section-title { font-size:14px; font-weight:600; color:#f1f5f9; }
+.dashboard-empty { color:#64748b; font-size:13px; padding:12px 0; }
+
+.dashboard-market-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:700px) { .dashboard-market-grid { grid-template-columns:1fr; } }
+.dashboard-market-card {
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:10px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.dashboard-market-rank {
+  width:28px; height:28px; border-radius:50%;
+  background:rgba(96,165,250,0.15); color:#60a5fa;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; flex-shrink:0;
+}
+.dashboard-market-name { font-size:13px; font-weight:600; color:#f1f5f9; }
+.dashboard-market-meta { font-size:11px; color:#64748b; margin-top:2px; }
+.dashboard-market-score { text-align:right; }
+.dashboard-market-score-label { font-size:9px; color:#64748b; text-transform:uppercase; }
+
+.dashboard-deal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media (max-width:1000px) { .dashboard-deal-grid { grid-template-columns:1fr; } }
+.dashboard-deal-card {
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:10px;
+  padding:14px;
+}
+.dashboard-deal-title { font-size:13px; font-weight:600; color:#f1f5f9; }
+.dashboard-deal-loc { font-size:11px; color:#64748b; margin-top:2px; }
+.dashboard-deal-stats {
+  display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;
+}
+.dashboard-deal-stats > div { text-align:center; min-width:52px; }
+.dashboard-deal-stat-label { font-size:9px; color:#64748b; text-transform:uppercase; margin-top:2px; }
+.dashboard-deal-z { margin-top:10px; }
+.dashboard-muted { color:#475569; font-size:12px; }

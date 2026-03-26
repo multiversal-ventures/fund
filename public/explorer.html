@@ -52,6 +52,58 @@
     </div>
 
     <div x-show="activeTab === 'dashboard'" x-cloak class="container">
+
+    <div class="scenario-bar">
+      <span class="scenario-bar-label">Scoring</span>
+      <div class="scenario-pills">
+        <button type="button" class="scenario-pill scenario-pill-active" data-scenario-key="balanced">Balanced</button>
+        <button type="button" class="scenario-pill" data-scenario-key="investor">Investor</button>
+        <button type="button" class="scenario-pill" data-scenario-key="ops">Ops</button>
+        <button type="button" class="scenario-pill" data-scenario-key="durable">Durable Tenants</button>
+      </div>
+    </div>
+
+    <div id="how-we-score" class="how-we-score">
+      <div id="how-we-score-body"></div>
+    </div>
+
+    <div class="dashboard-stat-row">
+      <div class="stat-card">
+        <div class="stat-card-label">Top market score</div>
+        <div id="dashboard-stat-top-ms" class="stat-card-value stat-green">—</div>
+        <div id="dashboard-stat-top-ms-sub" class="stat-card-sub">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Markets screened</div>
+        <div id="dashboard-stat-markets" class="stat-card-value stat-blue">—</div>
+        <div class="stat-card-sub">counties in model</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Active deals</div>
+        <div id="dashboard-stat-deals" class="stat-card-value stat-purple">—</div>
+        <div class="stat-card-sub">scored properties</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Pipeline</div>
+        <div id="dashboard-stat-pipeline" class="stat-card-value stat-pipeline">—</div>
+        <div id="dashboard-stat-pipeline-sub" class="stat-card-sub">last run</div>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-section-head">
+        <h2 class="dashboard-section-title">Top markets</h2>
+      </div>
+      <div id="dashboard-top-markets"></div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="dashboard-section-head">
+        <h2 class="dashboard-section-title">Top deals</h2>
+      </div>
+      <div id="dashboard-top-deals"></div>
+    </div>
+
 <div style="background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(96,165,250,0.08)); border:1px solid #334155; border-radius:10px; padding:16px 20px; margin-bottom:16px;">
   <p style="font-size:15px; color:#f1f5f9; font-weight:600; margin-bottom:8px;">Fund Thesis</p>
   <p style="font-size:13px; color:#e2e8f0; line-height:1.6; margin-bottom:12px;">Invest in multifamily properties where renters have durable, AI-proof jobs. Two-layer scoring model:</p>
@@ -95,15 +147,6 @@
           <h3>Actions</h3>
           <button class="btn" id="save-config-btn">Save & Refresh Pipeline</button>
           <div class="status" id="run-status">Loading run status...</div>
-          <div style="margin-top:12px;">
-            <h3 style="font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Scoring Scenarios</h3>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn btn-sm btn-outline scenario" data-scenario="balanced">Balanced</button>
-              <button class="btn btn-sm btn-outline scenario" data-scenario="investor">Investor</button>
-              <button class="btn btn-sm btn-outline scenario" data-scenario="ops">Ops</button>
-              <button class="btn btn-sm btn-outline scenario" data-scenario="durable">Durable Tenants</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -260,6 +303,9 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script type="module">
 import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js';
+import { applyScenarioToDom, VIEW_QUERIES } from '/js/explorer/scenarios.js';
+import { buildZillowUrl } from '/js/explorer/zillow.js';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js';
 
 const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
 const authGate = document.getElementById('auth-gate');
@@ -290,7 +336,9 @@ firebase.auth().onAuthStateChanged(user => {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('results').style.display = 'block';
         document.getElementById('charts').style.display = 'grid';
+        setActiveScenarioBar('balanced');
         await runQuery();
+        await refreshDashboard(conn);
         loadRunStatus();
       } catch (err) {
         document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
@@ -336,19 +384,26 @@ function updateWeightTotal(ids, totalId) {
   document.getElementById(totalId).textContent = total;
   document.getElementById(totalId).style.color = total === 100 ? '#34d399' : '#f87171';
 }
-marketWeightIds.forEach(id => {
-  document.getElementById(id).addEventListener('input', () => updateWeightTotal(marketWeightIds, 'w-m-total'));
+marketWeightIds.forEach((id) => {
+  document.getElementById(id).addEventListener('input', () => {
+    updateWeightTotal(marketWeightIds, 'w-m-total');
+    updateHowWeScorePanelOnly();
+  });
 });
-dealWeightIds.forEach(id => {
-  document.getElementById(id).addEventListener('input', () => updateWeightTotal(dealWeightIds, 'w-d-total'));
+dealWeightIds.forEach((id) => {
+  document.getElementById(id).addEventListener('input', () => {
+    updateWeightTotal(dealWeightIds, 'w-d-total');
+    updateHowWeScorePanelOnly();
+  });
 });
 // Keep split in sync
-['w-split-market','w-split-deal'].forEach(id => {
+['w-split-market', 'w-split-deal'].forEach((id) => {
   document.getElementById(id).addEventListener('input', () => {
     const m = parseInt(document.getElementById('w-split-market').value || 0);
     const d = parseInt(document.getElementById('w-split-deal').value || 0);
     const el = document.getElementById(id);
-    el.style.borderColor = (m + d === 100) ? '#334155' : '#f87171';
+    el.style.borderColor = m + d === 100 ? '#334155' : '#f87171';
+    updateHowWeScorePanelOnly();
   });
 });
 
@@ -406,40 +461,20 @@ document.querySelectorAll('.preset').forEach(btn => {
   });
 });
 
-const SCENARIOS = {
-  balanced: {m:{vacancy:20,rentgrowth:15,rent:15,resilience:20,hhi:10,pop:10,supply:10}, d:{maturity:40,units:20,sec8:20,vacancy:20}, split:{market:60,deal:40}},
-  investor: {m:{vacancy:15,rentgrowth:10,rent:10,resilience:30,hhi:15,pop:10,supply:10}, d:{maturity:40,units:20,sec8:20,vacancy:20}, split:{market:80,deal:20}},
-  ops: {m:{vacancy:20,rentgrowth:15,rent:15,resilience:20,hhi:10,pop:10,supply:10}, d:{maturity:50,units:15,sec8:25,vacancy:10}, split:{market:30,deal:70}},
-  durable: {m:{vacancy:15,rentgrowth:25,rent:10,resilience:30,hhi:10,pop:10,supply:0}, d:{maturity:30,units:20,sec8:30,vacancy:20}, split:{market:70,deal:30}},
-};
-
-document.querySelectorAll('.scenario').forEach(btn => {
+document.querySelectorAll('.scenario-pill').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const s = SCENARIOS[btn.dataset.scenario];
-    if (!s) return;
-    document.getElementById('w-m-vacancy').value = s.m.vacancy;
-    document.getElementById('w-m-rentgrowth').value = s.m.rentgrowth;
-    document.getElementById('w-m-rent').value = s.m.rent;
-    document.getElementById('w-m-resilience').value = s.m.resilience;
-    document.getElementById('w-m-hhi').value = s.m.hhi;
-    document.getElementById('w-m-pop').value = s.m.pop;
-    document.getElementById('w-m-supply').value = s.m.supply;
+    const key = btn.dataset.scenarioKey;
+    if (!key) return;
+    applyScenarioToDom(key);
+    setActiveScenarioBar(key);
     updateWeightTotal(marketWeightIds, 'w-m-total');
-    document.getElementById('w-d-maturity').value = s.d.maturity;
-    document.getElementById('w-d-units').value = s.d.units;
-    document.getElementById('w-d-sec8').value = s.d.sec8;
-    document.getElementById('w-d-vacancy').value = s.d.vacancy;
     updateWeightTotal(dealWeightIds, 'w-d-total');
-    document.getElementById('w-split-market').value = s.split.market;
-    document.getElementById('w-split-deal').value = s.split.deal;
+    (async () => {
+      const c = getConn();
+      if (c) await refreshDashboard(c);
+    })();
   });
 });
-
-const VIEW_QUERIES = {
-  combined: "SELECT * FROM properties ORDER BY total_score DESC LIMIT 50",
-  investor: "SELECT fips, county, state, market_score, resilience_index, rent_growth, vacancy_trend, employment_concentration, supply_pressure FROM market_scores ORDER BY market_score DESC LIMIT 50",
-  ops: "SELECT fips, property_name, city, state, deal_score, maturity_years, units, section8, market_score FROM properties WHERE market_score >= 40 ORDER BY deal_score DESC LIMIT 50",
-};
 
 document.querySelectorAll('.view-toggle').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -457,38 +492,6 @@ document.querySelectorAll('.view-toggle').forEach(btn => {
 });
 
 let lastResult = null;
-
-// County FIPS → Zillow map bounds for live link generation
-const COUNTY_BOUNDS = {
-  "06067":{s:38.02,n:38.74,w:-121.86,e:-120.99},"06065":{s:33.42,n:34.08,w:-117.67,e:-114.43},
-  "06071":{s:34.03,n:35.81,w:-117.65,e:-114.13},"06019":{s:36.39,n:37.27,w:-120.32,e:-118.36},
-  "06029":{s:34.79,n:35.79,w:-119.86,e:-117.63},"12105":{s:27.64,n:28.26,w:-82.11,e:-81.19},
-  "12083":{s:28.85,n:29.48,w:-82.66,e:-81.43},"12101":{s:28.13,n:28.52,w:-82.90,e:-82.05},
-  "12115":{s:26.94,n:27.46,w:-82.85,e:-82.02},"12097":{s:27.82,n:28.31,w:-81.66,e:-80.85},
-  "04013":{s:32.51,n:34.04,w:-113.33,e:-111.04},
-};
-
-function buildZillowUrl(fips, lat, lng, county, state) {
-  // If we have precise coordinates, use map bounds
-  if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
-    const r = 0.01;
-    const bounds = {south:lat-r, north:lat+r, west:lng-r, east:lng+r};
-    return `https://www.zillow.com/homes/for_sale/?searchQueryState=${encodeURIComponent(JSON.stringify({pagination:{},isMapVisible:true,mapBounds:bounds,filterState:{sort:{value:"globalrelevanceex"}},isListVisible:true,mapZoom:16}))}`;
-  }
-  // If we have known county bounds, use them
-  if (COUNTY_BOUNDS[fips]) {
-    const b = COUNTY_BOUNDS[fips];
-    const bounds = {south:b.s, north:b.n, west:b.w, east:b.e};
-    return `https://www.zillow.com/homes/for_sale/?searchQueryState=${encodeURIComponent(JSON.stringify({pagination:{},isMapVisible:true,mapBounds:bounds,filterState:{sort:{value:"globalrelevanceex"}},isListVisible:true,mapZoom:11}))}`;
-  }
-  // Fallback: use county name + state as a Zillow text search
-  if (county && state) {
-    const clean = String(county).replace(/ County$/i, '').replace(/ Parish$/i, '').replace(/ Municipio$/i, '').trim();
-    return `https://www.zillow.com/homes/${encodeURIComponent(clean + '-' + state)}/`;
-  }
-  // No useful link possible without county name
-  return '';
-}
 
 function renderResults(result) {
   lastResult = result;
@@ -638,9 +641,18 @@ async function loadRunStatus() {
     const meta = await resp.json();
     const dt = new Date(meta.timestamp).toLocaleDateString();
     const fileCount = meta.files?.length || 0;
-    document.getElementById('run-status').textContent = `Last run: ${dt} · ${fileCount} files`;
+    const line = `Last run: ${dt} · ${fileCount} files`;
+    document.getElementById('run-status').textContent = line;
+    const pipe = document.getElementById('dashboard-stat-pipeline');
+    const pipeSub = document.getElementById('dashboard-stat-pipeline-sub');
+    if (pipe) pipe.textContent = dt;
+    if (pipeSub) pipeSub.textContent = `${fileCount} files`;
   } catch (e) {
     document.getElementById('run-status').textContent = 'No pipeline runs yet.';
+    const pipe = document.getElementById('dashboard-stat-pipeline');
+    const pipeSub = document.getElementById('dashboard-stat-pipeline-sub');
+    if (pipe) pipe.textContent = '—';
+    if (pipeSub) pipeSub.textContent = 'No runs yet';
   }
 }
 </script>
