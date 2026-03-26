@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bump explorer-asset-version when changing JS/CSS so clients pull new files (used below + window.__explorerAssetV). -->
-<meta name="explorer-asset-version" content="20260326-3">
+<meta name="explorer-asset-version" content="20260326-4">
 <title>Fund Explorer — Multiversal Ventures</title>
 <script>
 (function () {
@@ -358,23 +358,23 @@
   </div>
 </div>
 
-<script src="/js/explorer/app.js?v=20260326-3"></script>
+<script src="/js/explorer/app.js?v=20260326-4"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <!-- Module specifiers must be string literals — bump ?v= with meta name="explorer-asset-version" -->
 <script type="module">
-import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260326-3';
-import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260326-3';
-import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260326-3';
-import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260326-3';
-import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260326-3';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260326-4';
+import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260326-4';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260326-4';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260326-4';
+import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260326-4';
 import {
   renderResultsTable,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
-} from '/js/explorer/results.js?v=20260326-3';
-import { renderCharts } from '/js/explorer/charts.js?v=20260326-3';
+} from '/js/explorer/results.js?v=20260326-4';
+import { renderCharts } from '/js/explorer/charts.js?v=20260326-4';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();

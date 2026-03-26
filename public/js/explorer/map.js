@@ -5,22 +5,32 @@
  * Feature `id` is 5-digit county FIPS (e.g. "01001"); join key matches `market_scores.fips`
  * after `normalizeFips()` (pad to 5 digits).
  */
-import { runQuery } from '/js/explorer/duckdb.js?v=20260326-3';
-import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260326-3';
-import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260326-3';
+import { runQuery } from '/js/explorer/duckdb.js?v=20260326-4';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260326-4';
+import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260326-4';
 
 /** CDN GeoJSON — Plotly public datasets (same file referenced in explorer plan). */
 export const COUNTY_GEOJSON_URL =
   'https://cdn.jsdelivr.net/gh/plotly/datasets@master/geojson-counties-fips.json';
 
 /**
- * Leaflet bounds [[south, west], [north, east]] for the contiguous US (lower 48).
- * The Plotly county file also includes AK, HI, PR, etc.; using its full bbox skews the default view.
+ * Contiguous US (lower 48). Use L.latLngBounds(lat, lng) — not [lng, lat].
+ * Plotly county GeoJSON includes AK/HI/PR; do not use geoLayer.getBounds() for default framing.
  */
-const US_CONTIGUOUS_BOUNDS = [
-  [24.2, -124.85],
-  [49.6, -66.85],
-];
+const US_CENTER = [39.8283, -98.5795];
+const US_ZOOM = 4;
+
+function usContiguousBounds(Lref) {
+  return Lref.latLngBounds(
+    Lref.latLng(24.2, -124.85),
+    Lref.latLng(49.6, -66.85),
+  );
+}
+
+/** Heuristic: map ended up over UK / Atlantic (bad fit when container had 0×0 size). */
+function centerLooksLikeEurope(lat, lng) {
+  return lat > 48 && lat < 60 && lng > -15 && lng < 15;
+}
 
 const MKEY_TO_COL = {
   vacancy: 'vacancy_trend',
@@ -202,8 +212,11 @@ class ExplorerMap {
     if (!el || typeof L === 'undefined') return;
 
     this.populateMetricSelect();
-    // Center on contiguous US before tiles/geo load (matches fitBounds below).
-    this.map = L.map(el, { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
+    this.map = L.map(el, {
+      scrollWheelZoom: true,
+      center: US_CENTER,
+      zoom: US_ZOOM,
+    });
     // Single-host Carto dark (Fastly) — avoids {s}.basemaps.cartocdn.com rotation issues that can leave grey tiles.
     L.tileLayer(
       'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
@@ -239,11 +252,7 @@ class ExplorerMap {
       onEachFeature: (feat, layer) => this._onEachFeature(feat, layer),
     }).addTo(this.map);
 
-    try {
-      this.map.fitBounds(US_CONTIGUOUS_BOUNDS, { padding: [16, 16] });
-    } catch (_) {
-      /* empty */
-    }
+    this._fitContiguousUS(L);
 
     document.getElementById('map-color-metric')?.addEventListener('change', (e) => {
       this._colorMetric = e.target.value;
@@ -267,6 +276,37 @@ class ExplorerMap {
     sel.innerHTML = COLOR_METRICS.map(
       (m) => `<option value="${esc(m.value)}">${esc(m.label)}</option>`,
     ).join('');
+  }
+
+  /**
+   * Fit lower-48 bounds after layout is valid. When the map initializes inside a hidden tab,
+   * fitBounds with a 0×0 container can leave the view over Europe; we invalidateSize + retry.
+   * @param {typeof import('leaflet')} Lref
+   */
+  _fitContiguousUS(Lref) {
+    if (!this.map) return;
+    const bounds = usContiguousBounds(Lref);
+    const run = () => {
+      if (!this.map) return;
+      try {
+        this.map.invalidateSize();
+        this.map.fitBounds(bounds, { padding: [16, 16], animate: false });
+        const c = this.map.getCenter();
+        if (centerLooksLikeEurope(c.lat, c.lng)) {
+          this.map.setView(US_CENTER, US_ZOOM, { animate: false });
+        }
+      } catch (_) {
+        try {
+          this.map.setView(US_CENTER, US_ZOOM, { animate: false });
+        } catch (_) {
+          /* empty */
+        }
+      }
+    };
+    run();
+    requestAnimationFrame(run);
+    setTimeout(run, 50);
+    setTimeout(run, 200);
   }
 
   _metricValue(row, metric) {
@@ -461,7 +501,7 @@ ${zUrl ? `<br/><a href="${esc(zUrl)}" target="_blank" rel="noopener">View listin
         style: (feat) => this._styleForFeature(feat),
         onEachFeature: (feat, layer) => this._onEachFeature(feat, layer),
       }).addTo(this.map);
-      this.map.fitBounds(US_CONTIGUOUS_BOUNDS, { padding: [16, 16] });
+      this._fitContiguousUS(L);
       this._restyleAll();
       this._updateLegend();
     } catch (e) {
@@ -475,9 +515,14 @@ ${zUrl ? `<br/><a href="${esc(zUrl)}" target="_blank" rel="noopener">View listin
   }
 
   invalidateSize() {
-    if (this.map) {
-      setTimeout(() => this.map.invalidateSize(), 50);
-    }
+    if (!this.map || typeof L === 'undefined') return;
+    setTimeout(() => {
+      this.map.invalidateSize();
+      const c = this.map.getCenter();
+      if (centerLooksLikeEurope(c.lat, c.lng)) {
+        this._fitContiguousUS(L);
+      }
+    }, 50);
   }
 }
 
