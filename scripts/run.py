@@ -6,7 +6,7 @@ import click
 from pathlib import Path
 
 from config_loader import load_config
-from pull_census import pull_census
+from pull_census import pull_census, fetch_occupation_data
 from pull_bls import pull_bls
 from pull_hud import pull_hud
 from score import run_scoring

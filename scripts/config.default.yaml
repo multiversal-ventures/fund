@@ -34,6 +34,7 @@ scoring_weights:
   rent_cost_ratio: 30
   area_vacancy: 10
   pop_growth: 15
+  workforce_resilience: 0  # AI-resistant workforce index (enable by setting > 0, reduce others to keep total 100)
 
 census:
   years: [2021, 2022, 2023]
@@ -47,3 +48,4 @@ census:
     - B25077
     - B25105
     - B01003
+    - B24010  # Occupation by sex (pulled separately for workforce resilience)

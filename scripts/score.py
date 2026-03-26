@@ -23,6 +23,7 @@ def score_properties(
     hud_fha: pd.DataFrame,
     weights: dict,
     usps_vacancy: pd.DataFrame = None,
+    occupation_data: pd.DataFrame = None,
 ) -> pd.DataFrame:
     # Compute vacancy trend
     trend = census_latest[["fips", "vacancy_rate", "pop"]].merge(
@@ -82,10 +83,26 @@ def score_properties(
         higher_is_better=True,
     )
 
+    # Optional: AI-resistant workforce resilience score
+    resilience_weight = weights.get("workforce_resilience", 0)
+    if resilience_weight > 0 and occupation_data is not None and "resilience_index" in occupation_data.columns:
+        df = df.merge(
+            occupation_data[["fips", "resilience_index"]],
+            on="fips",
+            how="left",
+        )
+        df["score_resilience"] = normalize_signal(
+            df["resilience_index"].fillna(0),
+            resilience_weight,
+            higher_is_better=True,
+        )
+    else:
+        df["score_resilience"] = 0.0
+
     df["total_score"] = (
         df["score_maturity"].fillna(0) + df["score_vacancy"].fillna(0) +
         df["score_rent_cost"].fillna(0) + df["score_area_vac"].fillna(0) +
-        df["score_pop"].fillna(0)
+        df["score_pop"].fillna(0) + df["score_resilience"].fillna(0)
     ).round(1)
 
     df["signal_rank"] = df["total_score"].rank(ascending=False, method="min").astype("Int64")
@@ -107,11 +124,14 @@ def run_scoring(data_dir: str, config: dict, output_path: str = None) -> pd.Data
     usps_path = Path(data_dir) / "hud" / "usps_vacancy.parquet"
     usps = pd.read_parquet(usps_path) if usps_path.exists() else None
 
+    occ_path = Path(data_dir) / "census" / f"occupations_{latest_year}.parquet"
+    occupation_data = pd.read_parquet(occ_path) if occ_path.exists() else None
+
     target_fips = config.get("target_markets", [])
     if target_fips:
         hud_fha = hud_fha[hud_fha["fips"].isin(target_fips)]
 
-    df = score_properties(census_latest, census_earliest, hud_fha, config["scoring_weights"], usps)
+    df = score_properties(census_latest, census_earliest, hud_fha, config["scoring_weights"], usps, occupation_data)
 
     if output_path:
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)

@@ -7,6 +7,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from pathlib import Path
 
+from occupation_resilience import B24010_VARIABLES, compute_resilience_index
+
 CENSUS_BASE = "https://api.census.gov/data"
 
 VARIABLES = [
@@ -115,6 +117,29 @@ def fetch_acs_year(year: int, output_path: str = None, api_key: str = None) -> p
     return df
 
 
+def fetch_occupation_data(year: int, output_path: str = None, api_key: str = None) -> pd.DataFrame:
+    """Pull B24010 occupation data and compute AI-resistant workforce index."""
+    api_key = api_key or os.environ.get("CENSUS_API_KEY", "")
+    url = build_census_url(year, variables=B24010_VARIABLES, api_key=api_key)
+    resp = requests.get(url, timeout=120)
+    resp.raise_for_status()
+    raw = resp.json()
+    header = raw[0]
+    data = raw[1:]
+    df = pd.DataFrame(data, columns=header)
+    df["fips"] = df["state"] + df["county"]
+    df["county"] = df["NAME"].str.replace(r",.*$", "", regex=True).str.strip()
+    df["state"] = df["state"].map(STATE_FIPS_TO_ABBR)
+    df["year"] = year
+
+    result = compute_resilience_index(df)
+    if output_path:
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        result.to_parquet(output_path, index=False)
+        print(f"  Wrote {len(result)} rows → {output_path}")
+    return result
+
+
 def pull_census(years: list[int], output_dir: str, api_key: str = None) -> dict[int, pd.DataFrame]:
     print(f"Pulling Census ACS data for {years}...")
     results = {}
@@ -122,4 +147,8 @@ def pull_census(years: list[int], output_dir: str, api_key: str = None) -> dict[
         print(f"  Fetching {year}...")
         output_path = str(Path(output_dir) / f"acs_{year}.parquet")
         results[year] = fetch_acs_year(year, output_path=output_path, api_key=api_key)
+        # Also pull occupation data for workforce resilience
+        occ_path = str(Path(output_dir) / f"occupations_{year}.parquet")
+        print(f"  Fetching B24010 occupation data for {year}...")
+        fetch_occupation_data(year, output_path=occ_path, api_key=api_key)
     return results
