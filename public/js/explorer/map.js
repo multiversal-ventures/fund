@@ -13,6 +13,15 @@ import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js';
 export const COUNTY_GEOJSON_URL =
   'https://cdn.jsdelivr.net/gh/plotly/datasets@master/geojson-counties-fips.json';
 
+/**
+ * Leaflet bounds [[south, west], [north, east]] for the contiguous US (lower 48).
+ * The Plotly county file also includes AK, HI, PR, etc.; using its full bbox skews the default view.
+ */
+const US_CONTIGUOUS_BOUNDS = [
+  [24.2, -124.85],
+  [49.6, -66.85],
+];
+
 const MKEY_TO_COL = {
   vacancy: 'vacancy_trend',
   rentgrowth: 'rent_growth',
@@ -193,7 +202,8 @@ class ExplorerMap {
     if (!el || typeof L === 'undefined') return;
 
     this.populateMetricSelect();
-    this.map = L.map(el, { scrollWheelZoom: true }).setView([39.8283, -98.5795], 4);
+    // Center on contiguous US before tiles/geo load (matches fitBounds below).
+    this.map = L.map(el, { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
     // Single-host Carto dark (Fastly) — avoids {s}.basemaps.cartocdn.com rotation issues that can leave grey tiles.
     L.tileLayer(
       'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
@@ -230,7 +240,7 @@ class ExplorerMap {
     }).addTo(this.map);
 
     try {
-      this.map.fitBounds(this.geoLayer.getBounds(), { padding: [16, 16] });
+      this.map.fitBounds(US_CONTIGUOUS_BOUNDS, { padding: [16, 16] });
     } catch (_) {
       /* empty */
     }
@@ -451,7 +461,7 @@ ${zUrl ? `<br/><a href="${esc(zUrl)}" target="_blank" rel="noopener">View listin
         style: (feat) => this._styleForFeature(feat),
         onEachFeature: (feat, layer) => this._onEachFeature(feat, layer),
       }).addTo(this.map);
-      this.map.fitBounds(this.geoLayer.getBounds(), { padding: [16, 16] });
+      this.map.fitBounds(US_CONTIGUOUS_BOUNDS, { padding: [16, 16] });
       this._restyleAll();
       this._updateLegend();
     } catch (e) {
