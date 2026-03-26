@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multifamily Real Estate Fund Research — Index</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+
+  .header { background:linear-gradient(135deg,#0f172a 0%,#1e293b 40%,#0f172a 100%); border-bottom:1px solid #334155; padding:48px 32px 40px; text-align:center; }
+  .header h1 { font-size:32px; background:linear-gradient(90deg,#34d399,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent; margin-bottom:8px; }
+  .header p { color:#94a3b8; font-size:14px; max-width:700px; margin:0 auto; line-height:1.6; }
+  .header .date { color:#64748b; font-size:12px; margin-top:12px; }
+
+  .container { max-width:1100px; margin:0 auto; padding:32px 24px 60px; }
+
+  .section-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#64748b; font-weight:600; margin-bottom:12px; margin-top:36px; padding-left:4px; }
+  .section-label:first-of-type { margin-top:0; }
+
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px; }
+
+  .card { background:#1e293b; border:1px solid #334155; border-radius:14px; padding:24px; transition:border-color 0.2s, transform 0.2s; display:flex; flex-direction:column; }
+  .card:hover { border-color:#60a5fa; transform:translateY(-2px); }
+  .card .num { font-size:11px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+  .card h3 { font-size:17px; color:#f1f5f9; margin:6px 0 8px; line-height:1.3; }
+  .card .desc { font-size:13px; color:#94a3b8; line-height:1.6; flex:1; }
+  .card .tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:14px; }
+  .card .tag { font-size:10px; padding:3px 10px; border-radius:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+  .tag.census { background:rgba(52,211,153,0.12); color:#34d399; }
+  .tag.bls { background:rgba(96,165,250,0.12); color:#60a5fa; }
+  .tag.market { background:rgba(167,139,250,0.12); color:#a78bfa; }
+  .tag.fund { background:rgba(251,191,36,0.12); color:#fbbf24; }
+  .card .link { display:inline-block; margin-top:14px; color:#60a5fa; font-size:13px; font-weight:600; text-decoration:none; }
+  .card .link:hover { text-decoration:underline; }
+
+  .sources-section { margin-top:48px; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:28px; }
+  .sources-section h2 { font-size:18px; color:#f1f5f9; margin-bottom:16px; }
+  .source-group { margin-bottom:20px; }
+  .source-group h3 { font-size:13px; color:#60a5fa; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+  .source-list { list-style:none; }
+  .source-list li { padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .source-list li:last-child { border-bottom:none; }
+  .source-list a { color:#94a3b8; font-size:13px; text-decoration:none; transition:color 0.2s; }
+  .source-list a:hover { color:#60a5fa; }
+  .source-list .src-label { color:#64748b; font-size:11px; display:block; margin-top:2px; }
+
+  .methodology { margin-top:24px; background:rgba(255,255,255,0.02); border:1px solid #334155; border-radius:14px; padding:28px; }
+  .methodology h2 { font-size:18px; color:#f1f5f9; margin-bottom:12px; }
+  .methodology p { font-size:13px; color:#94a3b8; line-height:1.7; margin-bottom:10px; }
+  .methodology code { background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; font-size:12px; color:#a78bfa; }
+
+  .footer { text-align:center; padding:32px; color:#475569; font-size:11px; border-top:1px solid #1e293b; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Multifamily Real Estate Fund Research</h1>
+  <p>A data-driven analysis of housing vacancy, occupancy, rental economics, and multifamily investment opportunities — built from U.S. Census Bureau and Bureau of Labor Statistics primary data.</p>
+  <div class="date">Research compiled March 25, 2026 · 6 reports · 528 US counties screened · Census ACS 2018–2023</div>
+</div>
+
+<div class="container">
+
+  <!-- CALIFORNIA RESEARCH -->
+  <div class="section-label">Phase 1 — California Deep Dive</div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="num">Report 1</div>
+      <h3>Electricians in California by Metro Area</h3>
+      <div class="desc">Where do California's 73,420 electricians work? Employment data across 25 metro areas from BLS OEWS May 2024, with location quotients, median salaries, and concentration analysis. LA leads with 21,070 electricians followed by SF (9,520) and Riverside (7,570).</div>
+      <div class="tags"><span class="tag bls">BLS OEWS</span><span class="tag census">25 Metros</span></div>
+      <a class="link" href="electricians_california_by_metro.html">View Report →</a>
+    </div>
+
+    <div class="card">
+      <div class="num">Report 2</div>
+      <h3>Electricians + Housing Profile</h3>
+      <div class="desc">Cross-references electrician employment with housing data for the top 6 metro areas. Shows own-vs-rent breakdown, median rent vs. owner cost, and affordability analysis. Finds homeownership out of reach on a solo electrician salary in all 6 metros.</div>
+      <div class="tags"><span class="tag bls">BLS</span><span class="tag census">Census ACS</span></div>
+      <a class="link" href="electricians_housing_profile_california.html">View Report →</a>
+    </div>
+
+    <div class="card">
+      <div class="num">Report 3</div>
+      <h3>California Housing Vacancy & Occupancy — All 58 Counties</h3>
+      <div class="desc">Complete county-level breakdown: total units, occupied, vacant, owner vs. renter, median rent, median home value, for-rent inventory, and for-sale inventory. Contra Costa (3.5%) is the tightest market; Alpine (70.2%) the highest vacancy.</div>
+      <div class="tags"><span class="tag census">Census ACS 2023</span><span class="tag census">58 Counties</span></div>
+      <a class="link" href="california_housing_vacancy_occupancy.html">View Report →</a>
+    </div>
+
+    <div class="card">
+      <div class="num">Report 4</div>
+      <h3>California 5-Year Vacancy Trends (2018–2023)</h3>
+      <div class="desc">Year-by-year vacancy and rental vacancy rates for all 58 counties with sparkline charts. Reveals two diverging stories: Bay Area tech hubs (SF +3.2pp) loosening while inland markets (Riverside -2.4pp, Sacramento -1.2pp) tighten from coastal migration.</div>
+      <div class="tags"><span class="tag census">Census ACS 2018–2023</span><span class="tag census">6 Years × 58 Counties</span></div>
+      <a class="link" href="california_housing_vacancy_5yr_trends.html">View Report →</a>
+    </div>
+  </div>
+
+  <!-- FUND TARGET MARKETS -->
+  <div class="section-label">Phase 2 — Fund Target Markets</div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="num">Report 5</div>
+      <h3>California Multifamily Fund — 4 Target Markets</h3>
+      <div class="desc">Scored all 58 CA counties on: falling vacancy (25pts), rent-to-owner-cost ratio (30pts), multifamily stock depth (15pts), rental vacancy trend (15pts), and market size (10pts). Selected Sacramento, Inland Empire, Fresno, and Kern/Bakersfield. Cap rates 5.1–7.1%, rent-to-cost ratios 0.92–0.98x. Includes investment theses, target submarkets, and market intelligence.</div>
+      <div class="tags"><span class="tag fund">Fund Thesis</span><span class="tag census">Census</span><span class="tag bls">BLS</span><span class="tag market">Market Intel</span></div>
+      <a class="link" href="multifamily_fund_target_markets.html">View Report →</a>
+    </div>
+
+    <div class="card">
+      <div class="num">Report 6</div>
+      <h3>National Dashboard — Growing Cities Where Rent Exceeds Owner Cost</h3>
+      <div class="desc">Screened 528 US counties (50K+ units, 10K+ renters). Found 147 markets where median rent exceeds median owner cost AND vacancy is falling. Florida dominates (20+ counties). Top picks: Polk FL (1.11x), Marion FL (1.27x), Pasco FL (1.14x), Sarasota FL (1.26x), Maricopa AZ (1.05x). Full scoring table, sparkline vacancy trends, margin analysis, and side-by-side comparison to California.</div>
+      <div class="tags"><span class="tag fund">Fund Thesis</span><span class="tag census">Census 2018–2023</span><span class="tag market">National</span></div>
+      <a class="link" href="national_multifamily_fund_dashboard.html">View Report →</a>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources-section">
+    <h2>Data Sources & References</h2>
+
+    <div class="source-group">
+      <h3>U.S. Census Bureau — Primary Data</h3>
+      <ul class="source-list">
+        <li><a href="https://api.census.gov/data/2023/acs/acs5">Census API — American Community Survey 5-Year Estimates (2018–2023)</a><span class="src-label">All housing, vacancy, rent, home value, multifamily structure, and population data. Tables: B25001, B25002, B25003, B25004, B25024, B25064, B25077, B25105, B01003.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25002">data.census.gov — B25002 Occupancy Status</a><span class="src-label">Total housing units, occupied, and vacant by county.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25004">data.census.gov — B25004 Vacancy Status</a><span class="src-label">Breakdown: for rent, rented not occupied, for sale, sold not occupied, seasonal, other vacant.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25064">data.census.gov — B25064 Median Gross Rent</a><span class="src-label">Median monthly rent by county.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25077">data.census.gov — B25077 Median Home Value</a><span class="src-label">Median home value for owner-occupied units.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25105">data.census.gov — B25105 Median Monthly Housing Costs</a><span class="src-label">Median monthly owner cost (with mortgage) — used for rent-to-cost ratio.</span></li>
+        <li><a href="https://data.census.gov/table/ACSDT5Y2023.B25024">data.census.gov — B25024 Units in Structure</a><span class="src-label">Multifamily stock: 3-4, 5-9, 10-19, 20-49, 50+ unit buildings.</span></li>
+        <li><a href="https://www.census.gov/programs-surveys/acs/microdata.html">Census PUMS — Public Use Microdata Sample</a><span class="src-label">Referenced for occupation-level residence data (electricians by PUMA).</span></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <h3>Bureau of Labor Statistics — Employment Data</h3>
+      <ul class="source-list">
+        <li><a href="https://www.bls.gov/oes/current/oes472111.htm">BLS OEWS — Electricians (SOC 47-2111)</a><span class="src-label">May 2024 occupational employment and wage statistics by metro area. Downloaded via special requests file (oesm24ma).</span></li>
+        <li><a href="https://www.bls.gov/oes/2023/may/oes_ca.htm">BLS OEWS — California State Estimates</a><span class="src-label">State-level employment by occupation.</span></li>
+        <li><a href="https://www.onetonline.org/link/localwages/47-2111.00?st=CA">O*NET — California Wages for Electricians</a><span class="src-label">Wage data by California metro area.</span></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <h3>Market Intelligence — Multifamily Investment</h3>
+      <ul class="source-list">
+        <li><a href="https://www.dmcinvestments.com/best-cities-in-california-for-multi-family-real-estate-investment-in-2025/">DMC Investments — Best CA Cities for Multi-Family 2025</a><span class="src-label">Cap rates, rent growth, and market profiles for Sacramento (5.5%+), Fresno (>95% occupancy), LA, San Diego.</span></li>
+        <li><a href="https://www.northmarq.com/insights/insights/new-construction-inland-empire-multifamily-market-poised-slow-2026">NorthMarq — Inland Empire Multifamily Outlook</a><span class="src-label">IE vacancy 5.3%, new supply slowing, $340K median per-unit pricing.</span></li>
+        <li><a href="https://www.yardimatrix.com/blog/sacramento-multifamily-market-report/">Yardi Matrix — Sacramento Multifamily Report</a><span class="src-label">Sacramento avg rents $1,762/mo, vacancy 6.8%, Class C cap rates 5.38%.</span></li>
+        <li><a href="https://www.colliers.com/en/research/sacramento/q3-2025-sacramento-multifamily-market-report">Colliers — Sacramento Q3 2025</a><span class="src-label">Sales price per unit $230,869 (+41% YoY), cap rate compression.</span></li>
+        <li><a href="https://therealdeal.com/la/2025/12/17/inland-empire-rents-growing-more-than-other-la-area-counties/">The Real Deal — Inland Empire Rents Growing</a><span class="src-label">IE rents outpacing LA-area counties, +4.6% rent growth projected.</span></li>
+        <li><a href="https://apartmentpropertyvaluation.com/cap-rate/county">ApartmentPropertyValuation — Cap Rates by County</a><span class="src-label">County-level cap rate data nationwide.</span></li>
+        <li><a href="https://www.multihousingnews.com/top-emerging-multifamily-markets/">Multi-Housing News — Top Emerging Multifamily Markets 2026</a><span class="src-label">Southeast dominates 2026 emerging markets; Savannah, Huntsville, Augusta lead.</span></li>
+        <li><a href="https://www.steadily.com/blog/top-multifamily-rental-markets">Steadily — Top 5 Multifamily Markets 2026</a><span class="src-label">Chicago, Columbus, N. New Jersey, Charlotte profiled with absorption data.</span></li>
+        <li><a href="https://www.matthews.com/market_insights/top-10-multifamily-markets-in-2026">Matthews — Top 10 Multifamily Markets 2026</a><span class="src-label">National market rankings and cap rate trends.</span></li>
+        <li><a href="https://www.getmultifamily.com/blog/get-january-2026-phoenix-multifamily-market-report/">GET Multifamily — Phoenix January 2026</a><span class="src-label">Phoenix vacancy 12.5%, 21K units delivered 2025, strong absorption.</span></li>
+        <li><a href="https://www.crexi.com/blog/best-multifamily-markets-2026">Crexi — Best Multifamily Markets 2026</a><span class="src-label">National multifamily investment rankings and cash flow analysis.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <h2>Methodology</h2>
+    <p><strong>Data pipeline:</strong> All primary data was pulled directly from the U.S. Census Bureau API (<code>api.census.gov</code>) and BLS Occupational Employment and Wage Statistics files (<code>bls.gov/oes/special-requests</code>). No third-party aggregators were used for the core housing and employment data.</p>
+    <p><strong>Vacancy trends:</strong> We pulled ACS 5-Year estimates for 6 consecutive years (2018–2023) for every county, computing vacancy rate (vacant ÷ total units) and rental vacancy rate (for-rent vacant ÷ (renter-occupied + for-rent vacant)) for each year. The 5-year change in percentage points determines whether a market is tightening or loosening.</p>
+    <p><strong>Rent-to-cost ratio:</strong> Compares <code>B25064</code> (median gross rent) to <code>B25105</code> (median monthly owner cost for units with a mortgage). A ratio ≥ 1.0 means median rent exceeds median owner cost — indicating potential for Day 1 positive cash flow on acquired multifamily properties. This is a proxy; actual deal-level economics depend on acquisition price, financing terms, capex, and management costs.</p>
+    <p><strong>Scoring model:</strong> Counties were scored on a 100-point scale: vacancy trend (25pts), rental vacancy trend (15pts), rent/cost ratio (30pts — weighted highest per fund criteria), population growth (15pts), multifamily stock depth (10pts), and market size/liquidity (5pts). Only counties with 50K+ housing units and 10K+ renter households were included.</p>
+    <p><strong>Multifamily stock:</strong> Derived from <code>B25024</code> (units in structure), summing 3-4 unit, 5-9, 10-19, 20-49, and 50+ unit buildings. Markets with deeper existing multifamily stock offer better acquisition pipelines and property management infrastructure.</p>
+    <p><strong>Market intelligence:</strong> Cap rates, rent growth projections, and supply pipeline data were sourced from Colliers, Yardi Matrix, NorthMarq, Marcus & Millichap, Matthews, and other commercial real estate research firms via their publicly available reports.</p>
+  </div>
+
+  <div class="footer">
+    Research compiled for Kartik · Multiversal Ventures · March 25, 2026<br>
+    This analysis is for informational purposes only and does not constitute investment advice.
+  </div>
+
+</div>
+</body>
+</html>

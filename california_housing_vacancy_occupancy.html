@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Housing Vacancy & Occupancy Report</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#f1f5f9; padding:24px; color:#334155; }
+  .container { max-width:1280px; margin:0 auto; }
+  .header { background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; padding:28px 32px; border-radius:16px 16px 0 0; }
+  .header h1 { font-size:24px; margin-bottom:6px; }
+  .header p { opacity:0.85; font-size:13px; }
+  .stats { display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; }
+  .stat { background:rgba(255,255,255,0.15); padding:12px 18px; border-radius:10px; min-width:140px; }
+  .stat .num { font-size:20px; font-weight:700; }
+  .stat .label { font-size:11px; opacity:0.8; margin-top:2px; }
+  .card { background:white; border-radius:0 0 16px 16px; box-shadow:0 4px 20px rgba(0,0,0,0.08); overflow:hidden; }
+  .section { padding:20px; }
+  .section h2 { font-size:16px; color:#1e293b; margin-bottom:12px; }
+  .market-cards { display:flex; gap:10px; flex-wrap:wrap; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#f1f5f9; padding:10px 12px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#64748b; font-weight:600; position:sticky; top:0; z-index:1; }
+  .insight { background:#faf5ff; border-left:4px solid #a855f7; padding:14px 18px; margin:16px 20px; border-radius:0 8px 8px 0; font-size:13px; line-height:1.6; }
+  .insight strong { color:#6b21a8; }
+  .legend { display:flex; gap:16px; padding:8px 20px; font-size:12px; color:#64748b; align-items:center; }
+  .legend-dot { width:12px; height:12px; border-radius:2px; display:inline-block; margin-right:4px; vertical-align:middle; }
+  .footer { padding:14px 20px; font-size:11px; color:#94a3b8; border-top:1px solid #e2e8f0; }
+  .divider { height:1px; background:#e2e8f0; margin:0 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>California Housing: Vacancy, Occupancy & Rental Data</h1>
+    <p>U.S. Census Bureau — American Community Survey 5-Year Estimates (2023) — All 58 Counties</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="num">14,532,683</div>
+        <div class="label">Total Housing Units</div>
+      </div>
+      <div class="stat">
+        <div class="num">13,434,847</div>
+        <div class="label">Occupied (92.4%)</div>
+      </div>
+      <div class="stat">
+        <div class="num">1,097,836</div>
+        <div class="label">Vacant (7.6%)</div>
+      </div>
+      <div class="stat">
+        <div class="num">44.2%</div>
+        <div class="label">Renter-Occupied</div>
+      </div>
+      <div class="stat">
+        <div class="num">4.1%</div>
+        <div class="label">Rental Vacancy Rate</div>
+      </div>
+      <div class="stat">
+        <div class="num">256,828</div>
+        <div class="label">Units For Rent (Vacant)</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="section">
+      <h2>Tightest Housing Markets (Lowest Vacancy)</h2>
+      <div class="market-cards">
+    <div style="flex:1;min-width:140px;background:#ecfdf5;padding:12px;border-radius:10px;border:1px solid #bbf7d0;text-align:center">
+      <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Tight</div>
+      <div style="font-size:14px;font-weight:700;color:#14532d;margin:4px 0">Contra Costa County</div>
+      <div style="font-size:22px;font-weight:800;color:#16a34a">3.5%</div>
+      <div style="font-size:11px;color:#64748b">vacancy rate</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#ecfdf5;padding:12px;border-radius:10px;border:1px solid #bbf7d0;text-align:center">
+      <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Tight</div>
+      <div style="font-size:14px;font-weight:700;color:#14532d;margin:4px 0">San Benito County</div>
+      <div style="font-size:22px;font-weight:800;color:#16a34a">3.6%</div>
+      <div style="font-size:11px;color:#64748b">vacancy rate</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#ecfdf5;padding:12px;border-radius:10px;border:1px solid #bbf7d0;text-align:center">
+      <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Tight</div>
+      <div style="font-size:14px;font-weight:700;color:#14532d;margin:4px 0">Sutter County</div>
+      <div style="font-size:22px;font-weight:800;color:#16a34a">4.2%</div>
+      <div style="font-size:11px;color:#64748b">vacancy rate</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#ecfdf5;padding:12px;border-radius:10px;border:1px solid #bbf7d0;text-align:center">
+      <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Tight</div>
+      <div style="font-size:14px;font-weight:700;color:#14532d;margin:4px 0">Stanislaus County</div>
+      <div style="font-size:22px;font-weight:800;color:#16a34a">4.2%</div>
+      <div style="font-size:11px;color:#64748b">vacancy rate</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#ecfdf5;padding:12px;border-radius:10px;border:1px solid #bbf7d0;text-align:center">
+      <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Tight</div>
+      <div style="font-size:14px;font-weight:700;color:#14532d;margin:4px 0">Sacramento County</div>
+      <div style="font-size:22px;font-weight:800;color:#16a34a">4.3%</div>
+      <div style="font-size:11px;color:#64748b">vacancy rate</div>
+    </div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <h2>Highest Vacancy Rates</h2>
+      <div class="market-cards">
+    <div style="flex:1;min-width:140px;background:#fef2f2;padding:12px;border-radius:10px;border:1px solid #fecaca;text-align:center">
+      <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">High Vacancy</div>
+      <div style="font-size:14px;font-weight:700;color:#7f1d1d;margin:4px 0">Alpine County</div>
+      <div style="font-size:22px;font-weight:800;color:#dc2626">70.2%</div>
+      <div style="font-size:11px;color:#64748b">1,031 seasonal</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#fef2f2;padding:12px;border-radius:10px;border:1px solid #fecaca;text-align:center">
+      <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">High Vacancy</div>
+      <div style="font-size:14px;font-weight:700;color:#7f1d1d;margin:4px 0">Mono County</div>
+      <div style="font-size:22px;font-weight:800;color:#dc2626">59.5%</div>
+      <div style="font-size:11px;color:#64748b">7,001 seasonal</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#fef2f2;padding:12px;border-radius:10px;border:1px solid #fecaca;text-align:center">
+      <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">High Vacancy</div>
+      <div style="font-size:14px;font-weight:700;color:#7f1d1d;margin:4px 0">Plumas County</div>
+      <div style="font-size:22px;font-weight:800;color:#dc2626">46.4%</div>
+      <div style="font-size:11px;color:#64748b">5,815 seasonal</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#fef2f2;padding:12px;border-radius:10px;border:1px solid #fecaca;text-align:center">
+      <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">High Vacancy</div>
+      <div style="font-size:14px;font-weight:700;color:#7f1d1d;margin:4px 0">Sierra County</div>
+      <div style="font-size:22px;font-weight:800;color:#dc2626">42.5%</div>
+      <div style="font-size:11px;color:#64748b">662 seasonal</div>
+    </div>
+    <div style="flex:1;min-width:140px;background:#fef2f2;padding:12px;border-radius:10px;border:1px solid #fecaca;text-align:center">
+      <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">High Vacancy</div>
+      <div style="font-size:14px;font-weight:700;color:#7f1d1d;margin:4px 0">Calaveras County</div>
+      <div style="font-size:22px;font-weight:800;color:#dc2626">35.1%</div>
+      <div style="font-size:11px;color:#64748b">7,953 seasonal</div>
+    </div></div>
+    </div>
+    <div class="divider"></div>
+    
+    <div class="insight">
+      <strong>Key Findings:</strong> California has 14.5 million housing units with an overall vacancy rate of 7.6%. 
+      The rental vacancy rate is just 4.1% statewide, indicating a very tight rental market. 
+      44.2% of occupied homes are renter-occupied — well above the national average (~34%). 
+      The tightest markets are in the Bay Area suburbs (Contra Costa at 3.5%) and Central Valley (Stanislaus, Sacramento). 
+      The highest vacancy counties (Alpine 70%, Mono 60%, Plumas 46%) are mountain/resort areas where most vacancies are seasonal/recreational homes. 
+      San Francisco stands out as a major urban county with both a high overall vacancy rate (11.9%) and a high rental vacancy rate (6.1%), reflecting post-pandemic shifts and new construction.
+    </div>
+
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#3b82f6"></span> Owner-occupied</span>
+      <span><span class="legend-dot" style="background:#f97316"></span> Renter-occupied</span>
+      <span style="margin-left:24px">Vacancy: <span style="color:#16a34a;font-weight:600">&lt;4% tight</span> · <span style="color:#ca8a04;font-weight:600">4-6% moderate</span> · <span style="color:#ea580c;font-weight:600">6-8% elevated</span> · <span style="color:#dc2626;font-weight:600">&gt;8% high</span></span>
+    </div>
+
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>County</th>
+          <th style="text-align:right">Total Units</th>
+          <th style="text-align:right">Occupied</th>
+          <th style="text-align:right">Vacant</th>
+          <th style="text-align:center">Vacancy Rate</th>
+          <th style="text-align:center">Rental Vac Rate</th>
+          <th style="text-align:right">For Rent</th>
+          <th style="text-align:right">For Sale</th>
+          <th>Owner vs Renter</th>
+          <th style="text-align:right">Median Rent</th>
+          <th style="text-align:right">Median Home Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Los Angeles County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,624,084</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,390,254</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">233,830</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">76,280</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">12,420</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:69.11902471024294px" title="Owner 46.1%"></div>
+          <div style="background:#f97316;width:80.88097528975706px" title="Renter 53.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">54% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,893</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$783,300</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Diego County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,240,607</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,159,822</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">80,785</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">22,102</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,627</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:81.76177034062124px" title="Owner 54.5%"></div>
+          <div style="background:#f97316;width:68.23822965937876px" title="Renter 45.5%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">45% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,154</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$791,600</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Orange County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,138,473</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,074,654</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">63,819</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">21,504</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,907</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:84.66981000396406px" title="Owner 56.4%"></div>
+          <div style="background:#f97316;width:65.33018999603594px" title="Renter 43.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">44% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,352</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$915,500</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Riverside County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">860,042</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">762,234</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">97,808</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">12,195</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">6,507</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:103.2895410070923px" title="Owner 68.9%"></div>
+          <div style="background:#f97316;width:46.71045899290769px" title="Renter 31.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">31% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,814</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$510,300</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Bernardino County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">738,535</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">668,004</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">70,531</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">9.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,535</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,624</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:92.30805504158658px" title="Owner 61.5%"></div>
+          <div style="background:#f97316;width:57.691944958413416px" title="Renter 38.5%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">38% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,706</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$475,000</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Santa Clara County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">694,209</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">654,467</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">39,742</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">16,339</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,544</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:82.94765053089003px" title="Owner 55.3%"></div>
+          <div style="background:#f97316;width:67.05234946910997px" title="Renter 44.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">45% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,814</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.4M</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Alameda County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">630,726</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">593,117</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">37,609</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">15,116</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,661</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:81.10844909183179px" title="Owner 54.1%"></div>
+          <div style="background:#f97316;width:68.89155090816821px" title="Renter 45.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">46% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,318</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.1M</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Sacramento County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">593,616</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">568,223</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">25,393</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,864</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,079</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:87.94337786397242px" title="Owner 58.6%"></div>
+          <div style="background:#f97316;width:62.05662213602758px" title="Renter 41.4%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">41% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,702</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$498,900</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Contra Costa County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">426,585</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">411,662</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">14,923</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,991</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,025</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:101.48216255083054px" title="Owner 67.7%"></div>
+          <div style="background:#f97316;width:48.51783744916947px" title="Renter 32.3%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">32% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,322</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$830,800</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Francisco County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">411,542</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">362,650</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">48,892</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">14,550</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,336</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:57.74576037501724px" title="Owner 38.5%"></div>
+          <div style="background:#f97316;width:92.25423962498276px" title="Renter 61.5%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">62% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,419</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.4M</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Fresno County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">342,003</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">322,163</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">19,840</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,469</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,631</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:83.1254675428277px" title="Owner 55.4%"></div>
+          <div style="background:#f97316;width:66.8745324571723px" title="Renter 44.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">45% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,300</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$362,600</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Kern County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">304,481</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">281,416</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">23,065</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,983</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,606</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:89.71824629729653px" title="Owner 59.8%"></div>
+          <div style="background:#f97316;width:60.28175370270347px" title="Renter 40.2%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">40% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,220</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$310,600</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Ventura County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">294,651</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">278,045</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">16,606</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,944</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">939</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:96.23694006365875px" title="Owner 64.2%"></div>
+          <div style="background:#f97316;width:53.76305993634124px" title="Renter 35.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">36% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,248</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$768,400</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Mateo County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">285,558</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">264,424</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">21,134</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,067</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,182</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:88.63265059147429px" title="Owner 59.1%"></div>
+          <div style="background:#f97316;width:61.367349408525705px" title="Renter 40.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">41% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,893</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.5M</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Joaquin County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">256,826</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">241,373</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">15,453</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,533</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,589</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:92.29822722508317px" title="Owner 61.5%"></div>
+          <div style="background:#f97316;width:57.70177277491683px" title="Renter 38.5%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">38% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,633</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$494,500</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Sonoma County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">206,319</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">190,498</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">15,821</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,882</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">566</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:93.29940471815976px" title="Owner 62.2%"></div>
+          <div style="background:#f97316;width:56.700595281840236px" title="Renter 37.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">38% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,093</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$779,000</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Stanislaus County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">184,240</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">176,457</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,783</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,946</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">963</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:91.50444584232986px" title="Owner 61.0%"></div>
+          <div style="background:#f97316;width:58.495554157670135px" title="Renter 39.0%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">39% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,528</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$426,600</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Placer County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">176,233</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">155,422</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">20,811</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,627</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">928</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:111.41858938888961px" title="Owner 74.3%"></div>
+          <div style="background:#f97316;width:38.58141061111039px" title="Renter 25.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">26% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,991</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$658,800</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Solano County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">163,455</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">155,800</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,655</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,850</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">665</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:94.84274711168165px" title="Owner 63.2%"></div>
+          <div style="background:#f97316;width:55.157252888318354px" title="Renter 36.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">37% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,088</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$589,600</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Santa Barbara County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">159,766</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">148,960</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">10,806</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,230</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">648</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:79.30383995703545px" title="Owner 52.9%"></div>
+          <div style="background:#f97316;width:70.69616004296455px" title="Renter 47.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">47% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,050</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$735,700</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Tulare County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">152,542</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">142,026</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">10,516</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,666</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">544</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:87.92721051075155px" title="Owner 58.6%"></div>
+          <div style="background:#f97316;width:62.07278948924845px" title="Renter 41.4%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">41% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,206</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$303,000</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Monterey County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">144,659</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">132,046</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">12,613</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">8.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,502</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">545</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:78.4192629841116px" title="Owner 52.3%"></div>
+          <div style="background:#f97316;width:71.5807370158884px" title="Renter 47.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">48% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,995</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$723,100</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Luis Obispo County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">124,871</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">108,897</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">15,974</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">12.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,063</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,433</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:92.84415548637703px" title="Owner 61.9%"></div>
+          <div style="background:#f97316;width:57.15584451362297px" title="Renter 38.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">38% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,899</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$777,200</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Marin County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">111,860</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">103,201</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,659</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,180</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">306</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:95.82319938760284px" title="Owner 63.9%"></div>
+          <div style="background:#f97316;width:54.17680061239716px" title="Renter 36.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">36% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,584</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.4M</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Santa Cruz County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">106,635</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">96,873</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,762</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">9.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,361</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">378</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:89.96624446440184px" title="Owner 60.0%"></div>
+          <div style="background:#f97316;width:60.03375553559816px" title="Renter 40.0%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">40% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,172</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$1.0M</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">El Dorado County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">94,258</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">75,719</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">18,539</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">19.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,341</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">504</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:114.57758290521534px" title="Owner 76.4%"></div>
+          <div style="background:#f97316;width:35.42241709478466px" title="Renter 23.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">24% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,626</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$640,500</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Butte County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">91,176</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">82,345</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,831</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">9.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,147</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">784</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:87.41332199890704px" title="Owner 58.3%"></div>
+          <div style="background:#f97316;width:62.58667800109296px" title="Renter 41.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">42% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,369</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$408,700</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Merced County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">89,610</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">84,605</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">5,005</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,140</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">341</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:79.95449441522368px" title="Owner 53.3%"></div>
+          <div style="background:#f97316;width:70.04550558477632px" title="Renter 46.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">47% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,284</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$368,400</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Yolo County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">81,543</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">76,640</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,903</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,793</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">138</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:80.33533402922757px" title="Owner 53.6%"></div>
+          <div style="background:#f97316;width:69.66466597077243px" title="Renter 46.4%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">46% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,757</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$593,800</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Shasta County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">79,748</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">71,473</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,275</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">10.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,328</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">666</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:98.03212401886026px" title="Owner 65.4%"></div>
+          <div style="background:#f97316;width:51.96787598113973px" title="Renter 34.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">35% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,267</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$347,200</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Humboldt County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">62,625</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">54,878</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,747</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">12.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">607</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">318</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:84.40267502460001px" title="Owner 56.3%"></div>
+          <div style="background:#f97316;width:65.59732497539999px" title="Renter 43.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">44% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,249</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$418,800</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Imperial County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">57,511</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">48,844</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,667</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">15.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">558</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">232</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:85.16501515027434px" title="Owner 56.8%"></div>
+          <div style="background:#f97316;width:64.83498484972566px" title="Renter 43.2%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">43% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,012</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$279,500</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Napa County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">55,601</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">49,663</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">5,938</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">10.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">924</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">259</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:96.60612528441699px" title="Owner 64.4%"></div>
+          <div style="background:#f97316;width:53.393874715583024px" title="Renter 35.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">36% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$2,141</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$838,800</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Nevada County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">53,981</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">41,873</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">12,108</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">22.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">435</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">558</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:111.65906431351947px" title="Owner 74.4%"></div>
+          <div style="background:#f97316;width:38.34093568648055px" title="Renter 25.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">26% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,635</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$602,800</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Madera County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">50,368</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">44,513</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">5,855</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">591</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">407</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:98.2903870779323px" title="Owner 65.5%"></div>
+          <div style="background:#f97316;width:51.709612922067706px" title="Renter 34.5%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">34% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,307</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$367,700</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Kings County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">46,695</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">43,736</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,959</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">497</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">374</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:82.22974208889701px" title="Owner 54.8%"></div>
+          <div style="background:#f97316;width:67.77025791110299px" title="Renter 45.2%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">45% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,228</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$305,700</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Mendocino County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">41,495</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">34,570</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">6,925</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">16.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">454</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">187</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:91.3103847266416px" title="Owner 60.9%"></div>
+          <div style="background:#f97316;width:58.6896152733584px" title="Renter 39.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">39% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,325</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$486,000</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Sutter County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">34,681</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">33,240</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,441</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#65a30d18;color:#65a30d;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">1.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">200</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">218</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:88.7725631768953px" title="Owner 59.2%"></div>
+          <div style="background:#f97316;width:61.227436823104696px" title="Renter 40.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">41% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,364</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$399,400</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Lake County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">34,271</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">26,364</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,907</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">23.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">231</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">451</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:106.40077378243058px" title="Owner 70.9%"></div>
+          <div style="background:#f97316;width:43.59922621756942px" title="Renter 29.1%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">29% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,292</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$316,800</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Tuolumne County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">31,491</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">22,809</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,682</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">27.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">365</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">230</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:111.21925555701698px" title="Owner 74.1%"></div>
+          <div style="background:#f97316;width:38.780744442983035px" title="Renter 25.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">26% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,247</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$406,200</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Yuba County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">30,089</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">28,063</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,026</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">352</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">115</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:94.97737234080462px" title="Owner 63.3%"></div>
+          <div style="background:#f97316;width:55.02262765919538px" title="Renter 36.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">37% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,209</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$380,000</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Calaveras County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">27,579</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">17,897</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,682</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">35.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">5.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">171</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">280</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:126.54914231435437px" title="Owner 84.4%"></div>
+          <div style="background:#f97316;width:23.450857685645637px" title="Renter 15.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">16% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,615</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$441,800</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Tehama County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">27,456</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">24,526</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,930</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">10.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">1.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">143</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">271</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:101.36589741498817px" title="Owner 67.6%"></div>
+          <div style="background:#f97316;width:48.63410258501183px" title="Renter 32.4%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">32% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,159</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$315,600</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Siskiyou County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">23,066</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">18,907</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,159</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">18.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">2.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">130</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">203</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:104.55651346062305px" title="Owner 69.7%"></div>
+          <div style="background:#f97316;width:45.44348653937695px" title="Renter 30.3%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">30% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,043</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$284,500</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">San Benito County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">20,937</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">20,188</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">749</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">0.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">32</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">38</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:101.14672082425204px" title="Owner 67.4%"></div>
+          <div style="background:#f97316;width:48.85327917574797px" title="Renter 32.6%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">33% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,922</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$751,500</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Amador County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">18,919</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">16,066</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,853</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">15.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">110</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">154</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:120.09523216730985px" title="Owner 80.1%"></div>
+          <div style="background:#f97316;width:29.904767832690148px" title="Renter 19.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">20% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,380</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$422,800</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Plumas County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">15,037</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,055</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">6,982</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">46.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">250</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">212</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:112.17877094972067px" title="Owner 74.8%"></div>
+          <div style="background:#f97316;width:37.821229050279335px" title="Renter 25.2%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">25% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,034</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$327,400</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Mono County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">13,632</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">5,521</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,111</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">59.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">15.4%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">311</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">114</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:103.75837710559682px" title="Owner 69.2%"></div>
+          <div style="background:#f97316;width:46.241622894403186px" title="Renter 30.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">31% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,593</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$514,300</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Lassen County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">12,232</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,060</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,172</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">25.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">4.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">120</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">180</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:102.31788079470198px" title="Owner 68.2%"></div>
+          <div style="background:#f97316;width:47.682119205298015px" title="Renter 31.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">32% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,043</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$259,500</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Del Norte County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">11,156</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,621</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,535</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">13.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">1.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">43</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">156</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:106.81322107888992px" title="Owner 71.2%"></div>
+          <div style="background:#f97316;width:43.186778921110076px" title="Renter 28.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">29% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,182</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$319,600</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Glenn County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">10,973</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,763</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,210</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">11.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">7.9%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">310</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">29</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:94.59694765953088px" title="Owner 63.1%"></div>
+          <div style="background:#f97316;width:55.40305234046912px" title="Renter 36.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">37% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,103</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$338,400</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Mariposa County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,796</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,515</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,281</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">23.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">10.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">219</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">11</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:112.09580838323353px" title="Owner 74.7%"></div>
+          <div style="background:#f97316;width:37.90419161676647px" title="Renter 25.3%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">25% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,268</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$358,000</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Inyo County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">9,500</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,923</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,577</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">16.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ca8a0418;color:#ca8a04;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">3.7%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">99</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">60</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:100.6436955698599px" title="Owner 67.1%"></div>
+          <div style="background:#f97316;width:49.3563044301401px" title="Renter 32.9%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">33% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,140</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$338,400</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Colusa County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,157</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">7,466</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">691</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">8.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">1.1%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">31</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">139</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:93.34315563889632px" title="Owner 62.2%"></div>
+          <div style="background:#f97316;width:56.65684436110368px" title="Renter 37.8%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">38% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,139</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$375,100</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Trinity County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">8,122</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">5,373</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,749</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">33.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#ea580c18;color:#ea580c;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">6.8%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">105</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">54</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:109.54773869346734px" title="Owner 73.0%"></div>
+          <div style="background:#f97316;width:40.45226130653267px" title="Renter 27.0%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">27% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$922</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$329,000</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Modoc County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">4,774</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">3,264</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,510</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">31.6%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">0.3%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">81</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:115.99264705882354px" title="Owner 77.3%"></div>
+          <div style="background:#f97316;width:34.00735294117647px" title="Renter 22.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">23% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$818</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$212,000</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Sierra County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">2,099</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,206</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">893</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">42.5%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#16a34a18;color:#16a34a;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">0.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">0</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">37</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:117.4129353233831px" title="Owner 78.3%"></div>
+          <div style="background:#f97316;width:32.58706467661692px" title="Renter 21.7%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">22% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">$1,181</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$334,100</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 12px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px">Alpine County</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,587</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">473</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">1,114</td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">70.2%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:center">
+        <span style="background:#dc262618;color:#dc2626;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600">10.0%</span>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">10</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px">17</td>
+      <td style="padding:8px 12px;width:130px">
+        <div style="display:flex;height:16px;border-radius:3px;overflow:hidden;font-size:0">
+          <div style="background:#3b82f6;width:121.45877378435517px" title="Owner 81.0%"></div>
+          <div style="background:#f97316;width:28.54122621564482px" title="Renter 19.0%"></div>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:2px">19% rent</div>
+      </td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#7c3aed;font-weight:500">N/A</td>
+      <td style="padding:8px 12px;text-align:right;font-size:13px;color:#0369a1;font-weight:500">$466,100</td>
+    </tr>
+      </tbody>
+    </table>
+    </div>
+    
+    <div class="footer">
+      Source: U.S. Census Bureau, American Community Survey 5-Year Estimates (2023). Tables B25001, B25002, B25003, B25004, B25064, B25077. 
+      Vacancy rate = vacant units / total units. Rental vacancy rate = for-rent vacant / (renter-occupied + for-rent vacant). 
+      Data covers all 58 California counties.
+    </div>
+  </div>
+</div>
+</body>
+</html>

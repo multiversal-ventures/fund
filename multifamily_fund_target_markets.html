@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Multifamily Fund — Target Market Analysis</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0f172a; padding:24px; color:#334155; }
+  .container { max-width:1200px; margin:0 auto; }
+  
+  .hero { background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f172a 100%); color:white; padding:40px 36px; border-radius:20px; margin-bottom:20px; border:1px solid #334155; }
+  .hero h1 { font-size:28px; margin-bottom:8px; background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .hero .subtitle { font-size:14px; color:#94a3b8; margin-bottom:24px; }
+  .hero-stats { display:flex; gap:16px; flex-wrap:wrap; }
+  .hero-stat { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:14px 20px; border-radius:12px; }
+  .hero-stat .hs-n { font-size:20px; font-weight:700; color:#e2e8f0; }
+  .hero-stat .hs-l { font-size:11px; color:#64748b; margin-top:2px; }
+  
+  .criteria { background:#1e293b; border:1px solid #334155; border-radius:16px; padding:24px; margin-bottom:20px; color:#e2e8f0; }
+  .criteria h2 { font-size:16px; color:#60a5fa; margin-bottom:12px; }
+  .criteria-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+  .criteria-item { background:rgba(255,255,255,0.03); border:1px solid #334155; border-radius:10px; padding:12px 16px; }
+  .criteria-item .ci-icon { font-size:18px; margin-bottom:4px; }
+  .criteria-item .ci-title { font-size:13px; font-weight:600; color:#e2e8f0; }
+  .criteria-item .ci-desc { font-size:11px; color:#94a3b8; margin-top:2px; }
+  
+  .market-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.3); margin-bottom:20px; }
+  .mk-head { padding:20px 24px; color:white; }
+  .mk-rank { font-size:11px; opacity:0.7; text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+  .mk-name { font-size:22px; font-weight:700; margin:4px 0; }
+  .mk-cap { font-size:13px; opacity:0.85; }
+  .mk-body { padding:20px 24px; }
+  .mk-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+  .mk-stat { background:#f8fafc; padding:10px; border-radius:8px; text-align:center; }
+  .mk-stat-n { font-size:17px; font-weight:700; color:#1e293b; }
+  .mk-stat-l { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.3px; }
+  .mk-row { display:flex; gap:12px; margin-bottom:10px; }
+  .mk-pair { flex:1; display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:8px 12px; border-radius:6px; }
+  .mk-label { font-size:11px; color:#64748b; font-weight:500; text-transform:uppercase; letter-spacing:0.3px; }
+  .mk-val { font-size:13px; color:#1e293b; }
+  .mk-sparkline-section { margin:12px 0; }
+  .mk-metrics { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px 16px; margin:14px 0; }
+  .mk-metric-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #dcfce7; }
+  .mk-metric-row:last-child { border-bottom:none; }
+  .mk-metric-label { font-size:12px; color:#64748b; }
+  .mk-metric-val { font-size:13px; color:#1e293b; font-weight:500; }
+  .mk-thesis { background:#faf5ff; border-left:4px solid #a855f7; padding:16px; border-radius:0 10px 10px 0; margin-top:14px; font-size:13px; line-height:1.7; color:#334155; }
+  .mk-thesis-head { font-size:12px; font-weight:700; color:#6b21a8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+  
+  .scoring { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.3); margin-bottom:20px; }
+  .scoring-head { padding:16px 20px; border-bottom:1px solid #e2e8f0; }
+  .scoring-head h2 { font-size:16px; color:#1e293b; }
+  .scoring-head p { font-size:12px; color:#94a3b8; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#f1f5f9; padding:8px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#64748b; font-weight:600; }
+  
+  .disclaimer { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:16px 20px; color:#94a3b8; font-size:11px; line-height:1.6; }
+  .disclaimer strong { color:#f59e0b; }
+  
+  .footer { text-align:center; color:#475569; font-size:11px; padding:16px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <h1>California Multifamily Real Estate Fund — Target Market Analysis</h1>
+    <div class="subtitle">4 markets selected from 58 counties scored on vacancy trends, cash flow potential, and multifamily depth · Census ACS 2018–2023 + BLS 2024 + Market Intelligence Q1 2026</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hs-n">4 Markets</div><div class="hs-l">Selected from 58 counties</div></div>
+      <div class="hero-stat"><div class="hs-n">5.1–7.1%</div><div class="hs-l">Cap Rate Range</div></div>
+      <div class="hero-stat"><div class="hs-n">349K+</div><div class="hs-l">Combined MF Units</div></div>
+      <div class="hero-stat"><div class="hs-n">728K+</div><div class="hs-l">Renter Households</div></div>
+      <div class="hero-stat"><div class="hs-n">0.92–0.98</div><div class="hs-l">Rent/Cost Ratio Range</div></div>
+      <div class="hero-stat"><div class="hs-n">All ▼</div><div class="hs-l">Vacancy Falling</div></div>
+    </div>
+  </div>
+
+  <div class="criteria">
+    <h2>Fund Selection Criteria</h2>
+    <div class="criteria-grid">
+      <div class="criteria-item">
+        <div class="ci-icon">📉</div>
+        <div class="ci-title">Falling or Stable Vacancy</div>
+        <div class="ci-desc">5-year vacancy trend declining or flat-to-declining. Markets tightening, not loosening. Scored on both overall and rental vacancy trajectory.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="ci-icon">💰</div>
+        <div class="ci-title">Rent ≈ Owner Cost</div>
+        <div class="ci-desc">Median rent close to median monthly owner cost (ratio ≥ 0.90). Means acquired properties can service debt and generate cash dividends from Day 1.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="ci-icon">🏢</div>
+        <div class="ci-title">Deep Multifamily Stock</div>
+        <div class="ci-desc">Large existing inventory of 5+ unit buildings. Ensures acquisition pipeline, comparable pricing, and property management infrastructure.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="ci-icon">📊</div>
+        <div class="ci-title">Market Liquidity</div>
+        <div class="ci-desc">Significant renter population (50K+) and total housing stock (100K+). Fund needs ability to deploy capital and exit positions at scale.</div>
+      </div>
+    </div>
+  </div>
+
+  
+    <div class="market-card">
+      <div class="mk-head" style="background:linear-gradient(135deg,#15803d,#15803ddd)">
+        <div class="mk-rank">Market #1</div>
+        <div class="mk-name">Sacramento</div>
+        <div class="mk-cap">Cap Rate: 5.1–5.5% · Price/Unit: $230K avg (+41% YoY)</div>
+      </div>
+      <div class="mk-body">
+        
+        <div class="mk-stats">
+          <div class="mk-stat"><div class="mk-stat-n">593,616</div><div class="mk-stat-l">Housing Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">116,789</div><div class="mk-stat-l">Multifamily Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">235,080</div><div class="mk-stat-l">Renter Households</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">8,864</div><div class="mk-stat-l">Vacant For Rent</div></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Vacancy Trend</span><span class="mk-val">5.5% → 4.3% <b style="color:#16a34a">(-1.2pp)</b></span></div>
+          <div class="mk-pair"><span class="mk-label">Rental Vacancy</span><span class="mk-val">3.6% (-0.5pp)</span></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Rent / Owner Cost</span><span class="mk-val">$1,702 / $1,764 = <b>0.96</b></span></div>
+          <div class="mk-pair"><span class="mk-label">% Renter</span><span class="mk-val">41%</span></div>
+        </div>
+        
+        <div class="mk-sparkline-section">
+          <div class="mk-label" style="margin-bottom:4px">Vacancy Trend (2018→2023)</div>
+          <svg width="140" height="32" viewBox="0 0 140 32" style="vertical-align:middle"><polyline points="0.0,7.3 28.0,16.0 56.0,23.3 84.0,24.7 112.0,24.7 140.0,24.7" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="7.3" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="140.0" cy="24.7" r="3" fill="#16a34a"/></svg>
+        </div>
+        
+        <div class="mk-metrics">
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Cap Rate (Class C)</span>
+            <span class="mk-metric-val" style="color:#15803d;font-weight:700">5.4%</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Rent Growth</span>
+            <span class="mk-metric-val">+2.8% (core), +3.4% (Class C)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">MF Vacancy</span>
+            <span class="mk-metric-val">~4.3–6.8%</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">New Supply</span>
+            <span class="mk-metric-val">1.5% of inventory (among lowest nationally)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Target Submarkets</span>
+            <span class="mk-metric-val" style="font-size:12px">Arden-Arcade, North Sacramento, Rancho Cordova, Citrus Heights</span>
+          </div>
+        </div>
+        
+        <div class="mk-thesis">
+          <div class="mk-thesis-head">Investment Thesis</div>
+          Sacramento is the textbook fund target. Vacancy has fallen from 5.5% to 4.3% over 5 years (-1.2pp), rental vacancy is a tight 3.6%, and rent ($1,702/mo) nearly matches owner cost ($1,764/mo) — giving a 0.96 rent-to-cost ratio that supports Day 1 cash flow on acquisitions. With 116,789 multifamily units (20% of stock) and 235K renters, it's deep and liquid. Bay Area migration continues to drive demand, while new supply is among the lowest in the nation at 1.5% of inventory. Class C properties offer 5.4% cap rates with 3.4% rent growth — the sweet spot for dividend-focused funds.
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <div class="mk-head" style="background:linear-gradient(135deg,#1e40af,#1e40afdd)">
+        <div class="mk-rank">Market #2</div>
+        <div class="mk-name">Inland Empire</div>
+        <div class="mk-cap">Cap Rate: 5.4–6.4% · Price/Unit: $340K median (+14% YoY)</div>
+      </div>
+      <div class="mk-body">
+        
+        <div class="mk-stats">
+          <div class="mk-stat"><div class="mk-stat-n">1,598,577</div><div class="mk-stat-l">Housing Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">215,164</div><div class="mk-stat-l">Multifamily Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">494,285</div><div class="mk-stat-l">Renter Households</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">20,730</div><div class="mk-stat-l">Vacant For Rent</div></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Riverside Vacancy</span><span class="mk-val">13.8% → 11.4% <b style="color:#16a34a">(-2.4pp)</b></span></div>
+          <div class="mk-pair"><span class="mk-label">SB Vacancy</span><span class="mk-val">11.9% → 9.6% <b style="color:#16a34a">(-2.3pp)</b></span></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Riv Rental Vac</span><span class="mk-val">4.9% (-0.5pp)</span></div>
+          <div class="mk-pair"><span class="mk-label">SB Rental Vac</span><span class="mk-val">3.2% (-1.1pp)</span></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Riv Rent / Cost</span><span class="mk-val">$1,814 / $1,903 = <b>0.95</b></span></div>
+          <div class="mk-pair"><span class="mk-label">SB Rent / Cost</span><span class="mk-val">$1,706 / $1,745 = <b>0.98</b></span></div>
+        </div>
+        
+        <div class="mk-sparkline-section">
+          <div class="mk-label" style="margin-bottom:4px">Vacancy Trend (2018→2023)</div>
+          <svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle"><polyline points="0.0,4.1 24.0,4.1 48.0,11.5 72.0,16.5 96.0,19.8 120.0,23.9" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.1" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="120.0" cy="23.9" r="3" fill="#16a34a"/></svg> <span style="font-size:10px;color:#64748b">Riv</span> <svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle"><polyline points="0.0,4.2 24.0,5.1 48.0,9.3 72.0,15.3 96.0,20.4 120.0,23.8" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.2" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="120.0" cy="23.8" r="3" fill="#16a34a"/></svg> <span style="font-size:10px;color:#64748b">SB</span>
+        </div>
+        
+        <div class="mk-metrics">
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Cap Rate (Class C)</span>
+            <span class="mk-metric-val" style="color:#1e40af;font-weight:700">6.4% (SB), 5.4% (Riv)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Rent Growth</span>
+            <span class="mk-metric-val">+4.6% projected over 2 years</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">MF Vacancy</span>
+            <span class="mk-metric-val">~5.3% (trending down in 2026)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">New Supply</span>
+            <span class="mk-metric-val">Slowing sharply — 20% fewer starts in 2025</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Target Submarkets</span>
+            <span class="mk-metric-val" style="font-size:12px">Rancho Cucamonga, Ontario, Moreno Valley, Fontana, SW Riverside</span>
+          </div>
+        </div>
+        
+        <div class="mk-thesis">
+          <div class="mk-thesis-head">Investment Thesis</div>
+          The Inland Empire (Riverside + San Bernardino combined) is California's most compelling value play. Both counties scored 97/100 on our criteria — vacancy has plunged (Riverside: 13.8%→11.4%, San Bernardino: 11.9%→9.6%) and rental vacancy is tight (3.2–4.9%). The combined market has 215,164 multifamily units and nearly 500K renters. The rent-to-cost ratio is exceptional: 0.95 (Riverside) and 0.98 (San Bernardino), meaning acquired properties can service debt almost immediately. San Bernardino offers 6.4% cap rates — highest among major metros. New construction starts dropped 20% in 2025, which will tighten the market further into 2026–2027. Median per-unit pricing of $340K is 30-50% below coastal metros.
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <div class="mk-head" style="background:linear-gradient(135deg,#7c3aed,#7c3aeddd)">
+        <div class="mk-rank">Market #3</div>
+        <div class="mk-name">Fresno</div>
+        <div class="mk-cap">Cap Rate: 6.5% · Price/Unit: ~$150–180K (lowest in major CA markets)</div>
+      </div>
+      <div class="mk-body">
+        
+        <div class="mk-stats">
+          <div class="mk-stat"><div class="mk-stat-n">342,003</div><div class="mk-stat-l">Housing Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">70,042</div><div class="mk-stat-l">Multifamily Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">143,630</div><div class="mk-stat-l">Renter Households</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">4,469</div><div class="mk-stat-l">Vacant For Rent</div></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Vacancy Trend</span><span class="mk-val">7.3% → 5.8% <b style="color:#16a34a">(-1.5pp)</b></span></div>
+          <div class="mk-pair"><span class="mk-label">Rental Vacancy</span><span class="mk-val">3.0% (-0.6pp)</span></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Rent / Owner Cost</span><span class="mk-val">$1,300 / $1,399 = <b>0.93</b></span></div>
+          <div class="mk-pair"><span class="mk-label">% Renter</span><span class="mk-val">45%</span></div>
+        </div>
+        
+        <div class="mk-sparkline-section">
+          <div class="mk-label" style="margin-bottom:4px">Vacancy Trend (2018→2023)</div>
+          <svg width="140" height="32" viewBox="0 0 140 32" style="vertical-align:middle"><polyline points="0.0,6.4 28.0,10.2 56.0,10.2 84.0,15.4 112.0,20.5 140.0,25.6" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="6.4" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="140.0" cy="25.6" r="3" fill="#16a34a"/></svg>
+        </div>
+        
+        <div class="mk-metrics">
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Cap Rate (Class C)</span>
+            <span class="mk-metric-val" style="color:#7c3aed;font-weight:700">6.5%</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Rent Growth</span>
+            <span class="mk-metric-val">+6% in 2024</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">MF Vacancy</span>
+            <span class="mk-metric-val"><5% (occupancy >95%)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">New Supply</span>
+            <span class="mk-metric-val">Limited pipeline</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Target Submarkets</span>
+            <span class="mk-metric-val" style="font-size:12px">Downtown Fresno, Tower District, North Fresno, Clovis-adjacent</span>
+          </div>
+        </div>
+        
+        <div class="mk-thesis">
+          <div class="mk-thesis-head">Investment Thesis</div>
+          Fresno is the yield leader. At 6.5% cap rates — the highest among sizeable California markets — and with occupancy above 95%, it delivers the strongest immediate cash-on-cash returns. Vacancy has dropped steadily from 7.3% to 5.8% (-1.5pp) with rental vacancy at just 3.0%. The rent-to-cost ratio (0.93) is strong, and rent growth hit 6% in 2024 — fastest among our picks. With 70,042 multifamily units, 143K renters, and per-unit pricing roughly half of Sacramento's, Fresno offers the lowest barrier to entry and the highest yield. Healthcare, agriculture, and logistics drive stable employment. The risk is slower appreciation, but for a dividend-focused fund, the cash flow profile is ideal.
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <div class="mk-head" style="background:linear-gradient(135deg,#b45309,#b45309dd)">
+        <div class="mk-rank">Market #4</div>
+        <div class="mk-name">Kern (Bakersfield)</div>
+        <div class="mk-cap">Cap Rate: 5.9–7.1% · Price/Unit: ~$120–160K (lowest in CA)</div>
+      </div>
+      <div class="mk-body">
+        
+        <div class="mk-stats">
+          <div class="mk-stat"><div class="mk-stat-n">304,481</div><div class="mk-stat-l">Housing Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">43,112</div><div class="mk-stat-l">Multifamily Units</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">113,095</div><div class="mk-stat-l">Renter Households</div></div>
+          <div class="mk-stat"><div class="mk-stat-n">3,983</div><div class="mk-stat-l">Vacant For Rent</div></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Vacancy Trend</span><span class="mk-val">9.4% → 7.6% <b style="color:#16a34a">(-1.8pp)</b></span></div>
+          <div class="mk-pair"><span class="mk-label">Rental Vacancy</span><span class="mk-val">3.4% (-1.9pp)</span></div>
+        </div>
+        <div class="mk-row">
+          <div class="mk-pair"><span class="mk-label">Rent / Owner Cost</span><span class="mk-val">$1,220 / $1,330 = <b>0.92</b></span></div>
+          <div class="mk-pair"><span class="mk-label">% Renter</span><span class="mk-val">40%</span></div>
+        </div>
+        
+        <div class="mk-sparkline-section">
+          <div class="mk-label" style="margin-bottom:4px">Vacancy Trend (2018→2023)</div>
+          <svg width="140" height="32" viewBox="0 0 140 32" style="vertical-align:middle"><polyline points="0.0,5.7 28.0,6.9 56.0,14.9 84.0,17.1 112.0,21.7 140.0,26.3" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="5.7" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="140.0" cy="26.3" r="3" fill="#16a34a"/></svg>
+        </div>
+        
+        <div class="mk-metrics">
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Cap Rate (Class C)</span>
+            <span class="mk-metric-val" style="color:#b45309;font-weight:700">~6.8%</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Rent Growth</span>
+            <span class="mk-metric-val">Moderate, energy-sector driven</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">MF Vacancy</span>
+            <span class="mk-metric-val">~7.6% (falling steadily from 9.4%)</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">New Supply</span>
+            <span class="mk-metric-val">Minimal pipeline</span>
+          </div>
+          <div class="mk-metric-row">
+            <span class="mk-metric-label">Target Submarkets</span>
+            <span class="mk-metric-val" style="font-size:12px">SW Bakersfield, Rosedale, NW Bakersfield, Stockdale corridor</span>
+          </div>
+        </div>
+        
+        <div class="mk-thesis">
+          <div class="mk-thesis-head">Investment Thesis</div>
+          Kern County / Bakersfield is the highest-yield opportunity with the steepest vacancy decline trajectory. Vacancy has dropped from 9.4% to 7.6% (-1.8pp) over 5 years, and rental vacancy plummeted from 5.3% to 3.4% (-1.9pp) — the sharpest rental tightening of any of our picks. Cap rates of 5.9–7.1% and per-unit pricing under $160K make this the most capital-efficient entry in California. The rent-to-cost ratio is 0.92. With 43,112 multifamily units and 113K renters, it's a real market with real liquidity. Energy transition and logistics are diversifying the employment base beyond oil. The tradeoff is slower population growth and less institutional interest, which actually creates buying opportunities for a nimble fund.
+        </div>
+      </div>
+    </div>
+
+  <div class="scoring">
+    <div class="scoring-head">
+      <h2>Full Scoring — Top 15 California Counties</h2>
+      <p>Scored on: vacancy trend (30pts) + rental vacancy trend (20pts) + rent/cost ratio (25pts) + MF stock depth (15pts) + market size (10pts) = 100 max. Green-highlighted rows are our 4 fund picks.</p>
+    </div>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>County</th>
+          <th style="text-align:center">Score</th>
+          <th style="text-align:center">Vacancy 18→23</th>
+          <th style="text-align:center">5yr Δ</th>
+          <th style="text-align:center">Trend</th>
+          <th style="text-align:center">Rental Vac</th>
+          <th style="text-align:center">Med. Rent</th>
+          <th style="text-align:center">Owner Cost</th>
+          <th style="text-align:center">R/C Ratio</th>
+          <th style="text-align:right">MF Units</th>
+          <th style="text-align:right">Renters</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr style="background:#f8fafc;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">1</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Monterey</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">97</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">10.7% → 8.7%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.0pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,3.3 16.0,6.0 32.0,9.3 48.0,13.3 64.0,15.3 80.0,16.7" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="3.3" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.7" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.3%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,995</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,028</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.98</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">33,282</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">63,013</td>
+    </tr>
+    <tr style="background:#fff;border-left:3px solid #16a34a">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">2</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Riverside<span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px">PICK</span></td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">97</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">13.8% → 11.4%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.4pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,2.9 16.0,2.9 32.0,8.2 48.0,11.8 64.0,14.1 80.0,17.1" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="2.9" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="17.1" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">4.9%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,814</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,903</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.95</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">112,289</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">237,362</td>
+    </tr>
+    <tr style="background:#f8fafc;border-left:3px solid #16a34a">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">3</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">San Bernardino<span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px">PICK</span></td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">97</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">11.9% → 9.6%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.3pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,3.0 16.0,3.6 32.0,6.7 48.0,10.9 64.0,14.5 80.0,17.0" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="3.0" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="17.0" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">3.2%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,706</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,745</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.98</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">102,875</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">256,923</td>
+    </tr>
+    <tr style="background:#fff;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">4</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Butte</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">91</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">12.1% → 9.7%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.4pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,2.9 16.0,5.9 32.0,11.2 48.0,13.5 64.0,12.4 80.0,17.1" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="2.9" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="17.1" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">5.9%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,369</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,382</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.99</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">18,480</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">34,358</td>
+    </tr>
+    <tr style="background:#f8fafc;border-left:3px solid #16a34a">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">5</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Kern<span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px">PICK</span></td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">90</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">9.4% → 7.6%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.8pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,3.6 16.0,4.3 32.0,9.3 48.0,10.7 64.0,13.6 80.0,16.4" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="3.6" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.4" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">3.4%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,220</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,330</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#ca8a04">0.92</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">43,112</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">113,095</td>
+    </tr>
+    <tr style="background:#fff;border-left:3px solid #16a34a">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">6</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Fresno<span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px">PICK</span></td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">88</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">7.3% → 5.8%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.5pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.0 16.0,6.4 32.0,6.4 48.0,9.6 64.0,12.8 80.0,16.0" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.0" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.0" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">3.0%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,300</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,399</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#ca8a04">0.93</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">70,042</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">143,630</td>
+    </tr>
+    <tr style="background:#f8fafc;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">7</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Placer</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">88</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">13.1% → 11.8%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.3pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.3 16.0,5.2 32.0,11.3 48.0,13.0 64.0,14.8 80.0,15.7" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.3" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="15.7" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">3.9%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,991</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,193</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#ca8a04">0.91</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">20,745</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">39,976</td>
+    </tr>
+    <tr style="background:#fff;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">8</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Imperial</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">87</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">23.3% → 15.1%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-8.2pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,1.1 16.0,3.3 32.0,6.3 48.0,9.1 64.0,13.9 80.0,18.9" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="1.1" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="18.9" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.6%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,012</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,100</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#ca8a04">0.92</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">13,397</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">21,112</td>
+    </tr>
+    <tr style="background:#f8fafc;border-left:3px solid #16a34a">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">9</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Sacramento<span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:600;margin-left:6px">PICK</span></td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">87</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">5.5% → 4.3%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.2pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.5 16.0,10.0 32.0,14.5 48.0,15.5 64.0,15.5 80.0,15.5" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.5" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="15.5" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">3.6%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,702</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,764</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.96</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">116,789</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">235,080</td>
+    </tr>
+    <tr style="background:#fff;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">10</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Lake</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">86</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">26.0% → 23.1%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.9pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,3.9 16.0,2.2 32.0,3.9 48.0,15.7 64.0,17.8 80.0,16.5" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="3.9" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.5" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.9%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,292</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,220</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">1.06</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">2,097</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">7,663</td>
+    </tr>
+    <tr style="background:#f8fafc;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">11</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Sonoma</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">84</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">8.8% → 7.7%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.1pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.8 16.0,4.8 32.0,7.6 48.0,13.3 64.0,15.2 80.0,15.2" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.8" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="15.2" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.5%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,093</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,188</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.96</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">33,444</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">72,009</td>
+    </tr>
+    <tr style="background:#fff;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">12</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Contra Costa</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">83</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">4.6% → 3.5%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.1pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.8 16.0,4.8 32.0,10.5 48.0,12.4 64.0,13.3 80.0,15.2" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.8" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="15.2" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.9%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,322</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$2,493</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#ca8a04">0.93</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">67,112</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">133,153</td>
+    </tr>
+    <tr style="background:#f8fafc;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">13</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Siskiyou</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">81</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">20.1% → 18.0%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.1pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,5.6 16.0,5.0 32.0,2.8 48.0,10.0 64.0,15.0 80.0,17.2" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="5.6" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="17.2" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">2.2%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,043</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$942</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">1.11</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">2,781</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">5,728</td>
+    </tr>
+    <tr style="background:#fff;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">14</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Sutter</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">81</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">5.7% → 4.2%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-1.5pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,4.0 16.0,8.8 32.0,7.2 48.0,8.8 64.0,14.4 80.0,16.0" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="4.0" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.0" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">1.5%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,364</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,401</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.97</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">5,015</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">13,568</td>
+    </tr>
+    <tr style="background:#f8fafc;">
+      <td style="padding:8px 10px;font-weight:600;font-size:13px">15</td>
+      <td style="padding:8px 10px;font-weight:500;font-size:13px">Colusa</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:15px;color:#1e40af">77</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">11.1% → 8.5%</td>
+      <td style="padding:8px 10px;text-align:center;color:#16a34a;font-weight:600;font-size:12px">-2.6pp</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="80" height="20" viewBox="0 0 80 20" style="vertical-align:middle"><polyline points="0.0,2.6 16.0,7.4 32.0,7.9 48.0,10.0 64.0,17.4 80.0,16.3" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="2.6" r="2.5" fill="#16a34a" opacity="0.5"/><circle cx="80.0" cy="16.3" r="3" fill="#16a34a"/></svg></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">1.1%</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,139</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">$1,178</td>
+      <td style="padding:8px 10px;text-align:center;font-weight:700;font-size:13px;color:#16a34a">0.97</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">771</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px">2,820</td>
+    </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This analysis is for informational purposes only and does not constitute investment advice. All data is sourced from the U.S. Census Bureau (ACS 2018–2023), Bureau of Labor Statistics (OEWS May 2024), and publicly available market research. Cap rates, rent growth projections, and market conditions are estimates and may vary. Actual investment returns depend on property-specific factors, financing terms, management, and market conditions. Consult qualified real estate, legal, and financial professionals before making investment decisions.
+  </div>
+
+  <div class="footer">
+    Sources: U.S. Census Bureau ACS 5-Year (2018–2023) · BLS OEWS May 2024 · Colliers, Yardi Matrix, NorthMarq, Marcus &amp; Millichap market reports · ApartmentPropertyValuation.com cap rate data<br>
+    Generated March 2026
+  </div>
+</div>
+</body>
+</html>

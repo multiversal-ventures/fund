@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Housing Vacancy & Occupancy — 5-Year Trends (2018–2023)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#f1f5f9; padding:20px; color:#334155; }
+  .container { max-width:1400px; margin:0 auto; }
+  .header { background:linear-gradient(135deg,#7c3aed,#a855f7,#c084fc); color:white; padding:28px 32px; border-radius:16px; margin-bottom:16px; }
+  .header h1 { font-size:24px; margin-bottom:6px; }
+  .header p { opacity:0.8; font-size:13px; margin-bottom:16px; }
+  .header-stats { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  .hstat { background:rgba(255,255,255,0.15); padding:12px 18px; border-radius:10px; }
+  .hstat .n { font-size:20px; font-weight:700; }
+  .hstat .l { font-size:11px; opacity:0.8; margin-top:2px; }
+  
+  .section { background:white; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,0.06); margin-bottom:16px; overflow:hidden; }
+  .section-head { padding:16px 20px; border-bottom:1px solid #e2e8f0; }
+  .section-head h2 { font-size:16px; color:#1e293b; }
+  .section-head p { font-size:12px; color:#94a3b8; margin-top:2px; }
+  .section-body { padding:16px 20px; }
+  
+  .movers-grid { display:flex; gap:10px; flex-wrap:wrap; }
+  .mover-card { flex:1; min-width:140px; padding:12px; border-radius:10px; text-align:center; }
+  .mover-card.grew { background:#fef2f2; border:1px solid #fecaca; }
+  .mover-card.fell { background:#ecfdf5; border:1px solid #bbf7d0; }
+  .mover-name { font-size:13px; font-weight:700; color:#1e293b; }
+  .mover-vals { font-size:11px; color:#64748b; margin:2px 0; }
+  .mover-change { font-size:14px; font-weight:800; }
+  .mover-card.grew .mover-change { color:#dc2626; }
+  .mover-card.fell .mover-change { color:#16a34a; }
+  
+  .insight { background:#faf5ff; border-left:4px solid #a855f7; padding:14px 18px; margin:16px 20px; border-radius:0 8px 8px 0; font-size:13px; line-height:1.7; }
+  .insight strong { color:#6b21a8; }
+  
+  .tbl-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; white-space:nowrap; }
+  th { background:#f8fafc; padding:8px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#64748b; font-weight:600; position:sticky; top:0; z-index:2; }
+  th.yr { min-width:52px; text-align:center; }
+  
+  .footer { text-align:center; font-size:11px; color:#94a3b8; padding:16px; }
+  
+  .callout { display:flex; gap:16px; align-items:center; background:#fff7ed; border:1px solid #fed7aa; padding:16px; border-radius:10px; margin-bottom:12px; }
+  .callout-icon { font-size:28px; }
+  .callout-text { font-size:13px; line-height:1.6; }
+  .callout-text strong { color:#9a3412; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>California Housing: Vacancy, Rental & Occupancy — 5-Year Trends</h1>
+    <p>U.S. Census Bureau, American Community Survey 5-Year Estimates (2018–2023) — All 58 Counties</p>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="n">14.5M</div>
+        <div class="l">Total Housing Units (2023)</div>
+      </div>
+      <div class="hstat">
+        <div class="n">7.6%</div>
+        <div class="l">Statewide Vacancy Rate</div>
+      </div>
+      <div class="hstat">
+        <div class="n">4.1%</div>
+        <div class="l">Rental Vacancy Rate</div>
+      </div>
+      <div class="hstat">
+        <div class="n">44.2%</div>
+        <div class="l">Renter-Occupied</div>
+      </div>
+      <div class="hstat">
+        <div class="n">7.9% → 7.6%</div>
+        <div class="l">CA Vacancy 2018→2023</div>
+      </div>
+      <div class="hstat" style="padding:8px 14px">
+        <svg width="140" height="36" viewBox="0 0 140 36" style="vertical-align:middle">
+      <polyline points="0.0,15.4 28.0,12.9 56.0,18.0 84.0,18.0 112.0,20.6 140.0,23.1" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="15.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="140.0" cy="23.1" r="3" fill="#16a34a"/>
+    </svg>
+        <div class="l" style="text-align:center">Statewide Trend</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>Biggest Vacancy Rate Increases (2018 → 2023)</h2>
+      <p>Counties where vacancy grew the most over 5 years</p>
+    </div>
+    <div class="section-body">
+      <div class="movers-grid">
+    <div class="mover-card grew">
+      <div class="mover-name">San Francisco</div>
+      <div class="mover-vals">8.7% → 11.9%</div>
+      <div class="mover-change">▲ +3.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,19.4 18.0,18.3 36.0,17.3 54.0,8.9 72.0,4.2 90.0,2.6" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="19.4" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="2.6" r="3" fill="#dc2626"/>
+    </svg>
+    </div>
+    <div class="mover-card grew">
+      <div class="mover-name">Glenn</div>
+      <div class="mover-vals">8.7% → 11.0%</div>
+      <div class="mover-change">▲ +2.3pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,17.1 18.0,18.9 36.0,15.9 54.0,6.7 72.0,4.9 90.0,3.1" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="17.1" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="3.1" r="3" fill="#dc2626"/>
+    </svg>
+    </div>
+    <div class="mover-card grew">
+      <div class="mover-name">San Mateo</div>
+      <div class="mover-vals">5.2% → 7.4%</div>
+      <div class="mover-change">▲ +2.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,18.0 18.0,18.7 36.0,16.0 54.0,10.7 72.0,6.0 90.0,3.3" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="18.0" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="3.3" r="3" fill="#dc2626"/>
+    </svg>
+    </div>
+    <div class="mover-card grew">
+      <div class="mover-name">Inyo</div>
+      <div class="mover-vals">15.3% → 16.6%</div>
+      <div class="mover-change">▲ +1.3pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,18.2 18.0,6.1 36.0,9.9 54.0,3.8 72.0,4.6 90.0,8.3" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="18.2" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="8.3" r="3" fill="#dc2626"/>
+    </svg>
+    </div>
+    <div class="mover-card grew">
+      <div class="mover-name">Santa Clara</div>
+      <div class="mover-vals">4.5% → 5.7%</div>
+      <div class="mover-change">▲ +1.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,17.0 18.0,14.0 36.0,12.0 54.0,8.0 72.0,7.0 90.0,5.0" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="17.0" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="5.0" r="3" fill="#dc2626"/>
+    </svg>
+    </div>
+    <div class="mover-card grew">
+      <div class="mover-name">Alameda</div>
+      <div class="mover-vals">4.8% → 6.0%</div>
+      <div class="mover-change">▲ +1.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,17.0 18.0,14.0 36.0,11.0 54.0,8.0 72.0,6.0 90.0,5.0" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="17.0" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="90.0" cy="5.0" r="3" fill="#dc2626"/>
+    </svg>
+    </div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>Biggest Vacancy Rate Decreases (2018 → 2023)</h2>
+      <p>Counties where vacancy fell the most — markets that tightened</p>
+    </div>
+    <div class="section-body">
+      <div class="movers-grid">
+    <div class="mover-card fell">
+      <div class="mover-name">Alpine</div>
+      <div class="mover-vals">82.7% → 70.2%</div>
+      <div class="mover-change">▼ -12.5pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,0.8 18.0,4.9 36.0,8.6 54.0,16.1 72.0,16.5 90.0,21.2" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="0.8" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="21.2" r="3" fill="#16a34a"/>
+    </svg>
+    </div>
+    <div class="mover-card fell">
+      <div class="mover-name">Imperial</div>
+      <div class="mover-vals">23.3% → 15.1%</div>
+      <div class="mover-change">▼ -8.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,1.2 18.0,3.6 36.0,6.9 54.0,10.0 72.0,15.3 90.0,20.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.2" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="20.8" r="3" fill="#16a34a"/>
+    </svg>
+    </div>
+    <div class="mover-card fell">
+      <div class="mover-name">Amador</div>
+      <div class="mover-vals">22.9% → 15.1%</div>
+      <div class="mover-change">▼ -7.8pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,1.2 18.0,7.0 36.0,12.0 54.0,14.2 72.0,17.7 90.0,20.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.2" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="20.8" r="3" fill="#16a34a"/>
+    </svg>
+    </div>
+    <div class="mover-card fell">
+      <div class="mover-name">Mono</div>
+      <div class="mover-vals">65.6% → 59.5%</div>
+      <div class="mover-change">▼ -6.1pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,3.1 18.0,1.4 36.0,10.3 54.0,17.4 72.0,19.7 90.0,20.6" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="3.1" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="20.6" r="3" fill="#16a34a"/>
+    </svg>
+    </div>
+    <div class="mover-card fell">
+      <div class="mover-name">Sierra</div>
+      <div class="mover-vals">48.2% → 42.5%</div>
+      <div class="mover-change">▼ -5.7pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,1.6 18.0,14.8 36.0,7.2 54.0,11.5 72.0,9.9 90.0,20.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.6" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="20.4" r="3" fill="#16a34a"/>
+    </svg>
+    </div>
+    <div class="mover-card fell">
+      <div class="mover-name">El Dorado</div>
+      <div class="mover-vals">22.9% → 19.7%</div>
+      <div class="mover-change">▼ -3.2pp</div>
+      <svg width="90" height="22" viewBox="0 0 90 22" style="vertical-align:middle">
+      <polyline points="0.0,2.6 18.0,10.5 36.0,16.8 54.0,18.3 72.0,19.4 90.0,19.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="2.6" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="90.0" cy="19.4" r="3" fill="#16a34a"/>
+    </svg>
+    </div></div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-body">
+      <div class="callout">
+        <div class="callout-icon">📊</div>
+        <div class="callout-text">
+          <strong>San Francisco stands out:</strong> Vacancy surged from 8.7% to 11.9% (+3.2pp) and rental vacancy nearly doubled from 2.9% to 6.1% (+3.2pp) — the largest increase among major urban counties, driven by pandemic-era remote work and new housing supply. 
+          <strong>San Mateo</strong> saw a similar pattern with rental vacancy spiking from 3.6% to 7.7% (+4.1pp).
+          Meanwhile, <strong>Inland Empire counties</strong> (Riverside, San Bernardino) saw vacancy drop sharply as affordable housing seekers moved east — Riverside fell from 13.8% to 11.4% (-2.4pp).
+        </div>
+      </div>
+      
+      <div class="insight">
+        <strong>Statewide Pattern:</strong> California's overall vacancy rate barely moved (8.0% → 7.6%), but this hides two diverging stories. 
+        <strong>Bay Area/coastal tech hubs</strong> (SF, San Mateo, Alameda, Santa Clara) saw vacancy <em>rise</em> significantly — more empty units, especially rentals — reflecting the post-pandemic remote work shift. 
+        <strong>Inland/affordable areas</strong> (Riverside, San Bernardino, Sacramento, Fresno, Kern) saw vacancy <em>fall</em> as demand surged from people priced out of coastal metros or seeking space. 
+        Resort/mountain counties (Alpine, Mono, Sierra) saw the biggest absolute drops, as second homes became primary residences.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>Full County Data — Vacancy Rates, 5-Year Trend, Rent & Home Values</h2>
+      <p>All 58 California counties sorted by housing stock size. Sparkline shows vacancy trend 2018–2023. Green = declining vacancy (tightening). Red = rising vacancy (loosening).</p>
+    </div>
+    <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="position:sticky;left:0;background:#f8fafc;z-index:3">County</th>
+          <th style="text-align:right">Units (2023)</th>
+          <th style="text-align:right">Vacant</th>
+          <th class="yr">2018</th>
+          <th class="yr">2019</th>
+          <th class="yr">2020</th>
+          <th class="yr">2021</th>
+          <th class="yr">2022</th>
+          <th class="yr">2023</th>
+          <th style="text-align:center;min-width:130px">Trend</th>
+          <th style="text-align:center">5yr Δ</th>
+          <th style="text-align:center">Rental Vac</th>
+          <th style="text-align:center">Rental 5yr Δ</th>
+          <th style="text-align:right">For Rent</th>
+          <th style="text-align:right">For Sale</th>
+          <th style="text-align:center">% Renter</th>
+          <th style="text-align:right">Med. Rent</th>
+          <th style="text-align:right">Med. Home</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Los Angeles</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,624,084</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">233,830</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,18.0 24.0,14.0 48.0,14.0 72.0,10.0 96.0,10.0 120.0,12.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="18.0" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="12.0" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +0.7pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">76,280</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">12,420</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">54%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">San Diego</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,240,607</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">80,785</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,10.9 24.0,7.8 48.0,12.4 72.0,17.1 96.0,18.7 120.0,20.2" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="10.9" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="20.2" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.6pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">22,102</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,627</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">46%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Orange</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,138,473</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">63,819</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,17.2 24.0,10.8 48.0,12.9 72.0,10.8 96.0,10.8 120.0,12.9" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="17.2" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="12.9" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.4%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">21,504</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,907</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">44%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Riverside</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">860,042</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">97,808</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.1 24.0,4.1 48.0,11.5 72.0,16.5 96.0,19.8 120.0,23.9" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.1" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.9" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">12,195</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">6,507</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">31%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">San Bernardino</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">738,535</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">70,531</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.2 24.0,5.1 48.0,9.3 72.0,15.3 96.0,20.4 120.0,23.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.2" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.8" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.2%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,535</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,624</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">38%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Santa Clara</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">694,209</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">39,742</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,21.6 24.0,17.8 48.0,15.3 72.0,10.2 96.0,8.9 120.0,6.4" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="21.6" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="6.4" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.7pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">16,339</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,544</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">45%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Alameda</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">630,726</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">37,609</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.0%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,21.6 24.0,17.8 48.0,14.0 72.0,10.2 96.0,7.6 120.0,6.4" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="21.6" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="6.4" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +2.6pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">15,116</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,661</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">46%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Sacramento</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">593,616</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">25,393</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.3%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.4 24.0,14.0 48.0,20.4 72.0,21.6 96.0,21.6 120.0,21.6" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.6" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.6%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,864</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,079</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">41%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Contra Costa</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">426,585</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">14,923</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">3.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">3.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">3.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.7 24.0,6.7 48.0,14.7 72.0,17.3 96.0,18.7 120.0,21.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.0pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,991</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,025</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">32%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">San Francisco</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">411,542</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">48,892</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.9%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,24.7 24.0,23.3 48.0,22.0 72.0,11.3 96.0,5.3 120.0,3.3" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="24.7" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="3.3" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +3.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">6.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +3.2pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">14,550</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,336</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">62%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Fresno</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">342,003</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">19,840</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.6 24.0,9.0 48.0,9.0 72.0,13.4 96.0,17.9 120.0,22.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.6" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="22.4" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.6pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,469</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,631</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">45%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Kern</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">304,481</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">23,065</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.0 24.0,6.0 48.0,13.0 72.0,15.0 96.0,19.0 120.0,23.0" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.0" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.0" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.8pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.4%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.9pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,983</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,606</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">40%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Ventura</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">294,651</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">16,606</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,17.5 24.0,8.7 48.0,10.5 72.0,10.5 96.0,10.5 120.0,19.3" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="17.5" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="19.3" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,944</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">939</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">36%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">San Mateo</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">285,558</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">21,134</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,22.9 24.0,23.8 48.0,20.4 72.0,13.6 96.0,7.6 120.0,4.2" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="22.9" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="4.2" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +2.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">7.7%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +4.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">9,067</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,182</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">41%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">San Joaquin</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">256,826</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">15,453</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.0%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,14.0 24.0,11.7 48.0,16.3 72.0,16.3 96.0,14.0 120.0,11.7" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="14.0" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="11.7" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.7%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,533</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,589</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">38%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Sonoma</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">206,319</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">15,821</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.7 24.0,6.7 48.0,10.7 72.0,18.7 96.0,21.3 120.0,21.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,882</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">566</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">38%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Stanislaus</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">184,240</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">7,783</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.2%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,8.7 24.0,15.8 48.0,19.3 72.0,19.3 96.0,19.3 120.0,17.5" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="8.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="17.5" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.0pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,946</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">963</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">39%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Placer</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">176,233</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">20,811</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.1 24.0,7.3 48.0,15.8 72.0,18.3 96.0,20.7 120.0,21.9" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.1" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.9" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,627</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">928</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">26%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Solano</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">163,455</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">7,655</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,10.0 24.0,10.0 48.0,12.0 72.0,14.0 96.0,18.0 120.0,16.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="10.0" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="16.0" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,850</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">665</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">37%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Santa Barbara</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">159,766</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">10,806</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,8.7 24.0,8.7 48.0,14.0 72.0,19.3 96.0,15.8 120.0,15.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="8.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="15.8" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,230</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">648</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">47%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Tulare</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">152,542</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">10,516</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.9%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.7 24.0,16.0 48.0,13.3 72.0,21.3 96.0,18.7 120.0,20.0" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="20.0" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,666</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">544</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">41%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Monterey</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">144,659</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">12,613</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.7 24.0,8.4 48.0,13.1 72.0,18.7 96.0,21.5 120.0,23.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,502</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">545</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">48%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">San Luis Obispo</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">124,871</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">15,974</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,14.0 24.0,12.0 48.0,12.0 72.0,10.0 96.0,18.0 120.0,18.0" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="14.0" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="18.0" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.7%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,063</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,433</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">38%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Marin</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">111,860</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,659</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,20.0 24.0,18.7 48.0,21.3 72.0,16.0 96.0,14.7 120.0,6.7" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="20.0" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="6.7" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,180</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">306</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">36%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Santa Cruz</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">106,635</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">9,762</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.2%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,11.8 24.0,7.4 48.0,20.6 72.0,19.2 96.0,16.2 120.0,17.7" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="11.8" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="17.7" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.4%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,361</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">378</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">40%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">El Dorado</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">94,258</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">18,539</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">21.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">19.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">19.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">19.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,3.3 24.0,13.3 48.0,21.3 72.0,23.3 96.0,24.7 120.0,24.7" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="3.3" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="24.7" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -3.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">7.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +2.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,341</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">504</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">24%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Butte</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">91,176</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,831</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.1 24.0,8.2 48.0,15.6 72.0,18.9 96.0,17.3 120.0,23.9" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.1" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.9" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.8pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,147</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">784</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">42%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Merced</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">89,610</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">5,005</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,10.5 24.0,8.7 48.0,8.7 72.0,14.0 96.0,15.8 120.0,19.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="10.5" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="19.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.6pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,140</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">341</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">47%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Yolo</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">81,543</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,903</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.0%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,15.8 24.0,21.9 48.0,18.3 72.0,14.6 96.0,12.2 120.0,6.1" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="15.8" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="6.1" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +0.8pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +2.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,793</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">138</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">46%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Shasta</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">79,748</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,275</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,11.5 24.0,21.6 48.0,19.1 72.0,11.5 96.0,6.4 120.0,10.2" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="11.5" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="10.2" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.7pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,328</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">666</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">35%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Humboldt</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">62,625</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">7,747</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">14.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,10.4 24.0,13.5 48.0,5.2 72.0,11.4 96.0,21.8 120.0,22.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="10.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="22.8" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">607</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">318</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">44%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Imperial</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">57,511</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,667</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">19.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">17.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">15.1%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,1.5 24.0,4.6 48.0,8.8 72.0,12.8 96.0,19.5 120.0,26.5" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.5" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="26.5" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -8.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.6%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">558</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">232</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">43%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Napa</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">55,601</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">5,938</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,12.4 24.0,5.2 48.0,5.2 72.0,8.3 96.0,14.5 120.0,22.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="12.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="22.8" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">924</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">259</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">36%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Nevada</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">53,981</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">12,108</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">24.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">24.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,9.7 24.0,4.8 48.0,6.8 72.0,12.6 96.0,18.3 120.0,23.2" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="9.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.2" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">435</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">558</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">26%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Madera</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">50,368</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">5,855</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,21.0 24.0,16.8 48.0,9.8 72.0,8.4 96.0,7.0 120.0,14.0" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="21.0" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="14.0" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.7%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">591</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">407</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">34%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Kings</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">46,695</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,959</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.3%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,7.4 24.0,19.2 48.0,20.6 72.0,14.7 96.0,14.7 120.0,13.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="7.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="13.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.5pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">497</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">374</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">45%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Mendocino</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">41,495</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">6,925</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">17.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,12.7 24.0,21.6 48.0,16.5 72.0,6.4 96.0,15.3 120.0,12.7" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="12.7" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="12.7" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.2%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">454</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">187</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">39%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Sutter</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">34,681</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,441</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">5.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.2%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.6 24.0,12.3 48.0,10.1 72.0,12.3 96.0,20.2 120.0,22.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.6" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="22.4" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">1.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">200</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">218</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">41%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Lake</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">34,271</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">7,907</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">26.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">26.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">26.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.1%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.5 24.0,3.0 48.0,5.5 72.0,21.9 96.0,25.0 120.0,23.1" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.5" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="23.1" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.9pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">231</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">451</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">29%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Tuolumne</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">31,491</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,682</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">28.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">28.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">26.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.2 24.0,5.1 48.0,16.1 72.0,23.8 96.0,16.1 120.0,14.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.2" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="14.4" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.2pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.0pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">365</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">230</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">26%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Yuba</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">30,089</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,026</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">7.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">6.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,8.0 24.0,6.7 48.0,8.0 72.0,6.7 96.0,18.7 120.0,21.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="8.0" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.9pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">352</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">115</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">37%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Calaveras</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">27,579</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">9,682</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">37.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">39.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">39.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">38.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">37.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">35.1%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,11.7 24.0,3.1 48.0,2.5 72.0,6.6 96.0,13.2 120.0,25.5" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="11.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="25.5" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.7pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">5.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">171</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">280</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">16%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Tehama</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">27,456</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,930</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.4 24.0,6.1 48.0,19.3 72.0,23.6 96.0,22.7 120.0,19.3" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="19.3" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.7pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">1.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.6pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">143</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">271</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">32%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Siskiyou</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">23,066</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,159</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">19.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">18.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">18.0%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,7.8 24.0,7.0 48.0,3.9 72.0,14.0 96.0,21.0 120.0,24.1" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="7.8" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="24.1" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">2.2%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">130</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">203</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">30%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">San Benito</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">20,937</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">749</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">4.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">3.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">3.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.4 24.0,8.6 48.0,9.7 72.0,11.8 96.0,22.6 120.0,17.2" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.4" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="17.2" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">0.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.8pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">32</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">38</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">33%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Amador</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">18,919</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,853</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">20.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">18.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">17.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">15.1%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,1.6 24.0,8.9 48.0,15.3 72.0,18.1 96.0,22.6 120.0,26.4" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.6" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="26.4" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -7.8pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -4.8pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">110</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">154</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">20%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Plumas</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">15,037</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">6,982</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">49.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">46.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">47.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">46.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">47.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">46.4%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,3.9 24.0,22.6 48.0,15.6 72.0,22.6 96.0,15.6 120.0,24.1" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="3.9" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="24.1" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.6pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">11.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +4.6pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">250</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">212</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">25%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Mono</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">13,632</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,111</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">65.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">66.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">63.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">60.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">59.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">59.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,4.0 24.0,1.8 48.0,13.1 72.0,22.2 96.0,25.1 120.0,26.2" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="4.0" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="26.2" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -6.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">15.4%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -24.0pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">311</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">114</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">31%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Lassen</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">12,232</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">3,172</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">25.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">28.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">27.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">25.9%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,24.1 24.0,10.1 48.0,3.9 72.0,10.1 96.0,11.7 120.0,21.8" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="24.1" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="21.8" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">4.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ -0.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">120</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">180</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">32%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Del Norte</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">11,156</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,535</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">12.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">14.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">14.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">13.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,9.7 24.0,22.6 48.0,11.8 72.0,6.5 96.0,5.4 120.0,9.7" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="9.7" r="2.5" fill="#94a3b8" opacity="0.5"/>
+      <circle cx="120.0" cy="9.7" r="3" fill="#94a3b8"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#94a3b8;font-weight:600">→ +0.0pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">1.5%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">43</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">156</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">29%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Glenn</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">10,973</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,210</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.0%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,21.8 24.0,24.1 48.0,20.2 72.0,8.6 96.0,6.2 120.0,3.9" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="21.8" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="3.9" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +2.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">7.9%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +4.9pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">310</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">29</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">37%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Mariposa</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">9,796</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,281</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">25.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">26.6%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">25.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.8%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">22.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">23.3%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,6.9 24.0,2.9 48.0,9.1 72.0,24.6 96.0,25.1 120.0,21.7" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="6.9" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="21.7" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.6pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">10.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">219</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">11</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">25%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Inyo</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">9,500</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,577</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">15.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">17.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">17.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">16.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,23.2 24.0,7.7 48.0,12.6 72.0,4.8 96.0,5.8 120.0,10.6" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="23.2" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="10.6" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.3pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">3.7%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">99</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">60</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">33%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Colusa</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,157</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">691</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">11.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">10.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">9.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">8.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,3.7 24.0,10.3 48.0,11.1 72.0,14.0 96.0,24.3 120.0,22.8" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="3.7" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="22.8" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -2.6pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">1.1%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -4.2pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">31</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">139</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">38%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Trinity</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">8,122</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,749</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">34.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">33.4%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">33.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">33.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">33.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">33.8%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,5.8 24.0,18.7 48.0,15.2 72.0,19.8 96.0,22.2 120.0,14.0" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="5.8" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="14.0" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.7pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">6.8%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +5.1pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">105</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">54</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">27%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Modoc</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">4,774</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,510</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">30.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">31.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">31.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">29.0%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">28.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">31.6%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,12.5 24.0,7.4 48.0,3.7 72.0,23.6 96.0,24.3 120.0,4.4" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="12.5" r="2.5" fill="#dc2626" opacity="0.5"/>
+      <circle cx="120.0" cy="4.4" r="3" fill="#dc2626"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#dc2626;font-weight:600">▲ +1.1pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">0.3%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -1.4pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">81</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">23%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#f8fafc">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#f8fafc;z-index:1">Sierra</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">2,099</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">893</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">48.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">44.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">46.5%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">45.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">45.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">42.5%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,2.1 24.0,18.8 48.0,9.2 72.0,14.6 96.0,12.5 120.0,25.9" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="2.1" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="25.9" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -5.7pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">0.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -0.9pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">0</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">37</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">22%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+    <tr style="background:#ffffff">
+      <td style="padding:8px 10px;font-weight:500;color:#1e293b;white-space:nowrap;font-size:13px;position:sticky;left:0;background:#ffffff;z-index:1">Alpine</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,587</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">1,114</td>
+      <td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">82.7%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">80.2%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">77.9%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">73.3%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">73.1%</td><td style="padding:6px 8px;text-align:center;font-size:12px;color:#475569">70.2%</td>
+      <td style="padding:8px 10px;text-align:center"><svg width="120" height="28" viewBox="0 0 120 28" style="vertical-align:middle">
+      <polyline points="0.0,1.0 24.0,6.2 48.0,11.0 72.0,20.5 96.0,20.9 120.0,27.0" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="0.0" cy="1.0" r="2.5" fill="#16a34a" opacity="0.5"/>
+      <circle cx="120.0" cy="27.0" r="3" fill="#16a34a"/>
+    </svg></td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -12.5pp</span></td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px;font-weight:600;color:#7c3aed">10.0%</td>
+      <td style="padding:8px 10px;text-align:center"><span style="color:#16a34a;font-weight:600">▼ -37.3pp</span></td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">10</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px">17</td>
+      <td style="padding:8px 10px;text-align:center;font-size:12px">19%</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#7c3aed">N/A</td>
+      <td style="padding:8px 10px;text-align:right;font-size:12px;color:#0369a1">N/A</td>
+    </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    Source: U.S. Census Bureau, American Community Survey 5-Year Estimates (2018–2023). Tables B25001, B25002, B25003, B25004, B25064, B25077.<br>
+    Vacancy rate = vacant units / total units. Rental vacancy rate = for-rent vacant / (renter-occupied + for-rent vacant).<br>
+    "5yr Δ" = change in percentage points from 2018 to 2023. Sparklines show year-over-year trajectory. ▲ Red = growing vacancy. ▼ Green = tightening market.
+  </div>
+</div>
+</body>
+</html>

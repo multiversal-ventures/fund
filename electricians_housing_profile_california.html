@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where Electricians Live in California — Housing Profile</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#f1f5f9; padding:24px; color:#334155; }
+  .container { max-width:1200px; margin:0 auto; }
+  .page-header { background:linear-gradient(135deg,#0f172a,#1e293b); color:white; padding:28px 32px; border-radius:16px; margin-bottom:20px; }
+  .page-header h1 { font-size:24px; margin-bottom:6px; }
+  .page-header p { opacity:0.7; font-size:13px; }
+  
+  .summary-bar { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:20px; }
+  .summary-card { background:white; padding:16px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  .summary-card .sc-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; }
+  .summary-card .sc-value { font-size:22px; font-weight:700; color:#1e293b; margin-top:4px; }
+  .summary-card .sc-sub { font-size:12px; color:#94a3b8; }
+  
+  .insight-box { background:#fffbeb; border:1px solid #fde68a; padding:16px 20px; border-radius:12px; margin-bottom:20px; font-size:13px; line-height:1.7; }
+  .insight-box strong { color:#92400e; }
+  
+  .metro-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(540px, 1fr)); gap:20px; }
+  .metro-card { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); }
+  .metro-header { padding:16px 20px; color:white; }
+  .metro-rank { font-size:11px; opacity:0.8; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+  .metro-name { font-size:18px; font-weight:700; margin:2px 0; }
+  .metro-elec { font-size:12px; opacity:0.85; }
+  .metro-body { padding:16px 20px; }
+  .metro-row { display:flex; gap:12px; margin-bottom:14px; }
+  .metro-metric { flex:1; background:#f8fafc; padding:10px; border-radius:8px; text-align:center; }
+  .metric-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.3px; font-weight:600; }
+  .metric-value { font-size:18px; font-weight:700; color:#1e293b; margin-top:2px; }
+  
+  .tenure-section { margin-bottom:14px; }
+  .tenure-bar { display:flex; height:28px; border-radius:6px; overflow:hidden; }
+  .tenure-owner { background:#3b82f6; display:flex; align-items:center; justify-content:center; }
+  .tenure-owner span { color:white; font-size:12px; font-weight:600; }
+  .tenure-renter { background:#f97316; display:flex; align-items:center; justify-content:center; }
+  .tenure-renter span { color:white; font-size:12px; font-weight:600; }
+  .tenure-numbers { display:flex; justify-content:space-between; font-size:11px; color:#94a3b8; margin-top:4px; }
+  
+  .cost-section { margin-bottom:14px; }
+  .cost-row { display:flex; gap:10px; }
+  .cost-item { flex:1; text-align:center; padding:8px; background:#f8fafc; border-radius:8px; }
+  .cost-label { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.3px; }
+  .cost-value { font-size:16px; font-weight:700; margin-top:2px; }
+  .cost-value span { font-size:11px; font-weight:400; color:#94a3b8; }
+  .cost-value.rent { color:#7c3aed; }
+  .cost-value.home { color:#0369a1; }
+  .cost-value.owner { color:#b45309; }
+  
+  .afford-section { background:#fafafa; padding:12px; border-radius:8px; margin-bottom:14px; }
+  .afford-row { display:flex; gap:10px; }
+  .afford-item { flex:1; }
+  .afford-label { font-size:10px; color:#64748b; margin-bottom:4px; text-transform:uppercase; }
+  .afford-badge { padding:6px 10px; border-radius:6px; font-size:12px; font-weight:600; text-align:center; }
+  .afford-note { font-size:10px; color:#94a3b8; margin-top:6px; font-style:italic; }
+  
+  .vacant-section { }
+  .vacant-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .vacant-chip { background:#f1f5f9; padding:4px 10px; border-radius:6px; font-size:12px; color:#64748b; }
+  .vacant-num { font-weight:700; color:#475569; }
+  
+  .footer { text-align:center; font-size:11px; color:#94a3b8; margin-top:24px; padding:16px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="page-header">
+    <h1>Where Do California's Electricians Live? Housing, Rent & Ownership</h1>
+    <p>Combining BLS employment data (May 2024) with Census ACS housing data (2023) for the top 6 electrician metro areas</p>
+  </div>
+  
+  <div class="summary-bar">
+    <div class="summary-card">
+      <div class="sc-label">Electricians in Top 6 Metros</div>
+      <div class="sc-value">56,880</div>
+      <div class="sc-sub">83% of CA metro total</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Avg Renter Rate</div>
+      <div class="sc-value">43%</div>
+      <div class="sc-sub">vs 44% statewide</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Rent Affordable?</div>
+      <div class="sc-value" style="color:#ca8a04">Borderline</div>
+      <div class="sc-sub">3 of 6 metros above 30%</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Homeownership</div>
+      <div class="sc-value" style="color:#dc2626">Out of Reach</div>
+      <div class="sc-sub">All 6 metros unaffordable</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Best Value Metro</div>
+      <div class="sc-value" style="font-size:16px">Riverside-SB</div>
+      <div class="sc-sub">$510K median · 65% own</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <strong>Key Takeaway:</strong> In all 6 major metro areas, homeownership is out of reach for an electrician earning the median salary — median home values range from $498K (Sacramento) to $1.38M (San Jose), far exceeding the ~$265K-$333K an electrician can typically afford. Renting is borderline: affordable in Sacramento (27% of income), LA (30%), and Riverside (29%), but cost-burdened in San Francisco (31%), San Diego (34%), and San Jose (36%). <strong>Riverside-San Bernardino</strong> offers the best balance — lowest rent, highest homeownership rate (65%), and the most available inventory. Electricians who do own homes likely purchased years ago, have dual incomes, or live in less expensive pockets within these metros.
+  </div>
+
+  <div class="metro-grid">
+    
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#1e40af,#1e40afcc)">
+        <div class="metro-rank">#1</div>
+        <div class="metro-name">Los Angeles-Long Beach-Anaheim</div>
+        <div class="metro-elec">21,070 electricians · $76,120/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">4,762,557</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">6.2%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">4.1%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:48.574617886863514%">
+              <span>Own 49%</span>
+            </div>
+            <div class="tenure-renter" style="width:51.425382113136486%">
+              <span>Rent 51%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>2,168,812 owners</span>
+            <span>2,296,096 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$1,893<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$783,300</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$2,032<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#16a34a15;color:#16a34a;border:1px solid #16a34a30">
+                Affordable · 30% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $516,880
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">97,784</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">17,327</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">297,649</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#7c3aed,#7c3aedcc)">
+        <div class="metro-rank">#2</div>
+        <div class="metro-name">San Francisco-Oakland-Fremont</div>
+        <div class="metro-elec">9,520 electricians · $93,750/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">1,866,271</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">7.0%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">5.4%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:55.38744039090426%">
+              <span>Own 55%</span>
+            </div>
+            <div class="tenure-renter" style="width:44.61255960909574%">
+              <span>Rent 45%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>961,002 owners</span>
+            <span>774,052 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$2,419<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$1.4M</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$2,620<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Cost-burdened · 31% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $1.1M
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">43,904</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">7,510</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">131,217</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#b45309,#b45309cc)">
+        <div class="metro-rank">#3</div>
+        <div class="metro-name">Riverside-San Bernardino-Ontario</div>
+        <div class="metro-elec">7,570 electricians · $73,970/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">1,598,577</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">10.5%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">4.0%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:65.44036726754568%">
+              <span>Own 65%</span>
+            </div>
+            <div class="tenure-renter" style="width:34.55963273245432%">
+              <span>Rent 35%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>935,953 owners</span>
+            <span>494,285 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$1,814<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$510,300</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$1,903<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#16a34a15;color:#16a34a;border:1px solid #16a34a30">
+                Affordable · 29% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $251,405
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">20,730</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">11,131</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">168,339</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#0e7490,#0e7490cc)">
+        <div class="metro-rank">#4</div>
+        <div class="metro-name">San Diego-Chula Vista-Carlsbad</div>
+        <div class="metro-elec">7,330 electricians · $75,640/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">1,240,607</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">6.5%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">4.0%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:54.50784689374749%">
+              <span>Own 55%</span>
+            </div>
+            <div class="tenure-renter" style="width:45.49215310625251%">
+              <span>Rent 45%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>632,194 owners</span>
+            <span>527,628 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$2,154<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$791,600</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$2,275<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Cost-burdened · 34% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $526,860
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">22,102</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">4,627</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">80,785</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#15803d,#15803dcc)">
+        <div class="metro-rank">#5</div>
+        <div class="metro-name">Sacramento-Roseville-Folsom</div>
+        <div class="metro-elec">5,850 electricians · $75,780/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">945,650</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">7.4%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">4.0%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:62.496632435468335%">
+              <span>Own 62%</span>
+            </div>
+            <div class="tenure-renter" style="width:37.50336756453167%">
+              <span>Rent 38%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>547,473 owners</span>
+            <span>328,531 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$1,702<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$498,900</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$1,764<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#16a34a15;color:#16a34a;border:1px solid #16a34a30">
+                Affordable · 27% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $233,670
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">13,625</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">3,649</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">69,646</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metro-card">
+      <div class="metro-header" style="background:linear-gradient(135deg,#be123c,#be123ccc)">
+        <div class="metro-rank">#6</div>
+        <div class="metro-name">San Jose-Sunnyvale-Santa Clara</div>
+        <div class="metro-elec">5,540 electricians · $95,020/yr median</div>
+      </div>
+      <div class="metro-body">
+        <div class="metro-row">
+          <div class="metro-metric">
+            <div class="metric-label">Total Housing Units</div>
+            <div class="metric-value">715,146</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Vacancy Rate</div>
+            <div class="metric-value">5.7%</div>
+          </div>
+          <div class="metro-metric">
+            <div class="metric-label">Rental Vacancy</div>
+            <div class="metric-value">5.2%</div>
+          </div>
+        </div>
+        
+        <div class="tenure-section">
+          <div class="metric-label" style="margin-bottom:6px">Own vs. Rent</div>
+          <div class="tenure-bar">
+            <div class="tenure-owner" style="width:55.66148624111583%">
+              <span>Own 56%</span>
+            </div>
+            <div class="tenure-renter" style="width:44.33851375888417%">
+              <span>Rent 44%</span>
+            </div>
+          </div>
+          <div class="tenure-numbers">
+            <span>375,523 owners</span>
+            <span>299,132 renters</span>
+          </div>
+        </div>
+        
+        <div class="cost-section">
+          <div class="cost-row">
+            <div class="cost-item">
+              <div class="cost-label">Median Rent</div>
+              <div class="cost-value rent">$2,814<span>/mo</span></div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Median Home Value</div>
+              <div class="cost-value home">$1.4M</div>
+            </div>
+            <div class="cost-item">
+              <div class="cost-label">Owner Monthly Cost</div>
+              <div class="cost-value owner">$2,958<span>/mo</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afford-section">
+          <div class="metric-label" style="margin-bottom:8px">Can an Electrician Afford to Live Here?</div>
+          <div class="afford-row">
+            <div class="afford-item">
+              <div class="afford-label">Rent</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Cost-burdened · 36% of income
+              </div>
+            </div>
+            <div class="afford-item">
+              <div class="afford-label">Buy</div>
+              <div class="afford-badge" style="background:#dc262615;color:#dc2626;border:1px solid #dc262630">
+                Out of reach · gap of $1.1M
+              </div>
+            </div>
+          </div>
+          <div class="afford-note">Rent: 30% rule. Buy: 3.5× annual salary.</div>
+        </div>
+
+        <div class="vacant-section">
+          <div class="metric-label" style="margin-bottom:6px">Vacant Units Breakdown</div>
+          <div class="vacant-row">
+            <div class="vacant-chip"><span class="vacant-num">16,371</span> for rent</div>
+            <div class="vacant-chip"><span class="vacant-num">2,582</span> for sale</div>
+            <div class="vacant-chip"><span class="vacant-num">40,491</span> total vacant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    Sources: U.S. Bureau of Labor Statistics, OEWS May 2024 (electrician employment & wages) · U.S. Census Bureau, ACS 5-Year 2023 (housing tables B25001-B25004, B25064, B25077, B25105)<br>
+    Affordability rules of thumb: Rent affordable if &lt;30% of gross income · Home affordable at ~3.5× annual salary
+  </div>
+</div>
+</body>
+</html>
