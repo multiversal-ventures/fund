@@ -7,7 +7,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from pathlib import Path
 
-from occupation_resilience import B24010_VARIABLES, compute_resilience_index
+from occupation_resilience import C24010_VARIABLES, compute_resilience_index
 
 CENSUS_BASE = "https://api.census.gov/data"
 
@@ -118,16 +118,35 @@ def fetch_acs_year(year: int, output_path: str = None, api_key: str = None) -> p
 
 
 def fetch_occupation_data(year: int, output_path: str = None, api_key: str = None) -> pd.DataFrame:
-    """Pull B24010 occupation data and compute AI-resistant workforce index."""
+    """Pull C24010 occupation data and compute AI-resistant workforce index.
+
+    Splits into multiple requests to stay under Census API's 50-variable limit.
+    """
     api_key = api_key or os.environ.get("CENSUS_API_KEY", "")
-    url = build_census_url(year, variables=B24010_VARIABLES, api_key=api_key)
-    resp = requests.get(url, timeout=120)
-    resp.raise_for_status()
-    raw = resp.json()
-    header = raw[0]
-    data = raw[1:]
-    df = pd.DataFrame(data, columns=header)
-    df["fips"] = df["state"] + df["county"]
+
+    # Split variables into chunks of 48 (leaving room for NAME, state, county)
+    chunk_size = 48
+    all_vars = C24010_VARIABLES
+    chunks = [all_vars[i:i + chunk_size] for i in range(0, len(all_vars), chunk_size)]
+
+    df = None
+    for i, chunk in enumerate(chunks):
+        url = build_census_url(year, variables=chunk, api_key=api_key)
+        resp = requests.get(url, timeout=120)
+        resp.raise_for_status()
+        raw = resp.json()
+        header = raw[0]
+        data = raw[1:]
+        chunk_df = pd.DataFrame(data, columns=header)
+        chunk_df["fips"] = chunk_df["state"] + chunk_df["county"]
+
+        if df is None:
+            df = chunk_df
+        else:
+            # Merge on fips, keeping new columns only
+            new_cols = [c for c in chunk_df.columns if c not in df.columns]
+            df = df.merge(chunk_df[["fips"] + new_cols], on="fips", how="left")
+
     df["county"] = df["NAME"].str.replace(r",.*$", "", regex=True).str.strip()
     df["state"] = df["state"].map(STATE_FIPS_TO_ABBR)
     df["year"] = year
@@ -149,6 +168,6 @@ def pull_census(years: list[int], output_dir: str, api_key: str = None) -> dict[
         results[year] = fetch_acs_year(year, output_path=output_path, api_key=api_key)
         # Also pull occupation data for workforce resilience
         occ_path = str(Path(output_dir) / f"occupations_{year}.parquet")
-        print(f"  Fetching B24010 occupation data for {year}...")
+        print(f"  Fetching C24010 occupation data for {year}...")
         fetch_occupation_data(year, output_path=occ_path, api_key=api_key)
     return results
