@@ -395,12 +395,10 @@ function buildZillowUrl(fips, lat, lng, county, state) {
   }
   // Fallback: use county name + state as a Zillow text search
   if (county && state) {
-    const loc = (county + ', ' + state).replace(/ County/i, '').replace(/\s+/g, '-');
-    return `https://www.zillow.com/homes/for_sale/${encodeURIComponent(loc)}/`;
+    const clean = String(county).replace(/ County$/i, '').replace(/ Parish$/i, '').replace(/ Municipio$/i, '').trim();
+    return `https://www.zillow.com/homes/${encodeURIComponent(clean + '-' + state)}/`;
   }
-  if (fips) {
-    return `https://www.zillow.com/homes/for_sale/`;
-  }
+  // No useful link possible without county name
   return '';
 }
 
