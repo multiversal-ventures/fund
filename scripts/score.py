@@ -200,13 +200,11 @@ def run_scoring(data_dir: str, config: dict, output_path: str = None) -> pd.Data
     occ_path = data / "census" / f"occupations_{latest_year}.parquet"
     occupation_data = pd.read_parquet(occ_path) if occ_path.exists() else None
 
-    # Load optional data (permits, cbp)
-    permits_path = data / "census" / "permits.parquet"
-    if not permits_path.exists():
-        permits_path = data / "permits" / "permits.parquet"
+    # Load optional data (permits, cbp) — use latest year file
+    permits_path = data / "permits" / f"permits_{latest_year}.parquet"
     permits_data = pd.read_parquet(permits_path) if permits_path.exists() else None
 
-    cbp_path = data / "cbp" / "cbp.parquet"
+    cbp_path = data / "cbp" / f"employment_{latest_year}.parquet"
     cbp_data = pd.read_parquet(cbp_path) if cbp_path.exists() else None
 
     # Hard filters
