@@ -154,10 +154,10 @@
         <button class="btn" id="run-query-btn">Run Query</button>
         <span class="preset-label">Presets:</span>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties ORDER BY total_score DESC LIMIT 50">Top Combined</button>
-        <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, market_score, resilience_index, rent_growth, hhi FROM market_scores ORDER BY market_score DESC LIMIT 30">Top Markets</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, market_score, resilience_index, rent_growth, employment_concentration FROM market_scores ORDER BY market_score DESC LIMIT 30">Top Markets</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT p.fips, p.property_name, p.city, p.state, p.deal_score, p.maturity_years, p.units, p.section8, p.market_score FROM properties p WHERE p.market_score >= 60 ORDER BY p.deal_score DESC LIMIT 30">Best Deals</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE stability_score >= 70 ORDER BY total_score DESC LIMIT 30">Most Stable</button>
-        <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, employment_concentration, top_sector_name, top_sector_share FROM cbp_2023 ORDER BY hhi ASC LIMIT 30">Most Diversified</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, hhi, top_sector_name, top_sector_share FROM cbp_2023 ORDER BY hhi ASC LIMIT 30">Most Diversified</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
       </div>
     </div>
