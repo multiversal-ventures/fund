@@ -366,30 +366,74 @@ document.querySelectorAll('.scenario').forEach(btn => {
 
 let lastResult = null;
 
+// County FIPS → Zillow map bounds for live link generation
+const COUNTY_BOUNDS = {
+  "06067":{s:38.02,n:38.74,w:-121.86,e:-120.99},"06065":{s:33.42,n:34.08,w:-117.67,e:-114.43},
+  "06071":{s:34.03,n:35.81,w:-117.65,e:-114.13},"06019":{s:36.39,n:37.27,w:-120.32,e:-118.36},
+  "06029":{s:34.79,n:35.79,w:-119.86,e:-117.63},"12105":{s:27.64,n:28.26,w:-82.11,e:-81.19},
+  "12083":{s:28.85,n:29.48,w:-82.66,e:-81.43},"12101":{s:28.13,n:28.52,w:-82.90,e:-82.05},
+  "12115":{s:26.94,n:27.46,w:-82.85,e:-82.02},"12097":{s:27.82,n:28.31,w:-81.66,e:-80.85},
+  "04013":{s:32.51,n:34.04,w:-113.33,e:-111.04},
+};
+
+function buildZillowUrl(fips, lat, lng) {
+  let bounds;
+  if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+    const r = 0.01;
+    bounds = {south:lat-r, north:lat+r, west:lng-r, east:lng+r};
+  } else if (COUNTY_BOUNDS[fips]) {
+    const b = COUNTY_BOUNDS[fips];
+    bounds = {south:b.s, north:b.n, west:b.w, east:b.e};
+  } else if (fips) {
+    // Generic search by FIPS — use a wide US-center fallback with county filter
+    return `https://www.zillow.com/homes/for_sale/?searchQueryState=${encodeURIComponent(JSON.stringify({pagination:{},isMapVisible:true,mapBounds:{west:-125,east:-66,south:24,north:50},filterState:{sort:{value:"globalrelevanceex"}},isListVisible:true,mapZoom:4}))}`;
+  } else {
+    return '';
+  }
+  return `https://www.zillow.com/homes/for_sale/?searchQueryState=${encodeURIComponent(JSON.stringify({pagination:{},isMapVisible:true,mapBounds:bounds,filterState:{sort:{value:"globalrelevanceex"}},isListVisible:true,mapZoom:lat?16:11}))}`;
+}
+
 function renderResults(result) {
   lastResult = result;
   const schema = result.schema.fields.map(f => f.name);
+  const hasFips = schema.includes('fips');
+  const hasZillow = schema.includes('zillow_url');
+  const hasLat = schema.includes('lat');
+  const hasLng = schema.includes('lng');
+
   const rows = result.toArray().map(r => {
     const obj = {};
     schema.forEach(col => { obj[col] = r[col]; });
+    // Auto-generate Zillow URL if fips present but no zillow_url column
+    if (hasFips && !hasZillow) {
+      obj._zillow = buildZillowUrl(obj.fips, hasLat ? obj.lat : null, hasLng ? obj.lng : null);
+    }
     return obj;
   });
+
+  const displayCols = hasZillow ? schema : (hasFips ? [...schema, '_zillow'] : schema);
 
   document.getElementById('result-count').textContent = `${rows.length} rows`;
 
   const thead = document.querySelector('#results-table thead');
   const tbody = document.querySelector('#results-table tbody');
 
-  thead.innerHTML = '<tr>' + schema.map(col => `<th>${col}</th>`).join('') + '</tr>';
+  thead.innerHTML = '<tr>' + displayCols.map(col =>
+    `<th>${col === '_zillow' ? 'Zillow' : col}</th>`
+  ).join('') + '</tr>';
 
-  tbody.innerHTML = rows.map(row => '<tr>' + schema.map(col => {
+  tbody.innerHTML = rows.map(row => '<tr>' + displayCols.map(col => {
     let val = row[col];
-    if (col === 'zillow_url' && val) {
+    if ((col === 'zillow_url' || col === '_zillow') && val) {
       return `<td><a class="zillow-link" href="${val}" target="_blank" rel="noopener">View on Zillow</a></td>`;
     }
     if (col === 'total_score' && typeof val === 'number') {
       const cls = val >= 70 ? 'score-high' : val >= 50 ? 'score-mid' : 'score-low';
       return `<td><span class="score-badge ${cls}">${val.toFixed(1)}</span></td>`;
+    }
+    if (col === 'resilience_index' && typeof val === 'number') {
+      const cls = val >= 0.6 ? 'score-high' : val >= 0.45 ? 'score-mid' : 'score-low';
+      return `<td><span class="score-badge ${cls}">${val.toFixed(3)}</span></td>`;
     }
     if (typeof val === 'number') {
       val = Number.isInteger(val) ? val.toLocaleString() : val.toFixed(2);
