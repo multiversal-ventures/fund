@@ -10,9 +10,17 @@ document.addEventListener('alpine:init', () => {
 
   Alpine.data('explorerApp', () => ({
     activeTab: 'dashboard',
+    weightsOpen: false,
 
     setTab(tab) {
       this.activeTab = tab;
+    },
+
+    async savePipelineToFirestore() {
+      const { savePipelineConfig } = await import('/js/explorer/scenarios.js');
+      await savePipelineConfig({
+        loadRunStatus: typeof window.__explorerLoadRunStatus === 'function' ? window.__explorerLoadRunStatus : undefined,
+      });
     },
 
     dismissDuckWarnings() {

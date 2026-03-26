@@ -57,9 +57,92 @@ export const DEAL_WEIGHT_META = [
   { domId: 'w-d-vacancy', dKey: 'vacancy', label: 'Area Vacancy', explain: 'Local rental vacancy — not too hot, not too cold.' },
 ];
 
+/** DOM input ids for market weights (sum must be 100). */
+export const MARKET_WEIGHT_IDS = [
+  'w-m-vacancy',
+  'w-m-rentgrowth',
+  'w-m-rent',
+  'w-m-resilience',
+  'w-m-hhi',
+  'w-m-pop',
+  'w-m-supply',
+];
+
+/** DOM input ids for deal weights (sum must be 100). */
+export const DEAL_WEIGHT_IDS = ['w-d-maturity', 'w-d-units', 'w-d-sec8', 'w-d-vacancy'];
+
 /**
- * @param {keyof typeof SCENARIOS} key
+ * Read Firestore-shaped payload from weight inputs (same keys as pipeline expects).
  */
+export function readPipelineWeightsFromDom() {
+  return {
+    market_weights: {
+      vacancy_trend: parseInt(document.getElementById('w-m-vacancy').value, 10),
+      rent_growth: parseInt(document.getElementById('w-m-rentgrowth').value, 10),
+      rent_cost_ratio: parseInt(document.getElementById('w-m-rent').value, 10),
+      workforce_resilience: parseInt(document.getElementById('w-m-resilience').value, 10),
+      employment_hhi: parseInt(document.getElementById('w-m-hhi').value, 10),
+      pop_growth: parseInt(document.getElementById('w-m-pop').value, 10),
+      supply_pressure: parseInt(document.getElementById('w-m-supply').value, 10),
+    },
+    deal_weights: {
+      mortgage_maturity: parseInt(document.getElementById('w-d-maturity').value, 10),
+      unit_count: parseInt(document.getElementById('w-d-units').value, 10),
+      section8: parseInt(document.getElementById('w-d-sec8').value, 10),
+      area_vacancy: parseInt(document.getElementById('w-d-vacancy').value, 10),
+    },
+    split: {
+      market: parseInt(document.getElementById('w-split-market').value, 10),
+      deal: parseInt(document.getElementById('w-split-deal').value, 10),
+    },
+  };
+}
+
+/**
+ * @returns {{ ok: boolean, message?: string }}
+ */
+export function validatePipelineWeights({ market_weights, deal_weights, split }) {
+  const mTotal = Object.values(market_weights).reduce((a, b) => a + b, 0);
+  const dTotal = Object.values(deal_weights).reduce((a, b) => a + b, 0);
+  if (mTotal !== 100) {
+    return { ok: false, message: 'Market weights must sum to 100' };
+  }
+  if (dTotal !== 100) {
+    return { ok: false, message: 'Deal weights must sum to 100' };
+  }
+  if (split.market + split.deal !== 100) {
+    return { ok: false, message: 'Market/Deal split must sum to 100' };
+  }
+  return { ok: true };
+}
+
+/**
+ * Persist weights to Firestore (same document as legacy explorer).
+ * @param {{ loadRunStatus?: () => Promise<void> }} [opts]
+ */
+export async function savePipelineConfig(opts = {}) {
+  const { loadRunStatus } = opts;
+  const payload = readPipelineWeightsFromDom();
+  const v = validatePipelineWeights(payload);
+  if (!v.ok) {
+    alert(v.message);
+    return;
+  }
+  await firebase.firestore().doc('config/pipeline').set(
+    {
+      market_weights: payload.market_weights,
+      deal_weights: payload.deal_weights,
+      split: payload.split,
+    },
+    { merge: true },
+  );
+  const el = document.getElementById('run-status');
+  if (el) el.textContent = 'Pipeline refresh triggered...';
+  if (typeof loadRunStatus === 'function') {
+    await loadRunStatus();
+  }
+}
+
 export function applyScenarioToDom(key) {
   const s = SCENARIOS[key];
   if (!s) return;
