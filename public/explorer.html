@@ -3,13 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bump explorer-asset-version when changing JS/CSS so clients pull new files (used below + window.__explorerAssetV). -->
+<meta name="explorer-asset-version" content="20260326-3">
 <title>Fund Explorer — Multiversal Ventures</title>
+<script>
+(function () {
+  var v = document.querySelector('meta[name="explorer-asset-version"]').getAttribute('content');
+  window.__explorerAssetV = v;
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/css/explorer.css?v=' + encodeURIComponent(v);
+  document.head.appendChild(link);
+})();
+</script>
 <script src="/__/firebase/12.11.0/firebase-app-compat.js"></script>
 <script src="/__/firebase/12.11.0/firebase-auth-compat.js"></script>
 <script src="/__/firebase/12.11.0/firebase-firestore-compat.js"></script>
 <script src="/__/firebase/12.11.0/firebase-storage-compat.js"></script>
 <script src="/__/firebase/init.js"></script>
-<link rel="stylesheet" href="/css/explorer.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" crossorigin>
 </head>
 <body>
@@ -347,22 +358,23 @@
   </div>
 </div>
 
-<script src="/js/explorer/app.js"></script>
+<script src="/js/explorer/app.js?v=20260326-3"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+<!-- Module specifiers must be string literals — bump ?v= with meta name="explorer-asset-version" -->
 <script type="module">
-import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js';
-import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js';
-import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js';
-import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js';
-import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260326-3';
+import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260326-3';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260326-3';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260326-3';
+import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260326-3';
 import {
   renderResultsTable,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
-} from '/js/explorer/results.js';
-import { renderCharts } from '/js/explorer/charts.js';
+} from '/js/explorer/results.js?v=20260326-3';
+import { renderCharts } from '/js/explorer/charts.js?v=20260326-3';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();

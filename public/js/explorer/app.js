@@ -1,6 +1,14 @@
 /**
  * Fund Explorer — Alpine.js root state + DuckDB store (Task 2+).
  */
+function explorerImport(url) {
+  const v =
+    typeof window !== 'undefined' && window.__explorerAssetV
+      ? String(window.__explorerAssetV)
+      : '1';
+  return import(`${url}?v=${encodeURIComponent(v)}`);
+}
+
 document.addEventListener('alpine:init', () => {
   Alpine.store('duck', {
     db: null,
@@ -32,7 +40,7 @@ document.addEventListener('alpine:init', () => {
     },
 
     async savePipelineToFirestore() {
-      const { savePipelineConfig, hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      const { savePipelineConfig, hashPipelineWeightsFromDom } = await explorerImport('/js/explorer/scenarios.js');
       const ok = await savePipelineConfig({
         loadRunStatus: typeof window.__explorerLoadRunStatus === 'function' ? window.__explorerLoadRunStatus : undefined,
       });
@@ -40,24 +48,24 @@ document.addEventListener('alpine:init', () => {
         this.weightsBaselineHash = hashPipelineWeightsFromDom();
         this.estimatedPreview = false;
         window.__explorerEstimatedPreview = false;
-        import('/js/explorer/map.js')
+        explorerImport('/js/explorer/map.js')
           .then((m) => m.refreshMapLegendIfAny?.())
           .catch(() => {});
       }
     },
 
     async setWeightsBaselineFromCurrentDom() {
-      const { hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      const { hashPipelineWeightsFromDom } = await explorerImport('/js/explorer/scenarios.js');
       this.weightsBaselineHash = hashPipelineWeightsFromDom();
       this.estimatedPreview = false;
       window.__explorerEstimatedPreview = false;
-      import('/js/explorer/map.js')
+      explorerImport('/js/explorer/map.js')
         .then((m) => m.refreshMapLegendIfAny?.())
         .catch(() => {});
     },
 
     async syncEstimatedFromDom() {
-      const { hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      const { hashPipelineWeightsFromDom } = await explorerImport('/js/explorer/scenarios.js');
       const h = hashPipelineWeightsFromDom();
       if (this.weightsBaselineHash === '') {
         this.estimatedPreview = false;
@@ -65,7 +73,7 @@ document.addEventListener('alpine:init', () => {
         this.estimatedPreview = h !== this.weightsBaselineHash;
       }
       window.__explorerEstimatedPreview = this.estimatedPreview;
-      import('/js/explorer/map.js')
+      explorerImport('/js/explorer/map.js')
         .then((m) => m.refreshMapLegendIfAny?.())
         .catch(() => {});
     },

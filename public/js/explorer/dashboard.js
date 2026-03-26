@@ -8,13 +8,13 @@
  * re-running the pipeline. Preview strategy: scenario pills change ORDER BY for ranked lists and
  * VIEW_QUERIES presets; custom slider weights show “Estimated” until Save & Refresh Pipeline.
  */
-import { runQuery as duckQuery } from '/js/explorer/duckdb.js';
-import { buildZillowUrl } from '/js/explorer/zillow.js';
+import { runQuery as duckQuery } from '/js/explorer/duckdb.js?v=20260326-3';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260326-3';
 import {
   MARKET_WEIGHT_META,
   DEAL_WEIGHT_META,
   SCENARIO_LABELS,
-} from '/js/explorer/scenarios.js';
+} from '/js/explorer/scenarios.js?v=20260326-3';
 
 const TOP_N = 6;
 
