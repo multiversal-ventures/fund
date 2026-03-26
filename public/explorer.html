@@ -10,6 +10,7 @@
 <script src="/__/firebase/12.11.0/firebase-storage-compat.js"></script>
 <script src="/__/firebase/init.js"></script>
 <link rel="stylesheet" href="/css/explorer.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" crossorigin>
 </head>
 <body>
 
@@ -286,8 +287,44 @@
     </div>
     </div>
 
-    <div x-show="activeTab === 'map'" x-cloak class="container">
-      <p class="tab-placeholder">Interactive county map (choropleth, filters, Zillow links on hover) ships in <strong>Task 5</strong> of the implementation plan.</p>
+    <div x-show="activeTab === 'map'" x-cloak class="container map-tab">
+      <div class="map-toolbar">
+        <label class="map-toolbar-label">Color by
+          <select id="map-color-metric" class="map-select" aria-label="Choropleth metric">
+            <option value="market_score">Market score</option>
+            <option value="resilience_index">Resilience index</option>
+            <option value="vacancy_trend">Vacancy trend</option>
+            <option value="rent_growth">Rent growth</option>
+            <option value="rent_cost_ratio">Rent / cost ratio</option>
+            <option value="employment_concentration">Employment HHI</option>
+            <option value="pop_growth">Pop growth</option>
+            <option value="supply_pressure">Supply pressure</option>
+          </select>
+        </label>
+        <label class="map-toolbar-label">Filter
+          <select id="map-filter" class="map-select" aria-label="County filter">
+            <option value="all">All counties</option>
+            <option value="m40">Market score ≥ 40</option>
+            <option value="m50">Market score ≥ 50</option>
+            <option value="deals">Has scored deals</option>
+          </select>
+        </label>
+        <span id="map-legend" class="map-legend" aria-live="polite"></span>
+      </div>
+      <div id="map-geojson-error" class="map-error" style="display:none;">
+        <p class="map-error-msg">Could not load county boundaries.</p>
+        <button type="button" class="btn btn-sm" id="map-retry-btn">Retry</button>
+      </div>
+      <div id="map-main-wrap" class="map-split">
+        <div id="explorer-map" class="explorer-leaflet" role="application" aria-label="County choropleth map"></div>
+        <aside id="map-side-panel" class="map-side-panel" hidden>
+          <div class="map-side-panel-head">
+            <h2 id="map-panel-title">County</h2>
+            <button type="button" class="btn btn-sm btn-outline" id="map-panel-close" aria-label="Close panel">×</button>
+          </div>
+          <div id="map-panel-body"></div>
+        </aside>
+      </div>
     </div>
     <div x-show="activeTab === 'sql'" x-cloak class="container">
       <p class="tab-placeholder">SQL Studio (CodeMirror 6 + searchable schema + autocomplete) ships in <strong>Task 6</strong>. Until then, use the <strong>Dashboard</strong> tab for the query editor, presets, and exports.</p>
@@ -302,11 +339,16 @@
 
 <script src="/js/explorer/app.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <script type="module">
 import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js';
 import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js';
 import { buildZillowUrl } from '/js/explorer/zillow.js';
 import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js';
+
+window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
+window.__explorerMapInvalidate = () => invalidateExplorerMapSize();
 
 const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
 const authGate = document.getElementById('auth-gate');
@@ -341,6 +383,11 @@ firebase.auth().onAuthStateChanged(user => {
         await runQuery();
         await refreshDashboard(conn);
         loadRunStatus();
+        try {
+          const root = document.querySelector('.explorer-root');
+          const d = root && typeof Alpine !== 'undefined' && Alpine.$data ? Alpine.$data(root) : null;
+          if (d?.activeTab === 'map') queueMicrotask(() => window.__explorerInitMap?.());
+        } catch (_) { /* Alpine not ready */ }
       } catch (err) {
         document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
         console.error(err);

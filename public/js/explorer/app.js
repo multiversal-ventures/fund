@@ -14,6 +14,12 @@ document.addEventListener('alpine:init', () => {
 
     setTab(tab) {
       this.activeTab = tab;
+      if (tab === 'map') {
+        queueMicrotask(() => {
+          if (typeof window.__explorerInitMap === 'function') window.__explorerInitMap();
+          if (typeof window.__explorerMapInvalidate === 'function') window.__explorerMapInvalidate();
+        });
+      }
     },
 
     async savePipelineToFirestore() {
