@@ -129,7 +129,7 @@
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT state, COUNT(*) as cnt, ROUND(AVG(total_score),1) as avg_score FROM properties GROUP BY state ORDER BY cnt DESC">By State</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE vacancy_rate > 0.08 ORDER BY total_score DESC LIMIT 50">High Vacancy</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
-        <button class="btn btn-sm btn-outline preset" data-sql="SELECT o.county, o.state, o.resilience_index, o.blue_collar_safe_pct, o.healthcare_pct, c.rent_to_cost_ratio, c.vacancy_rate FROM occupations_2023 o JOIN census_2023 c ON o.fips = c.fips WHERE o.resilience_index > 0.55 AND c.rent_to_cost_ratio > 0.9 ORDER BY o.resilience_index DESC">Resilient + Cash Flow</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT o.fips, o.county, o.state, o.resilience_index, o.blue_collar_safe_pct, o.healthcare_pct, c.rent_to_cost_ratio, c.vacancy_rate FROM occupations_2023 o JOIN census_2023 c ON o.fips = c.fips WHERE o.resilience_index > 0.55 AND c.rent_to_cost_ratio > 0.9 ORDER BY o.resilience_index DESC">Resilient + Cash Flow</button>
       </div>
     </div>
 
