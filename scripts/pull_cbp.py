@@ -79,9 +79,13 @@ def parse_cbp_response(raw: list[list], year: int) -> pd.DataFrame:
     # Convert employment to numeric
     df["emp"] = pd.to_numeric(df["emp"], errors="coerce").fillna(0)
 
+    # Deduplicate columns (CBP API can return duplicate column names)
+    df = df.loc[:, ~df.columns.duplicated()]
+
     # Filter to 2-digit NAICS sectors only, exclude "00" (total)
-    mask = df["naics"].apply(_is_2digit_naics) & (df["naics"] != "00")
-    df = df[mask].copy()
+    is_2digit = df["naics"].apply(_is_2digit_naics)
+    not_total = df["naics"] != "00"
+    df = df[is_2digit & not_total].copy()
 
     rows = []
     for fips, group in df.groupby("fips"):

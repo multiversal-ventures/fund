@@ -26,6 +26,9 @@ def parse_oews_data(raw_df: pd.DataFrame, year: int) -> pd.DataFrame:
         "A_MEDIAN": "annual_median",
         "LOC_QUOTIENT": "location_quotient",
     }
+    # Select only columns we care about (raw data has many extra cols with ** values)
+    keep_raw = [c for c in col_map if c in df.columns]
+    df = df[keep_raw].copy()
     df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
     for col in ["total_employment", "hourly_median", "annual_median", "location_quotient"]:
         if col in df.columns:
@@ -34,14 +37,63 @@ def parse_oews_data(raw_df: pd.DataFrame, year: int) -> pd.DataFrame:
     return df
 
 
+def _download_with_playwright(url: str, download_dir: str) -> Path:
+    """Download a file using headless browser to bypass bot protection."""
+    from playwright.sync_api import sync_playwright
+    import time
+    import random
+
+    time.sleep(random.uniform(1.0, 3.0))
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
+        page = context.new_page()
+
+        # Navigate to the BLS page first to get cookies
+        page.goto("https://www.bls.gov/oes/", wait_until="domcontentloaded")
+        time.sleep(random.uniform(0.5, 1.5))
+
+        # Now download the file
+        with page.expect_download(timeout=120000) as download_info:
+            page.evaluate(f"window.location.href = '{url}'")
+        download = download_info.value
+
+        dest = Path(download_dir) / download.suggested_filename
+        download.save_as(str(dest))
+        browser.close()
+        print(f"    Downloaded via headless browser → {dest}")
+        return dest
+
+
 def fetch_oews_year(year: int, output_path: str = None) -> pd.DataFrame:
+    import time
+    import random
+
     url = build_oews_url(year)
     print(f"  Downloading {url}...")
-    resp = requests.get(url, timeout=120)
-    resp.raise_for_status()
+
+    # First try direct request
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+        "Accept": "*/*",
+        "Referer": "https://www.bls.gov/oes/",
+    }
+    resp = requests.get(url, headers=headers, timeout=180)
+
+    if resp.status_code == 403:
+        print(f"    Direct download blocked (403). Using headless browser...")
+        download_dir = str(Path(output_path).parent) if output_path else "/tmp"
+        Path(download_dir).mkdir(parents=True, exist_ok=True)
+        zip_path = _download_with_playwright(url, download_dir)
+        content = zip_path.read_bytes()
+        zip_path.unlink()  # clean up zip after reading
+    else:
+        resp.raise_for_status()
+        content = resp.content
 
     import zipfile
-    with zipfile.ZipFile(io.BytesIO(resp.content)) as zf:
+    with zipfile.ZipFile(io.BytesIO(content)) as zf:
         excel_files = [f for f in zf.namelist() if f.endswith((".xlsx", ".xls"))]
         if not excel_files:
             csv_files = [f for f in zf.namelist() if f.endswith(".csv")]
