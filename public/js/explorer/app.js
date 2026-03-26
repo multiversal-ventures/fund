@@ -11,6 +11,9 @@ document.addEventListener('alpine:init', () => {
   Alpine.data('explorerApp', () => ({
     activeTab: 'dashboard',
     weightsOpen: false,
+    /** True when DOM weights differ from last baseline (initial load or successful pipeline save). */
+    estimatedPreview: false,
+    weightsBaselineHash: '',
 
     setTab(tab) {
       this.activeTab = tab;
@@ -29,10 +32,42 @@ document.addEventListener('alpine:init', () => {
     },
 
     async savePipelineToFirestore() {
-      const { savePipelineConfig } = await import('/js/explorer/scenarios.js');
-      await savePipelineConfig({
+      const { savePipelineConfig, hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      const ok = await savePipelineConfig({
         loadRunStatus: typeof window.__explorerLoadRunStatus === 'function' ? window.__explorerLoadRunStatus : undefined,
       });
+      if (ok) {
+        this.weightsBaselineHash = hashPipelineWeightsFromDom();
+        this.estimatedPreview = false;
+        window.__explorerEstimatedPreview = false;
+        import('/js/explorer/map.js')
+          .then((m) => m.refreshMapLegendIfAny?.())
+          .catch(() => {});
+      }
+    },
+
+    async setWeightsBaselineFromCurrentDom() {
+      const { hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      this.weightsBaselineHash = hashPipelineWeightsFromDom();
+      this.estimatedPreview = false;
+      window.__explorerEstimatedPreview = false;
+      import('/js/explorer/map.js')
+        .then((m) => m.refreshMapLegendIfAny?.())
+        .catch(() => {});
+    },
+
+    async syncEstimatedFromDom() {
+      const { hashPipelineWeightsFromDom } = await import('/js/explorer/scenarios.js');
+      const h = hashPipelineWeightsFromDom();
+      if (this.weightsBaselineHash === '') {
+        this.estimatedPreview = false;
+      } else {
+        this.estimatedPreview = h !== this.weightsBaselineHash;
+      }
+      window.__explorerEstimatedPreview = this.estimatedPreview;
+      import('/js/explorer/map.js')
+        .then((m) => m.refreshMapLegendIfAny?.())
+        .catch(() => {});
     },
 
     dismissDuckWarnings() {
@@ -40,4 +75,11 @@ document.addEventListener('alpine:init', () => {
       if (window.__explorerDuckdb) window.__explorerDuckdb.warnings = [];
     },
   }));
+
+  window.__explorerSyncEstimated = () => {
+    const root = document.querySelector('.explorer-root');
+    if (!root || typeof Alpine === 'undefined' || !Alpine.$data) return;
+    const d = Alpine.$data(root);
+    if (d && typeof d.syncEstimatedFromDom === 'function') d.syncEstimatedFromDom();
+  };
 });

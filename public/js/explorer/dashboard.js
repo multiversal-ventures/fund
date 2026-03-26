@@ -1,5 +1,12 @@
 /**
  * Dashboard aggregates: stats, top markets/deals, “How We Score” panel.
+ *
+ * Task 8 — Parquet audit: `market_scores` exposes `market_score` plus signal columns (vacancy_trend,
+ * rent_growth, resilience_index, …). `properties` exposes `total_score`, `market_score`, `deal_score`,
+ * stability_score, etc. Those values are produced by the Python pipeline; there are no additional
+ * raw subscore columns that allow exact client-side reweighting to match the server without
+ * re-running the pipeline. Preview strategy: scenario pills change ORDER BY for ranked lists and
+ * VIEW_QUERIES presets; custom slider weights show “Estimated” until Save & Refresh Pipeline.
  */
 import { runQuery as duckQuery } from '/js/explorer/duckdb.js';
 import { buildZillowUrl } from '/js/explorer/zillow.js';
@@ -10,6 +17,41 @@ import {
 } from '/js/explorer/scenarios.js';
 
 const TOP_N = 6;
+
+/**
+ * @param {string} scenario
+ * @returns {string} ORDER BY clause body (single column + direction)
+ */
+function topMarketsOrderBy(scenario) {
+  switch (scenario) {
+    case 'investor':
+      return 'resilience_index DESC NULLS LAST';
+    case 'durable':
+      return 'rent_growth DESC NULLS LAST';
+    case 'ops':
+      return 'supply_pressure DESC NULLS LAST';
+    case 'balanced':
+    default:
+      return 'market_score DESC NULLS LAST';
+  }
+}
+
+/**
+ * @param {string} scenario
+ */
+function topDealsOrderBy(scenario) {
+  switch (scenario) {
+    case 'investor':
+      return 'market_score DESC NULLS LAST, total_score DESC NULLS LAST';
+    case 'ops':
+      return 'deal_score DESC NULLS LAST';
+    case 'durable':
+      return 'stability_score DESC NULLS LAST, total_score DESC NULLS LAST';
+    case 'balanced':
+    default:
+      return 'total_score DESC NULLS LAST';
+  }
+}
 
 function esc(s) {
   if (s == null) return '';
@@ -36,9 +78,15 @@ function scoreBadgeClass(score, kind) {
 
 /**
  * @param {*} conn
+ * @param {string} [scenarioKey] defaults to `window.__explorerActiveScenario` or balanced
  */
-export async function refreshDashboard(conn) {
+export async function refreshDashboard(conn, scenarioKey) {
   if (!conn) return;
+
+  const sk =
+    scenarioKey ||
+    (typeof window !== 'undefined' && window.__explorerActiveScenario) ||
+    'balanced';
 
   try {
     const marketsCount = await duckQuery(
@@ -71,7 +119,7 @@ export async function refreshDashboard(conn) {
     const topMarketsRes = await duckQuery(
       conn,
       `SELECT fips, county, state, market_score, resilience_index
-       FROM market_scores ORDER BY market_score DESC NULLS LAST LIMIT ${TOP_N}`,
+       FROM market_scores ORDER BY ${topMarketsOrderBy(sk)} LIMIT ${TOP_N}`,
     );
     renderTopMarkets(topMarketsRes);
 
@@ -79,7 +127,7 @@ export async function refreshDashboard(conn) {
       conn,
       `SELECT property_name, address, city, state, total_score, market_score, deal_score,
               fips, lat, lng, county, zillow_url
-       FROM properties ORDER BY total_score DESC NULLS LAST LIMIT ${TOP_N}`,
+       FROM properties ORDER BY ${topDealsOrderBy(sk)} LIMIT ${TOP_N}`,
     );
     renderTopDeals(topDealsRes);
 

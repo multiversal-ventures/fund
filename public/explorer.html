@@ -63,12 +63,14 @@
         <button type="button" class="scenario-pill" data-scenario-key="durable">Durable Tenants</button>
       </div>
       <button type="button" class="scenario-customize-btn" @click="weightsOpen = !weightsOpen" :aria-expanded="weightsOpen">⚙ Customize weights</button>
+      <span class="estimated-badge" x-show="estimatedPreview" x-cloak title="Weights differ from the last pipeline run. Parquet scores are unchanged until the pipeline recomputes.">Estimated</span>
     </div>
 
     <div class="pipeline-run-status status" id="run-status">Loading run status...</div>
 
     <div class="weights-panel" x-show="weightsOpen" x-cloak>
       <div class="weights-panel-inner">
+        <p x-show="estimatedPreview" x-cloak class="weights-preview-hint">Custom weights are not recomputed in the browser. For scores that match these weights, run <span class="weights-preview-em">Save &amp; Refresh Pipeline</span>.</p>
         <div class="config-section">
           <h3>Market Weights</h3>
           <div class="weight-row"><span>Vacancy Trend</span><input type="number" id="w-m-vacancy" value="20" min="0" max="100"></div>
@@ -401,6 +403,7 @@ firebase.auth().onAuthStateChanged(user => {
         try {
           const root = document.querySelector('.explorer-root');
           const d = root && typeof Alpine !== 'undefined' && Alpine.$data ? Alpine.$data(root) : null;
+          if (d?.setWeightsBaselineFromCurrentDom) await d.setWeightsBaselineFromCurrentDom();
           if (d?.activeTab === 'map') queueMicrotask(() => window.__explorerInitMap?.());
           if (d?.activeTab === 'sql') queueMicrotask(() => window.__explorerInitSql?.());
         } catch (_) { /* Alpine not ready */ }
@@ -440,12 +443,14 @@ MARKET_WEIGHT_IDS.forEach((id) => {
   document.getElementById(id).addEventListener('input', () => {
     updateWeightTotal(MARKET_WEIGHT_IDS, 'w-m-total');
     updateHowWeScorePanelOnly();
+    window.__explorerSyncEstimated?.();
   });
 });
 DEAL_WEIGHT_IDS.forEach((id) => {
   document.getElementById(id).addEventListener('input', () => {
     updateWeightTotal(DEAL_WEIGHT_IDS, 'w-d-total');
     updateHowWeScorePanelOnly();
+    window.__explorerSyncEstimated?.();
   });
 });
 // Keep split in sync
@@ -456,6 +461,7 @@ DEAL_WEIGHT_IDS.forEach((id) => {
     const el = document.getElementById(id);
     el.style.borderColor = m + d === 100 ? '#334155' : '#f87171';
     updateHowWeScorePanelOnly();
+    window.__explorerSyncEstimated?.();
   });
 });
 
@@ -499,7 +505,8 @@ document.querySelectorAll('.scenario-pill').forEach((btn) => {
     updateWeightTotal(DEAL_WEIGHT_IDS, 'w-d-total');
     (async () => {
       const c = getConn();
-      if (c) await refreshDashboard(c);
+      if (c) await refreshDashboard(c, key);
+      window.__explorerSyncEstimated?.();
     })();
   });
 });

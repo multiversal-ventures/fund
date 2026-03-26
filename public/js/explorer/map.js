@@ -315,9 +315,15 @@ ${zUrl ? `<br/><a href="${esc(zUrl)}" target="_blank" rel="noopener">View listin
     const { minV, maxV } = computeLegendRange(this.byFips, this._colorMetric, this._filterKey);
     const label = COLOR_METRICS.find((m) => m.value === this._colorMetric)?.label || this._colorMetric;
     const shown = [...this.byFips.values()].filter((r) => passesFilter(r, this._filterKey)).length;
+    const est =
+      typeof window !== 'undefined' &&
+      window.__explorerEstimatedPreview === true;
+    const estNote = est
+      ? `<span class="map-legend-est"> · Weights differ from last pipeline run (Parquet scores unchanged)</span>`
+      : '';
     el.innerHTML = `<span class="map-legend-label">${esc(label)}</span>
       <span class="map-legend-scale">${formatMetricVal(this._colorMetric, minV)} … ${formatMetricVal(this._colorMetric, maxV)}</span>
-      <span class="map-legend-n">${shown} counties match filter</span>`;
+      <span class="map-legend-n">${shown} counties match filter</span>${estNote}`;
   }
 
   closePanel() {
@@ -453,4 +459,9 @@ export async function initExplorerMapIfNeeded(conn) {
 
 export function invalidateExplorerMapSize() {
   _instance?.invalidateSize();
+}
+
+/** Re-read legend when global “Estimated” preview flag changes (Task 8). */
+export function refreshMapLegendIfAny() {
+  _instance?._updateLegend();
 }

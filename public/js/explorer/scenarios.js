@@ -32,6 +32,7 @@ export const SCENARIO_LABELS = {
   durable: 'Durable Tenants',
 };
 
+/** Dashboard SQL presets — Task 8: scenario-specific ORDER BY / filters (Parquet scores unchanged). */
 export const VIEW_QUERIES = {
   combined: 'SELECT * FROM properties ORDER BY total_score DESC LIMIT 50',
   investor:
@@ -99,6 +100,14 @@ export function readPipelineWeightsFromDom() {
 }
 
 /**
+ * Stable fingerprint of current pipeline weights (Task 8 — estimated vs authoritative).
+ * Compare to baseline after last Save & Refresh or initial load.
+ */
+export function hashPipelineWeightsFromDom() {
+  return JSON.stringify(readPipelineWeightsFromDom());
+}
+
+/**
  * @returns {{ ok: boolean, message?: string }}
  */
 export function validatePipelineWeights({ market_weights, deal_weights, split }) {
@@ -120,13 +129,14 @@ export function validatePipelineWeights({ market_weights, deal_weights, split })
  * Persist weights to Firestore (same document as legacy explorer).
  * @param {{ loadRunStatus?: () => Promise<void> }} [opts]
  */
+/** @returns {Promise<boolean>} true if Firestore write succeeded */
 export async function savePipelineConfig(opts = {}) {
   const { loadRunStatus } = opts;
   const payload = readPipelineWeightsFromDom();
   const v = validatePipelineWeights(payload);
   if (!v.ok) {
     alert(v.message);
-    return;
+    return false;
   }
   await firebase.firestore().doc('config/pipeline').set(
     {
@@ -141,6 +151,7 @@ export async function savePipelineConfig(opts = {}) {
   if (typeof loadRunStatus === 'function') {
     await loadRunStatus();
   }
+  return true;
 }
 
 export function applyScenarioToDom(key) {
