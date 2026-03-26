@@ -47,9 +47,25 @@ def _load_from_firestore() -> dict:
 
 
 def _merge_defaults(config: dict) -> dict:
-    """Merge provided config with defaults. Provided values take precedence."""
+    """Merge provided config with defaults. Provided values take precedence.
+
+    Backward compatibility: if the loaded config contains the old ``scoring_weights``
+    key, signal names that overlap with ``market_weights`` are mapped across and
+    default ``deal_weights`` are used.
+    """
     with open(DEFAULT_CONFIG_PATH) as f:
         defaults = yaml.safe_load(f)
+
+    # Backward compatibility: migrate old scoring_weights to new two-layer structure.
+    if "scoring_weights" in config and "scoring_weights" not in defaults:
+        old_weights = config.pop("scoring_weights")
+        market_weight_keys = set(defaults.get("market_weights", {}).keys())
+        migrated_market_weights = {
+            k: v for k, v in old_weights.items() if k in market_weight_keys
+        }
+        if migrated_market_weights:
+            config.setdefault("market_weights", {}).update(migrated_market_weights)
+        # deal_weights are left as defaults if not explicitly provided
 
     merged = defaults.copy()
     for key, value in config.items():
