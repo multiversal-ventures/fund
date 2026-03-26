@@ -95,12 +95,22 @@
           <div class="weight-row"><span>Rent/Cost Ratio</span><input type="number" id="w-rent" value="30" min="0" max="100"></div>
           <div class="weight-row"><span>Area Vacancy</span><input type="number" id="w-area" value="10" min="0" max="100"></div>
           <div class="weight-row"><span>Pop Growth</span><input type="number" id="w-pop" value="15" min="0" max="100"></div>
+          <div class="weight-row"><span>Workforce Resilience</span><input type="number" id="w-resilience" value="0" min="0" max="100"></div>
           <div class="weight-row" style="font-weight:600; color:#e2e8f0;"><span>Total</span><span id="w-total">100</span></div>
         </div>
         <div class="config-section">
           <h3>Actions</h3>
           <button class="btn" id="save-config-btn">Save & Refresh Pipeline</button>
           <div class="status" id="run-status">Loading run status...</div>
+          <div style="margin-top:12px;">
+            <h3 style="font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Scoring Scenarios</h3>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-outline scenario" data-weights='{"maturity":20,"vacancy":25,"rent":30,"area":10,"pop":15,"resilience":0}'>Default</button>
+              <button class="btn btn-sm btn-outline scenario" data-weights='{"maturity":15,"vacancy":20,"rent":25,"area":5,"pop":10,"resilience":25}'>AI-Resistant Focus</button>
+              <button class="btn btn-sm btn-outline scenario" data-weights='{"maturity":25,"vacancy":20,"rent":30,"area":10,"pop":15,"resilience":0}'>Cash Flow Focus</button>
+              <button class="btn btn-sm btn-outline scenario" data-weights='{"maturity":10,"vacancy":15,"rent":20,"area":10,"pop":15,"resilience":30}'>Durable Tenants</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -114,6 +124,8 @@
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE maturity_years < 2 ORDER BY maturity_years ASC">Maturing &lt;2yr</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT state, COUNT(*) as cnt, ROUND(AVG(total_score),1) as avg_score FROM properties GROUP BY state ORDER BY cnt DESC">By State</button>
         <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE vacancy_rate > 0.08 ORDER BY total_score DESC LIMIT 50">High Vacancy</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT o.county, o.state, o.resilience_index, o.blue_collar_safe_pct, o.healthcare_pct, c.rent_to_cost_ratio, c.vacancy_rate FROM occupations_2023 o JOIN census_2023 c ON o.fips = c.fips WHERE o.resilience_index > 0.55 AND c.rent_to_cost_ratio > 0.9 ORDER BY o.resilience_index DESC">Resilient + Cash Flow</button>
       </div>
     </div>
 
@@ -169,7 +181,19 @@
         </table>
         <div style="margin-top:12px; padding:0 12px;">
           <h3 style="font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Scoring Methodology</h3>
-          <p style="font-size:12px; color:#94a3b8; line-height:1.6;">Properties scored on 100-point scale: mortgage maturity proximity, vacancy trend (tightening markets), rent-to-owner-cost ratio, area vacancy optimality, population growth, and workforce automation resilience. Workforce resilience combines Frey &amp; Osborne physical automation risk with Eloundou et al. AI/LLM exposure into a per-county index using Census B24010 occupation data.</p>
+          <p style="font-size:12px; color:#94a3b8; line-height:1.6; margin-bottom:8px;">Properties scored on configurable 100-point scale across 6 signals. Use scenario presets or set custom weights in the config panel.</p>
+          <div style="font-size:11px; color:#64748b; line-height:1.8;">
+            <div><strong style="color:#94a3b8;">Mortgage Maturity</strong> — Properties with FHA loans maturing within 1-2 years score highest (motivated sellers). Based on HUD FHA insured mortgage data.</div>
+            <div><strong style="color:#94a3b8;">Vacancy Trend</strong> — Counties where vacancy rates are falling (tightening markets) score higher. Computed from Census ACS 2021 vs 2023 vacancy rates.</div>
+            <div><strong style="color:#94a3b8;">Rent/Cost Ratio</strong> — Counties where median rent exceeds median owner cost (ratio &gt; 1.0) indicate Day 1 positive cash flow potential. Census B25064 / B25105.</div>
+            <div><strong style="color:#94a3b8;">Area Vacancy</strong> — Moderate vacancy (~5-8%) is optimal — enough turnover for new acquisitions but not so high it signals distress.</div>
+            <div><strong style="color:#94a3b8;">Pop Growth</strong> — Growing counties indicate expanding renter demand. Census B01003 population trends.</div>
+            <div style="margin-top:4px; padding-top:4px; border-top:1px solid #334155;"><strong style="color:#60a5fa;">Workforce Resilience (AI-Resistant Index)</strong> — Measures what % of a county's workforce is in occupations resilient to both physical automation AND AI/LLM disruption. Combines two frameworks:</div>
+            <div style="padding-left:12px;"><strong style="color:#94a3b8;">Frey &amp; Osborne (2017)</strong> — Oxford study scoring 702 occupations on physical/software automation probability (0-1). Electricians: 0.15 risk. Retail cashiers: 0.97 risk.</div>
+            <div style="padding-left:12px;"><strong style="color:#94a3b8;">Eloundou et al. (2023)</strong> — OpenAI/UPenn study scoring occupations on LLM/AI exposure. Key insight: AI risk is <em>inverted</em> from automation risk — white collar jobs (analysts, writers) are MORE exposed to AI than blue collar (trades, healthcare).</div>
+            <div style="padding-left:12px;">Combined 50/50 into a per-county index using Census C24010 occupation data. Counties with high concentrations of construction trades, healthcare, protective services, and education score highest.</div>
+            <div style="padding-left:12px; margin-top:4px;"><strong style="color:#34d399;">Fund thesis:</strong> Invest in multifamily properties where renters have durable, AI-proof jobs — they'll keep paying rent regardless of tech disruption.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -221,7 +245,7 @@ document.getElementById('sources-toggle').addEventListener('click', () => {
   body.style.display = body.style.display === 'none' ? 'block' : 'none';
 });
 
-const weightInputs = ['w-maturity','w-vacancy','w-rent','w-area','w-pop'];
+const weightInputs = ['w-maturity','w-vacancy','w-rent','w-area','w-pop','w-resilience'];
 weightInputs.forEach(id => {
   document.getElementById(id).addEventListener('input', () => {
     const total = weightInputs.reduce((s, i) => s + parseInt(document.getElementById(i).value || 0), 0);
@@ -237,6 +261,7 @@ document.getElementById('save-config-btn').addEventListener('click', async () =>
     rent_cost_ratio: parseInt(document.getElementById('w-rent').value),
     area_vacancy: parseInt(document.getElementById('w-area').value),
     pop_growth: parseInt(document.getElementById('w-pop').value),
+    workforce_resilience: parseInt(document.getElementById('w-resilience').value),
   };
   const total = Object.values(weights).reduce((a,b) => a+b, 0);
   if (total !== 100) { alert('Weights must sum to 100'); return; }
@@ -271,6 +296,9 @@ async function initExplorer(user) {
       { path: 'data/census/acs_2021.parquet', table: 'census_2021' },
       { path: 'data/hud/fha_multifamily.parquet', table: 'hud_fha' },
       { path: 'data/hud/usps_vacancy.parquet', table: 'usps_vacancy' },
+      { path: 'data/census/occupations_2023.parquet', table: 'occupations_2023' },
+      { path: 'data/census/occupations_2022.parquet', table: 'occupations_2022' },
+      { path: 'data/census/occupations_2021.parquet', table: 'occupations_2021' },
     ];
 
     for (const f of files) {
@@ -317,6 +345,22 @@ document.querySelectorAll('.preset').forEach(btn => {
   btn.addEventListener('click', () => {
     document.getElementById('sql-input').value = btn.dataset.sql;
     runQuery();
+  });
+});
+
+document.querySelectorAll('.scenario').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const w = JSON.parse(btn.dataset.weights);
+    document.getElementById('w-maturity').value = w.maturity;
+    document.getElementById('w-vacancy').value = w.vacancy;
+    document.getElementById('w-rent').value = w.rent;
+    document.getElementById('w-area').value = w.area;
+    document.getElementById('w-pop').value = w.pop;
+    document.getElementById('w-resilience').value = w.resilience;
+    // Update total
+    const total = Object.values(w).reduce((a,b) => a+b, 0);
+    document.getElementById('w-total').textContent = total;
+    document.getElementById('w-total').style.color = total === 100 ? '#34d399' : '#f87171';
   });
 });
 
