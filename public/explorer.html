@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fund Explorer — Multiversal Ventures</title>
+<script src="/__/firebase/12.11.0/firebase-app-compat.js"></script>
+<script src="/__/firebase/12.11.0/firebase-auth-compat.js"></script>
+<script src="/__/firebase/12.11.0/firebase-firestore-compat.js"></script>
+<script src="/__/firebase/12.11.0/firebase-storage-compat.js"></script>
+<script src="/__/firebase/init.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser-blocking.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,monospace; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+  #auth-gate { display:flex; align-items:center; justify-content:center; min-height:100vh; flex-direction:column; }
+  #auth-gate h1 { font-size:28px; background:linear-gradient(90deg,#34d399,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent; margin-bottom:24px; }
+  .header { background:linear-gradient(135deg,#0f172a,#1e293b,#0f172a); border-bottom:1px solid #334155; padding:20px 24px; display:flex; justify-content:space-between; align-items:center; }
+  .header h1 { font-size:20px; color:#f1f5f9; }
+  .header .user { color:#94a3b8; font-size:12px; }
+  .container { max-width:1400px; margin:0 auto; padding:20px; }
+  .config-panel { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:20px; margin-bottom:16px; }
+  .config-toggle { cursor:pointer; color:#60a5fa; font-size:13px; font-weight:600; }
+  .config-body { display:none; margin-top:16px; }
+  .config-body.open { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .config-section h3 { font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .weight-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; font-size:13px; color:#94a3b8; }
+  .weight-row input { width:50px; background:#0f172a; border:1px solid #334155; color:#e2e8f0; padding:4px 8px; border-radius:4px; text-align:center; }
+  .btn { background:#60a5fa; color:#0f172a; border:none; padding:8px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+  .btn:hover { background:#93c5fd; }
+  .btn-sm { padding:4px 12px; font-size:11px; }
+  .btn-outline { background:transparent; color:#60a5fa; border:1px solid #334155; }
+  .btn-outline:hover { border-color:#60a5fa; }
+  .status { font-size:11px; color:#64748b; margin-top:8px; }
+  .query-bar { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; margin-bottom:16px; }
+  .query-bar textarea { width:100%; background:#0f172a; border:1px solid #334155; color:#e2e8f0; padding:12px; border-radius:6px; font-family:monospace; font-size:13px; resize:vertical; min-height:60px; }
+  .query-actions { display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap; }
+  .preset-label { font-size:11px; color:#64748b; margin-left:8px; }
+  .results { background:#1e293b; border:1px solid #334155; border-radius:10px; overflow:hidden; margin-bottom:16px; }
+  .results-header { padding:12px 16px; border-bottom:1px solid #334155; display:flex; justify-content:space-between; align-items:center; }
+  .results-header span { font-size:13px; color:#94a3b8; }
+  .results-table-wrap { overflow-x:auto; max-height:500px; overflow-y:auto; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th { background:#0f172a; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; font-size:10px; padding:8px 12px; text-align:left; position:sticky; top:0; cursor:pointer; white-space:nowrap; }
+  th:hover { color:#60a5fa; }
+  td { padding:8px 12px; border-top:1px solid rgba(255,255,255,0.04); white-space:nowrap; }
+  tr:hover td { background:rgba(96,165,250,0.05); }
+  .zillow-link { color:#60a5fa; text-decoration:none; font-weight:600; }
+  .zillow-link:hover { text-decoration:underline; }
+  .score-badge { display:inline-block; padding:2px 8px; border-radius:10px; font-weight:600; font-size:11px; }
+  .score-high { background:rgba(52,211,153,0.15); color:#34d399; }
+  .score-mid { background:rgba(251,191,36,0.15); color:#fbbf24; }
+  .score-low { background:rgba(248,113,113,0.15); color:#f87171; }
+  .charts { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .chart-card { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:16px; }
+  .chart-card h3 { font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
+  .bar { display:flex; align-items:center; gap:8px; margin-bottom:4px; font-size:12px; }
+  .bar-label { width:40px; text-align:right; color:#94a3b8; }
+  .bar-fill { height:16px; border-radius:3px; background:linear-gradient(90deg,#60a5fa,#a78bfa); min-width:2px; }
+  .bar-count { color:#64748b; font-size:11px; }
+  .loading { text-align:center; padding:60px; color:#64748b; }
+  .loading .spinner { display:inline-block; width:24px; height:24px; border:3px solid #334155; border-top-color:#60a5fa; border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .footer { text-align:center; padding:20px; color:#475569; font-size:11px; }
+</style>
+</head>
+<body>
+
+<div id="auth-gate">
+  <h1>Multiversal Ventures — Fund Explorer</h1>
+  <p style="color:#94a3b8; margin-bottom:24px; font-size:14px;">Sign in to access the property explorer.</p>
+  <button class="btn" id="sign-in-btn" style="padding:12px 32px; font-size:15px; display:flex; align-items:center; gap:8px;">
+    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M10.53 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.9 7.35 2.56 10.52l7.97-5.93z"/><path fill="#FBBC05" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.93C6.51 42.62 14.62 48 24 48z"/></svg>
+    Sign in with Google
+  </button>
+  <p id="auth-error" style="color:#f87171; margin-top:16px; font-size:13px; display:none;"></p>
+</div>
+
+<div id="app" style="display:none;">
+  <div class="header">
+    <h1>Fund Explorer</h1>
+    <div>
+      <span class="user" id="user-email"></span>
+      <button class="btn btn-sm btn-outline" onclick="firebase.auth().signOut()" style="margin-left:8px;">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="config-panel">
+      <span class="config-toggle" id="config-toggle">&#9662; Pipeline Configuration</span>
+      <div class="config-body" id="config-body">
+        <div class="config-section">
+          <h3>Scoring Weights</h3>
+          <div class="weight-row"><span>Mortgage Maturity</span><input type="number" id="w-maturity" value="20" min="0" max="100"></div>
+          <div class="weight-row"><span>Vacancy Trend</span><input type="number" id="w-vacancy" value="25" min="0" max="100"></div>
+          <div class="weight-row"><span>Rent/Cost Ratio</span><input type="number" id="w-rent" value="30" min="0" max="100"></div>
+          <div class="weight-row"><span>Area Vacancy</span><input type="number" id="w-area" value="10" min="0" max="100"></div>
+          <div class="weight-row"><span>Pop Growth</span><input type="number" id="w-pop" value="15" min="0" max="100"></div>
+          <div class="weight-row" style="font-weight:600; color:#e2e8f0;"><span>Total</span><span id="w-total">100</span></div>
+        </div>
+        <div class="config-section">
+          <h3>Actions</h3>
+          <button class="btn" id="save-config-btn">Save & Refresh Pipeline</button>
+          <div class="status" id="run-status">Loading run status...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="query-bar">
+      <textarea id="sql-input">SELECT * FROM properties ORDER BY total_score DESC LIMIT 50</textarea>
+      <div class="query-actions">
+        <button class="btn" id="run-query-btn">Run Query</button>
+        <span class="preset-label">Presets:</span>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties ORDER BY total_score DESC LIMIT 50">Top 50</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE maturity_years < 2 ORDER BY maturity_years ASC">Maturing &lt;2yr</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT state, COUNT(*) as cnt, ROUND(AVG(total_score),1) as avg_score FROM properties GROUP BY state ORDER BY cnt DESC">By State</button>
+        <button class="btn btn-sm btn-outline preset" data-sql="SELECT * FROM properties WHERE vacancy_rate > 0.08 ORDER BY total_score DESC LIMIT 50">High Vacancy</button>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top:12px;">Loading DuckDB WASM + Parquet data...</p>
+    </div>
+
+    <div class="results" id="results" style="display:none;">
+      <div class="results-header">
+        <span id="result-count">0 rows</span>
+        <div>
+          <button class="btn btn-sm btn-outline" id="export-csv">Export CSV</button>
+          <button class="btn btn-sm btn-outline" id="export-parquet" style="margin-left:4px;">Export Parquet</button>
+        </div>
+      </div>
+      <div class="results-table-wrap">
+        <table id="results-table"><thead></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <div class="charts" id="charts" style="display:none;">
+      <div class="chart-card">
+        <h3>Score Distribution</h3>
+        <div id="chart-scores"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Top States</h3>
+        <div id="chart-states"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Multiversal Ventures — Fund Explorer<br>
+    <a href="index.html" style="color:#60a5fa; text-decoration:none;">Back to Dashboard</a>
+  </div>
+</div>
+
+<script>
+const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
+const authGate = document.getElementById('auth-gate');
+const app = document.getElementById('app');
+const authError = document.getElementById('auth-error');
+
+firebase.auth().onAuthStateChanged(user => {
+  if (user && ALLOWED.includes(user.email.toLowerCase())) {
+    authGate.style.display = 'none';
+    app.style.display = 'block';
+    document.getElementById('user-email').textContent = user.email;
+    initExplorer(user);
+  } else if (user) {
+    firebase.auth().signOut();
+    authError.textContent = 'Access restricted to authorized team members.';
+    authError.style.display = 'block';
+  } else {
+    authGate.style.display = 'flex';
+    app.style.display = 'none';
+  }
+});
+
+document.getElementById('sign-in-btn').addEventListener('click', () => {
+  firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(err => {
+    authError.textContent = err.message;
+    authError.style.display = 'block';
+  });
+});
+
+document.getElementById('config-toggle').addEventListener('click', () => {
+  document.getElementById('config-body').classList.toggle('open');
+});
+
+const weightInputs = ['w-maturity','w-vacancy','w-rent','w-area','w-pop'];
+weightInputs.forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    const total = weightInputs.reduce((s, i) => s + parseInt(document.getElementById(i).value || 0), 0);
+    document.getElementById('w-total').textContent = total;
+    document.getElementById('w-total').style.color = total === 100 ? '#34d399' : '#f87171';
+  });
+});
+
+document.getElementById('save-config-btn').addEventListener('click', async () => {
+  const weights = {
+    mortgage_maturity: parseInt(document.getElementById('w-maturity').value),
+    vacancy_trend: parseInt(document.getElementById('w-vacancy').value),
+    rent_cost_ratio: parseInt(document.getElementById('w-rent').value),
+    area_vacancy: parseInt(document.getElementById('w-area').value),
+    pop_growth: parseInt(document.getElementById('w-pop').value),
+  };
+  const total = Object.values(weights).reduce((a,b) => a+b, 0);
+  if (total !== 100) { alert('Weights must sum to 100'); return; }
+  await firebase.firestore().doc('config/pipeline').set({ scoring_weights: weights }, { merge: true });
+  document.getElementById('run-status').textContent = 'Pipeline refresh triggered...';
+});
+
+let db = null;
+let conn = null;
+
+async function initExplorer(user) {
+  try {
+    const DUCKDB_BUNDLES = duckdb.getJsDelivrBundles();
+    const bundle = await duckdb.selectBundle(DUCKDB_BUNDLES);
+    const worker = new Worker(bundle.mainWorker);
+    const logger = new duckdb.ConsoleLogger();
+    db = new duckdb.AsyncDuckDB(logger, worker);
+    await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+    conn = await db.connect();
+
+    const token = await user.getIdToken();
+    const storageRef = firebase.storage().ref();
+
+    const files = [
+      { path: 'data/scored/properties.parquet', table: 'properties' },
+      { path: 'data/census/acs_2023.parquet', table: 'census_2023' },
+      { path: 'data/census/acs_2022.parquet', table: 'census_2022' },
+      { path: 'data/census/acs_2021.parquet', table: 'census_2021' },
+      { path: 'data/hud/fha_multifamily.parquet', table: 'hud_fha' },
+      { path: 'data/hud/usps_vacancy.parquet', table: 'usps_vacancy' },
+    ];
+
+    for (const f of files) {
+      try {
+        const url = await storageRef.child(f.path).getDownloadURL();
+        const resp = await fetch(url);
+        const buffer = await resp.arrayBuffer();
+        await db.registerFileBuffer(f.table + '.parquet', new Uint8Array(buffer));
+        await conn.query(`CREATE TABLE ${f.table} AS SELECT * FROM '${f.table}.parquet'`);
+      } catch (e) {
+        console.warn(`Skipping ${f.path}: ${e.message}`);
+      }
+    }
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('charts').style.display = 'grid';
+    await runQuery();
+    loadRunStatus();
+  } catch (err) {
+    document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+async function runQuery() {
+  const sql = document.getElementById('sql-input').value.trim();
+  if (!sql || !conn) return;
+  try {
+    const result = await conn.query(sql);
+    renderResults(result);
+    renderCharts(result);
+  } catch (err) {
+    document.getElementById('results-table').innerHTML = `<tr><td style="color:#f87171; padding:16px;">${err.message}</td></tr>`;
+  }
+}
+
+document.getElementById('run-query-btn').addEventListener('click', runQuery);
+document.getElementById('sql-input').addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') runQuery();
+});
+
+document.querySelectorAll('.preset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('sql-input').value = btn.dataset.sql;
+    runQuery();
+  });
+});
+
+let lastResult = null;
+
+function renderResults(result) {
+  lastResult = result;
+  const schema = result.schema.fields.map(f => f.name);
+  const rows = result.toArray().map(r => {
+    const obj = {};
+    schema.forEach(col => { obj[col] = r[col]; });
+    return obj;
+  });
+
+  document.getElementById('result-count').textContent = `${rows.length} rows`;
+
+  const thead = document.querySelector('#results-table thead');
+  const tbody = document.querySelector('#results-table tbody');
+
+  thead.innerHTML = '<tr>' + schema.map(col => `<th>${col}</th>`).join('') + '</tr>';
+
+  tbody.innerHTML = rows.map(row => '<tr>' + schema.map(col => {
+    let val = row[col];
+    if (col === 'zillow_url' && val) {
+      return `<td><a class="zillow-link" href="${val}" target="_blank" rel="noopener">View on Zillow</a></td>`;
+    }
+    if (col === 'total_score' && typeof val === 'number') {
+      const cls = val >= 70 ? 'score-high' : val >= 50 ? 'score-mid' : 'score-low';
+      return `<td><span class="score-badge ${cls}">${val.toFixed(1)}</span></td>`;
+    }
+    if (typeof val === 'number') {
+      val = Number.isInteger(val) ? val.toLocaleString() : val.toFixed(2);
+    }
+    return `<td>${val ?? ''}</td>`;
+  }).join('') + '</tr>').join('');
+}
+
+function renderCharts(result) {
+  const schema = result.schema.fields.map(f => f.name);
+  const rows = result.toArray().map(r => {
+    const obj = {};
+    schema.forEach(col => { obj[col] = r[col]; });
+    return obj;
+  });
+
+  if (schema.includes('total_score')) {
+    const buckets = {'90-100':0,'80-90':0,'70-80':0,'60-70':0,'50-60':0,'<50':0};
+    rows.forEach(r => {
+      const s = r.total_score || 0;
+      if (s >= 90) buckets['90-100']++;
+      else if (s >= 80) buckets['80-90']++;
+      else if (s >= 70) buckets['70-80']++;
+      else if (s >= 60) buckets['60-70']++;
+      else if (s >= 50) buckets['50-60']++;
+      else buckets['<50']++;
+    });
+    const max = Math.max(...Object.values(buckets), 1);
+    document.getElementById('chart-scores').innerHTML = Object.entries(buckets).map(([k,v]) =>
+      `<div class="bar"><span class="bar-label">${k}</span><div class="bar-fill" style="width:${(v/max)*200}px"></div><span class="bar-count">${v}</span></div>`
+    ).join('');
+  }
+
+  if (schema.includes('state')) {
+    const states = {};
+    rows.forEach(r => { states[r.state] = (states[r.state] || 0) + 1; });
+    const sorted = Object.entries(states).sort((a,b) => b[1]-a[1]).slice(0, 10);
+    const max = sorted[0]?.[1] || 1;
+    document.getElementById('chart-states').innerHTML = sorted.map(([st,cnt]) =>
+      `<div class="bar"><span class="bar-label">${st}</span><div class="bar-fill" style="width:${(cnt/max)*200}px"></div><span class="bar-count">${cnt}</span></div>`
+    ).join('');
+  }
+}
+
+document.getElementById('export-csv').addEventListener('click', () => {
+  if (!lastResult) return;
+  const schema = lastResult.schema.fields.map(f => f.name);
+  const rows = lastResult.toArray();
+  let csv = schema.join(',') + '\n';
+  rows.forEach(r => {
+    csv += schema.map(col => {
+      let v = r[col];
+      if (typeof v === 'string' && v.includes(',')) v = `"${v}"`;
+      return v ?? '';
+    }).join(',') + '\n';
+  });
+  downloadBlob(csv, 'fund-export.csv', 'text/csv');
+});
+
+document.getElementById('export-parquet').addEventListener('click', async () => {
+  if (!conn) return;
+  const sql = document.getElementById('sql-input').value.trim();
+  await conn.query(`COPY (${sql}) TO 'export.parquet' (FORMAT PARQUET)`);
+  const buf = await db.copyFileToBuffer('export.parquet');
+  downloadBlob(buf, 'fund-export.parquet', 'application/octet-stream');
+});
+
+function downloadBlob(data, filename, type) {
+  const blob = new Blob([data], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function loadRunStatus() {
+  try {
+    const ref = firebase.storage().ref('data/meta/last_run.json');
+    const url = await ref.getDownloadURL();
+    const resp = await fetch(url);
+    const meta = await resp.json();
+    const dt = new Date(meta.timestamp).toLocaleDateString();
+    const fileCount = meta.files?.length || 0;
+    document.getElementById('run-status').textContent = `Last run: ${dt} · ${fileCount} files`;
+  } catch (e) {
+    document.getElementById('run-status').textContent = 'No pipeline runs yet.';
+  }
+}
+</script>
+</body>
+</html>
