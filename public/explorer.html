@@ -191,14 +191,20 @@
       </div>
     </div>
 
-    <div class="charts" id="charts" style="display:none;">
-      <div class="chart-card">
-        <h3>Score Distribution</h3>
-        <div id="chart-scores"></div>
+    <div id="dashboard-query-insights" class="dashboard-query-insights" style="display:none;">
+      <div class="dashboard-section-head">
+        <h2 class="dashboard-section-title">Query insights</h2>
+        <p class="dashboard-section-sub">Score mix and geography from the last <strong>dashboard</strong> query result.</p>
       </div>
-      <div class="chart-card">
-        <h3>Top States</h3>
-        <div id="chart-states"></div>
+      <div class="charts" id="charts">
+        <div class="chart-card">
+          <h3>Score Distribution</h3>
+          <div id="chart-scores"></div>
+        </div>
+        <div class="chart-card">
+          <h3>Top States</h3>
+          <div id="chart-states"></div>
+        </div>
       </div>
     </div>
 
@@ -242,50 +248,6 @@
       </div>
     </div>
   </div>
-
-    <!-- Available Tables -->
-    <div class="config-panel" style="margin-top:16px;">
-      <span class="config-toggle" id="tables-toggle">&#9662; Available Tables & Columns</span>
-      <div id="tables-body" style="display:none; margin-top:16px; font-size:11px; line-height:1.8; color:#94a3b8;">
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">properties</strong> <span style="color:#64748b;">(434 rows) — Scored acquisition targets</span><br>
-          <code style="color:#64748b;">fips, property_name, address, city, state, zip, units, maturity_date, maturity_years, section8, lat, lng, deal_score, market_score, total_score, signal_rank, stability_score, rank_std, rank_min, rank_max, zillow_url</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">market_scores</strong> <span style="color:#64748b;">(1,044 rows) — County-level market scores</span><br>
-          <code style="color:#64748b;">fips, county, state, market_score, vacancy_trend, rent_growth, rent_cost_ratio, resilience_index, employment_concentration, pop_growth, supply_pressure</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">census_2023</strong> <span style="color:#64748b;">(3,222 rows) — Housing data by county</span><br>
-          <code style="color:#64748b;">fips, county, state, total_units, occupied, vacant, owner_occupied, renter_occupied, median_rent, median_home_value, median_owner_cost, mf_units, mf_pct, pop, vacancy_rate, rental_vac_rate, rent_to_cost_ratio, year</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">occupations_2023</strong> <span style="color:#64748b;">(3,222 rows) — AI-resistant workforce index</span><br>
-          <code style="color:#64748b;">fips, county, state, year, total_employed, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">cbp_2023</strong> <span style="color:#64748b;">(3,237 rows) — Employment diversification (HHI)</span><br>
-          <code style="color:#64748b;">fips, state, year, total_employment, hhi, top_sector_name, top_sector_share, top3_share, num_sectors</code><br>
-          <span style="color:#64748b; font-size:10px;">Note: no county column — JOIN with census_2023 on fips for county names</span>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">permits_2023</strong> <span style="color:#64748b;">(3,029 rows) — Building permits (supply pipeline)</span><br>
-          <code style="color:#64748b;">fips, state, county, year, total_permits, total_units_permitted, sf_permits, mf_permits, mf_units_permitted, mf_pct</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">hud_fha</strong> <span style="color:#64748b;">(17,484 rows) — FHA-insured multifamily properties</span><br>
-          <code style="color:#64748b;">fips, property_name, address, city, state, zip, units, maturity_date, maturity_years, section8, lat, lng, loan_id</code>
-        </div>
-        <div style="margin-bottom:12px;">
-          <strong style="color:#60a5fa;">bls_2023</strong> <span style="color:#64748b;">(48,559 rows) — Employment & wages by metro/occupation</span><br>
-          <code style="color:#64748b;">metro_code, metro_name, occ_code, occ_title, total_employment, hourly_median, annual_median, location_quotient, year</code>
-        </div>
-        <div style="margin-top:12px; padding-top:8px; border-top:1px solid #334155;">
-          <strong style="color:#94a3b8;">Also available:</strong> census_2021, census_2022, occupations_2021, occupations_2022 (same schemas, earlier years). Use JOINs on <code>fips</code> to combine tables.
-        </div>
-      </div>
-    </div>
-    </div>
 
     <div x-show="activeTab === 'map'" x-cloak class="container map-tab">
       <div class="map-toolbar">
@@ -362,6 +324,13 @@
           </div>
         </div>
       </div>
+      <details class="sql-help-details">
+        <summary class="sql-help-summary">SQL reference &amp; tips</summary>
+        <div class="sql-help-body">
+          <p>Browse tables and columns in the left sidebar. Double-click a column or table name to insert it into the editor.</p>
+          <p>Earlier years (<code>census_2021</code>, <code>census_2022</code>, <code>occupations_2021</code>, <code>occupations_2022</code>) use the same shapes as the 2023 tables—join on <code>fips</code> to combine.</p>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -382,11 +351,11 @@ import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer
 import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js';
 import {
   renderResultsTable,
-  renderCharts,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
 } from '/js/explorer/results.js';
+import { renderCharts } from '/js/explorer/charts.js';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();
@@ -421,7 +390,10 @@ firebase.auth().onAuthStateChanged(user => {
         applyExplorerDuckState(db, conn, warnings);
         document.getElementById('loading').style.display = 'none';
         document.getElementById('results').style.display = 'block';
-        document.getElementById('charts').style.display = 'grid';
+        const dq = document.getElementById('dashboard-query-insights');
+        if (dq) dq.style.display = 'block';
+        const ch = document.getElementById('charts');
+        if (ch) ch.style.display = 'grid';
         setActiveScenarioBar('balanced');
         await runQuery();
         await refreshDashboard(conn);
@@ -456,11 +428,6 @@ document.getElementById('sign-in-btn').addEventListener('click', () => {
 
 document.getElementById('sources-toggle').addEventListener('click', () => {
   const body = document.getElementById('sources-body');
-  body.style.display = body.style.display === 'none' ? 'block' : 'none';
-});
-
-document.getElementById('tables-toggle').addEventListener('click', () => {
-  const body = document.getElementById('tables-body');
   body.style.display = body.style.display === 'none' ? 'block' : 'none';
 });
 
