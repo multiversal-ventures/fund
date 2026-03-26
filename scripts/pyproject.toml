@@ -1,0 +1,20 @@
+[project]
+name = "fund-pipeline"
+version = "0.1.0"
+description = "Multifamily fund data pipeline"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2",
+    "pyarrow>=17.0",
+    "duckdb>=1.1",
+    "requests>=2.32",
+    "firebase-admin>=6.5",
+    "pyyaml>=6.0",
+    "click>=8.1",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3",
+    "pytest-mock>=3.14",
+]

@@ -2,3 +2,18 @@ firebase-debug.log
 *.log
 node_modules/
 .firebase/
+
+# Python / uv
+__pycache__/
+*.pyc
+.venv/
+scripts/.venv/
+
+# Local data output
+data/
+
+# Firebase
+.firebase/
+
+# Node (functions)
+functions/node_modules/
