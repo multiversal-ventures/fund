@@ -1,0 +1,49 @@
+# Target markets: FIPS codes of qualifying counties
+# Default: 147 counties with 50K+ units, 10K+ renters, rent > owner cost, vacancy falling
+# This list is seeded with the top-scoring markets from our national screening.
+# Full list generated on first pipeline run via screening thresholds below.
+target_markets:
+  # California
+  - "06067"  # Sacramento
+  - "06065"  # Riverside (Inland Empire)
+  - "06071"  # San Bernardino (Inland Empire)
+  - "06019"  # Fresno
+  - "06029"  # Kern / Bakersfield
+  # Florida
+  - "12105"  # Polk
+  - "12083"  # Marion
+  - "12101"  # Pasco
+  - "12115"  # Sarasota
+  - "12097"  # Osceola
+  # Arizona
+  - "04013"  # Maricopa
+  # Add more or set to "auto" to use screening thresholds
+
+# Set to true to auto-discover markets matching thresholds
+auto_discover: true
+
+screening_thresholds:
+  min_total_units: 50000
+  min_renter_households: 10000
+  rent_exceeds_owner_cost: true
+  vacancy_falling: true
+
+scoring_weights:
+  mortgage_maturity: 20
+  vacancy_trend: 25
+  rent_cost_ratio: 30
+  area_vacancy: 10
+  pop_growth: 15
+
+census:
+  years: [2021, 2022, 2023]
+  tables:
+    - B25001
+    - B25002
+    - B25003
+    - B25004
+    - B25024
+    - B25064
+    - B25077
+    - B25105
+    - B01003
