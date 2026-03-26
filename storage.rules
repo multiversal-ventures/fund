@@ -3,12 +3,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /data/{allPaths=**} {
-      allow read: if request.auth != null &&
-                   request.auth.token.email in [
-                     'holly@multiversal.ventures',
-                     'akshay@multiversal.ventures',
-                     'kartik@multiversal.ventures'
-                   ];
+      allow read: if request.auth != null;
       allow write: if false;
     }
   }
