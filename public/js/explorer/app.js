@@ -1,13 +1,23 @@
 /**
- * Fund Explorer — Alpine.js root state (Task 1 shell).
- * DuckDB init remains in explorer.html until Task 2 extracts it.
+ * Fund Explorer — Alpine.js root state + DuckDB store (Task 2+).
  */
 document.addEventListener('alpine:init', () => {
+  Alpine.store('duck', {
+    db: null,
+    conn: null,
+    warnings: [],
+  });
+
   Alpine.data('explorerApp', () => ({
     activeTab: 'dashboard',
 
     setTab(tab) {
       this.activeTab = tab;
+    },
+
+    dismissDuckWarnings() {
+      Alpine.store('duck').warnings = [];
+      if (window.__explorerDuckdb) window.__explorerDuckdb.warnings = [];
     },
   }));
 });

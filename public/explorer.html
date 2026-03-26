@@ -39,6 +39,18 @@
       <button type="button" class="tab-btn" :class="{ active: activeTab === 'sql' }" @click="setTab('sql')" :aria-selected="activeTab === 'sql'" role="tab">⌨ SQL Studio</button>
     </nav>
 
+    <div id="duckdb-warnings" x-show="$store.duck.warnings.length > 0" x-cloak class="duckdb-warnings">
+      <div class="duckdb-warnings-title">
+        <span>Some data files could not be loaded (tables skipped)</span>
+        <button type="button" class="btn btn-sm btn-outline" @click="dismissDuckWarnings()">Dismiss</button>
+      </div>
+      <ul>
+        <template x-for="(w, i) in $store.duck.warnings" :key="i">
+          <li x-text="w"></li>
+        </template>
+      </ul>
+    </div>
+
     <div x-show="activeTab === 'dashboard'" x-cloak class="container">
 <div style="background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(96,165,250,0.08)); border:1px solid #334155; border-radius:10px; padding:16px 20px; margin-bottom:16px;">
   <p style="font-size:15px; color:#f1f5f9; font-weight:600; margin-bottom:8px;">Fund Thesis</p>
@@ -247,19 +259,44 @@
 <script src="/js/explorer/app.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script type="module">
-import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/+esm';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js';
 
 const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
 const authGate = document.getElementById('auth-gate');
 const app = document.getElementById('app');
 const authError = document.getElementById('auth-error');
 
+function applyExplorerDuckState(db, conn, warnings) {
+  window.__explorerDuckdb = { db, conn, warnings };
+  if (typeof Alpine !== 'undefined' && Alpine.store) {
+    try {
+      const s = Alpine.store('duck');
+      s.db = db;
+      s.conn = conn;
+      s.warnings = [...warnings];
+    } catch (_) { /* Alpine store not ready */ }
+  }
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if (user && ALLOWED.includes(user.email.toLowerCase())) {
     authGate.style.display = 'none';
     app.style.display = 'block';
     document.getElementById('user-email').textContent = user.email;
-    initExplorer(user);
+    (async () => {
+      try {
+        const { db, conn, warnings } = await initDuckDB(user);
+        applyExplorerDuckState(db, conn, warnings);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('charts').style.display = 'grid';
+        await runQuery();
+        loadRunStatus();
+      } catch (err) {
+        document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
+        console.error(err);
+      }
+    })();
   } else if (user) {
     firebase.auth().signOut();
     authError.textContent = 'Access restricted to authorized team members.';
@@ -344,69 +381,12 @@ document.getElementById('save-config-btn').addEventListener('click', async () =>
   document.getElementById('run-status').textContent = 'Pipeline refresh triggered...';
 });
 
-let db = null;
-let conn = null;
-
-async function initExplorer(user) {
-  try {
-    const DUCKDB_BUNDLES = duckdb.getJsDelivrBundles();
-    const bundle = await duckdb.selectBundle(DUCKDB_BUNDLES);
-    // Fetch worker script as blob to avoid cross-origin Worker restriction
-    const workerResp = await fetch(bundle.mainWorker);
-    const workerBlob = new Blob([await workerResp.text()], { type: 'application/javascript' });
-    const workerUrl = URL.createObjectURL(workerBlob);
-    const worker = new Worker(workerUrl);
-    const logger = new duckdb.ConsoleLogger();
-    db = new duckdb.AsyncDuckDB(logger, worker);
-    await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
-    conn = await db.connect();
-
-    const token = await user.getIdToken();
-    const storageRef = firebase.storage().ref();
-
-    const files = [
-      { path: 'data/scored/properties.parquet', table: 'properties' },
-      { path: 'data/census/acs_2023.parquet', table: 'census_2023' },
-      { path: 'data/census/acs_2022.parquet', table: 'census_2022' },
-      { path: 'data/census/acs_2021.parquet', table: 'census_2021' },
-      { path: 'data/hud/fha_multifamily.parquet', table: 'hud_fha' },
-      { path: 'data/hud/usps_vacancy.parquet', table: 'usps_vacancy' },
-      { path: 'data/census/occupations_2023.parquet', table: 'occupations_2023' },
-      { path: 'data/census/occupations_2022.parquet', table: 'occupations_2022' },
-      { path: 'data/census/occupations_2021.parquet', table: 'occupations_2021' },
-      { path: 'data/scored/market_scores.parquet', table: 'market_scores' },
-      { path: 'data/cbp/employment_2023.parquet', table: 'cbp_2023' },
-      { path: 'data/permits/permits_2023.parquet', table: 'permits_2023' },
-    ];
-
-    for (const f of files) {
-      try {
-        const url = await storageRef.child(f.path).getDownloadURL();
-        const resp = await fetch(url);
-        const buffer = await resp.arrayBuffer();
-        await db.registerFileBuffer(f.table + '.parquet', new Uint8Array(buffer));
-        await conn.query(`CREATE TABLE ${f.table} AS SELECT * FROM '${f.table}.parquet'`);
-      } catch (e) {
-        console.warn(`Skipping ${f.path}: ${e.message}`);
-      }
-    }
-
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('charts').style.display = 'grid';
-    await runQuery();
-    loadRunStatus();
-  } catch (err) {
-    document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
-    console.error(err);
-  }
-}
-
 async function runQuery() {
   const sql = document.getElementById('sql-input').value.trim();
-  if (!sql || !conn) return;
+  const c = getConn();
+  if (!sql || !c) return;
   try {
-    const result = await conn.query(sql);
+    const result = await duckDbRunQuery(c, sql);
     renderResults(result);
     renderCharts(result);
   } catch (err) {
@@ -633,9 +613,11 @@ document.getElementById('export-csv').addEventListener('click', () => {
 });
 
 document.getElementById('export-parquet').addEventListener('click', async () => {
-  if (!conn) return;
+  const c = getConn();
+  const db = getDb();
+  if (!c || !db) return;
   const sql = document.getElementById('sql-input').value.trim();
-  await conn.query(`COPY (${sql}) TO 'export.parquet' (FORMAT PARQUET)`);
+  await c.query(`COPY (${sql}) TO 'export.parquet' (FORMAT PARQUET)`);
   const buf = await db.copyFileToBuffer('export.parquet');
   downloadBlob(buf, 'fund-export.parquet', 'application/octet-stream');
 });
