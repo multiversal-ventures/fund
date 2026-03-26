@@ -275,6 +275,11 @@
         </label>
         <span id="map-legend" class="map-legend" aria-live="polite"></span>
       </div>
+      <div id="map-no-scores" class="map-banner" style="display:none;" role="status">
+        <strong>No county scores loaded.</strong>
+        The map can show outlines, but choropleth data needs <code>market_scores</code> from Storage.
+        Check the load warnings on the Dashboard tab, or confirm <code>data/scored/market_scores.parquet</code> exists and loaded without errors.
+      </div>
       <div id="map-geojson-error" class="map-error" style="display:none;">
         <p class="map-error-msg">Could not load county boundaries.</p>
         <button type="button" class="btn btn-sm" id="map-retry-btn">Retry</button>

@@ -45,12 +45,27 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-/** @param {unknown} v */
+/**
+ * Align Parquet / DuckDB FIPS with Plotly GeoJSON `id` (5-digit string, e.g. "01001").
+ * Handles integers, floats, BigInt, and strings like "1001.0" from Arrow/Parquet.
+ * @param {unknown} v
+ */
 export function normalizeFips(v) {
-  if (v == null) return '';
+  if (v == null || v === '') return '';
+  if (typeof v === 'bigint') {
+    const s = String(v);
+    return /^\d+$/.test(s) ? s.padStart(5, '0') : s;
+  }
+  if (typeof v === 'number' && Number.isFinite(v)) {
+    return String(Math.round(v)).padStart(5, '0');
+  }
   const s = String(v).trim();
-  if (!/^\d+$/.test(s)) return s;
-  return s.padStart(5, '0');
+  if (!s) return '';
+  if (/^\d+$/.test(s)) return s.padStart(5, '0');
+  if (/^\d+\.\d+$/.test(s)) {
+    return String(Math.round(parseFloat(s))).padStart(5, '0');
+  }
+  return s;
 }
 
 /**
@@ -101,9 +116,12 @@ async function loadMarketRows(conn) {
          SELECT fips, COUNT(*)::BIGINT AS cnt FROM properties GROUP BY fips
        ) p ON CAST(ms.fips AS VARCHAR) = CAST(p.fips AS VARCHAR)`,
     );
+    const fields = result.schema.fields.map((f) => f.name);
+    const fipsCol = fields.find((n) => n.toLowerCase() === 'fips') || 'fips';
     const byFips = new Map();
     for (const row of result.toArray()) {
-      const f = normalizeFips(row.fips);
+      const raw = row[fipsCol];
+      const f = normalizeFips(raw);
       if (f) byFips.set(f, row);
     }
     return byFips;
@@ -186,6 +204,8 @@ class ExplorerMap {
     ).addTo(this.map);
 
     this.byFips = await loadMarketRows(this.conn);
+    const noScoresEl = document.getElementById('map-no-scores');
+    if (noScoresEl) noScoresEl.style.display = this.byFips.size === 0 ? 'block' : 'none';
 
     try {
       const res = await fetch(COUNTY_GEOJSON_URL);
