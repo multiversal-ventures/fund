@@ -5,25 +5,26 @@ from pull_hud import parse_fha_response, parse_usps_vacancy, build_fha_url
 
 def test_build_fha_url():
     url = build_fha_url(limit=10, offset=0)
-    assert "data.hud.gov" in url
+    assert "arcgis.com" in url
+    assert "resultRecordCount=10" in url
 
 def test_parse_fha_response():
     raw = [
         {
-            "property_name": "Sunset Apartments",
-            "property_street": "123 Main St",
-            "city_name_text": "Sacramento",
-            "state_code": "CA",
-            "zip_code": "95814",
-            "units_tot_cnt": "120",
-            "fha_loan_id": "12345",
-            "orig_mortgage_amt": "5000000",
-            "maturity_date": "2027-06-15T00:00:00.000",
-            "soa_cd_txt": "Section 8",
-            "latitude": "38.58",
-            "longitude": "-121.49",
-            "fips_state_cd": "06",
-            "fips_cnty_cd": "067",
+            "PROPERTY_NAME_TEXT": "Sunset Apartments",
+            "ADDRESS_LINE1_TEXT": "123 Main St",
+            "PLACED_BASE_CITY_NAME_TEXT": "Sacramento",
+            "STD_ZIP5": "95814",
+            "TOTAL_UNIT_COUNT": 120,
+            "PRIMARY_FHA_NUMBER": "12345",
+            "LOAN_MATURITY_DATE": 1813276800000,  # ~2027-06-15 epoch ms
+            "SOA_NAME1": "Section 8",
+            "LAT": 38.58,
+            "LON": -121.49,
+            "STATE2KX": "06",
+            "COUNTY_LEVEL": "06067",
+            "PROPERTY_CATEGORY_NAME": "Insured-Subsidized",
+            "TOTAL_ASSISTED_UNIT_COUNT": 120,
         }
     ]
     df = parse_fha_response(raw)

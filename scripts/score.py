@@ -83,11 +83,12 @@ def score_properties(
     )
 
     df["total_score"] = (
-        df["score_maturity"] + df["score_vacancy"] + df["score_rent_cost"] +
-        df["score_area_vac"] + df["score_pop"]
+        df["score_maturity"].fillna(0) + df["score_vacancy"].fillna(0) +
+        df["score_rent_cost"].fillna(0) + df["score_area_vac"].fillna(0) +
+        df["score_pop"].fillna(0)
     ).round(1)
 
-    df["signal_rank"] = df["total_score"].rank(ascending=False, method="min").astype(int)
+    df["signal_rank"] = df["total_score"].rank(ascending=False, method="min").astype("Int64")
     df["zillow_url"] = add_zillow_urls(df)
     df = df.sort_values("signal_rank").reset_index(drop=True)
 

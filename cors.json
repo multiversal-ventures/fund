@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://mvv-fund.web.app", "https://mvv-fund.firebaseapp.com"],
+    "method": ["GET", "HEAD", "OPTIONS"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type", "Authorization", "Content-Length", "X-Requested-With"]
+  }
+]
