@@ -1,0 +1,10 @@
+{
+  "electrical": 30,
+  "water_cooling": 10,
+  "political": 20,
+  "pipeline": 15,
+  "connectivity": 10,
+  "labor_cost": 10,
+  "unique": 5,
+  "penalty_max": 10
+}

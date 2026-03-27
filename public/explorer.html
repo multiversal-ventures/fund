@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bump explorer-asset-version when changing JS/CSS so clients pull new files (used below + window.__explorerAssetV). -->
-<meta name="explorer-asset-version" content="20260326-4">
+<meta name="explorer-asset-version" content="20260327-1">
 <title>Fund Explorer — Multiversal Ventures</title>
 <script>
 (function () {
@@ -49,6 +49,7 @@
       <button type="button" class="tab-btn" :class="{ active: activeTab === 'dashboard' }" @click="setTab('dashboard')" :aria-selected="activeTab === 'dashboard'" role="tab">📊 Dashboard</button>
       <button type="button" class="tab-btn" :class="{ active: activeTab === 'map' }" @click="setTab('map')" :aria-selected="activeTab === 'map'" role="tab">🗺 Map</button>
       <button type="button" class="tab-btn" :class="{ active: activeTab === 'sql' }" @click="setTab('sql')" :aria-selected="activeTab === 'sql'" role="tab">⌨ SQL Studio</button>
+      <button type="button" class="tab-btn" :class="{ active: activeTab === 'dc' }" @click="setTab('dc')" :aria-selected="activeTab === 'dc'" role="tab">⚡ DC Markets</button>
     </nav>
 
     <div id="duckdb-warnings" x-show="$store.duck.warnings.length > 0" x-cloak class="duckdb-warnings">
@@ -326,6 +327,8 @@
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM properties WHERE stability_score >= 70 ORDER BY total_score DESC LIMIT 30">Most Stable</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT c.fips, c.county, c.state, b.hhi, b.top_sector_name, b.top_sector_share, b.num_sectors FROM cbp_2023 b JOIN census_2023 c ON b.fips = c.fips ORDER BY b.hhi ASC LIMIT 30">Most Diversified</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
+            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline, dc_penalty FROM dc_market_scores ORDER BY dc_market_score DESC NULLS LAST LIMIT 40">DC Top 40</button>
+            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM dc_tavily_state ORDER BY state_abbr LIMIT 60">DC Tavily (states)</button>
             <div class="sql-editor-export">
               <button type="button" class="btn btn-sm btn-outline" id="sql-export-csv">Export CSV</button>
               <button type="button" class="btn btn-sm btn-outline" id="sql-export-parquet">Export Parquet</button>
@@ -350,6 +353,49 @@
         </div>
       </details>
     </div>
+
+    <div x-show="activeTab === 'dc'" x-cloak class="container dc-tab">
+      <div class="scenario-bar">
+        <span class="scenario-bar-label">Data center adjacency thesis</span>
+        <a href="dc_thesis.html" class="scenario-customize-btn" style="text-decoration:none;">Full methodology →</a>
+      </div>
+
+      <div class="how-we-score" id="dc-how-we-score">
+        <h3 style="font-size:13px; color:#f1f5f9; margin-bottom:8px;">How we score (Tier 1)</h3>
+        <p style="font-size:12px; color:#94a3b8; line-height:1.65; margin-bottom:10px;">
+          County-level <strong style="color:#e2e8f0;">dc_market_score</strong> (0–100) combines electrical cost (EIA-style state industrial ¢/kWh),
+          Census CBP NAICS 518210 density (pipeline), Tavily state-level political signals (incentives vs. risk), and neutral placeholders for water/connectivity until additional layers ship.
+          Validation against industry frameworks: Kearney AI DC Index, Analytics.loan Site Readiness, CBRE / JLL outlooks — see thesis page for links.
+        </p>
+        <p style="font-size:11px; color:#64748b;">Tavily: <a href="https://docs.tavily.com/documentation/agent-skills.md" style="color:#60a5fa;">Agent Skills</a> ·
+        <a href="https://docs.tavily.com/llms.txt" style="color:#60a5fa;">Docs index</a></p>
+      </div>
+
+      <div class="dashboard-stat-row">
+        <div class="stat-card">
+          <div class="stat-card-label">Top DC market score</div>
+          <div id="dc-stat-top" class="stat-card-value stat-green">—</div>
+          <div id="dc-stat-top-sub" class="stat-card-sub">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Counties scored</div>
+          <div id="dc-stat-n" class="stat-card-value stat-blue">—</div>
+          <div class="stat-card-sub">in dc_market_scores</div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="dashboard-section-head">
+          <h2 class="dashboard-section-title">Top counties</h2>
+        </div>
+        <div id="dc-top-markets"></div>
+      </div>
+
+      <p style="font-size:13px; color:#94a3b8; margin-top:12px;">
+        <a href="dc_market_leaderboard.html" style="color:#60a5fa;">Static leaderboard page →</a>
+        · Run <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:#a78bfa;">uv run python dc/run_dc_pipeline.py</code> from <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px;">scripts/</code> after Census pull, then upload <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px;">data/dc/*.parquet</code>.
+      </p>
+    </div>
   </div>
 
   <div class="footer">
@@ -358,28 +404,41 @@
   </div>
 </div>
 
-<script src="/js/explorer/app.js?v=20260326-4"></script>
+<script src="/js/explorer/app.js?v=20260327-1"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <!-- Module specifiers must be string literals — bump ?v= with meta name="explorer-asset-version" -->
 <script type="module">
-import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260326-4';
-import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260326-4';
-import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260326-4';
-import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260326-4';
-import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260326-4';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260327-1';
+import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260327-1';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260327-1';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260327-1';
+import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260327-1';
 import {
   renderResultsTable,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
-} from '/js/explorer/results.js?v=20260326-4';
-import { renderCharts } from '/js/explorer/charts.js?v=20260326-4';
+} from '/js/explorer/results.js?v=20260327-1';
+import { renderCharts } from '/js/explorer/charts.js?v=20260327-1';
+import { refreshDcDashboard } from '/js/explorer/dc-dashboard.js?v=20260327-1';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();
 window.__explorerInitSql = () => initSqlStudioIfNeeded();
 window.__explorerSqlInvalidate = () => notifySqlTabVisible();
+window.__explorerRefreshDc = () => refreshDcDashboard(getConn());
+
+document.addEventListener('alpine:initialized', () => {
+  try {
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab === 'dc') {
+      const root = document.querySelector('.explorer-root');
+      const d = root && Alpine.$data ? Alpine.$data(root) : null;
+      if (d?.setTab) d.setTab('dc');
+    }
+  } catch (_) { /* ignore */ }
+});
 
 const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
 const authGate = document.getElementById('auth-gate');
@@ -423,6 +482,7 @@ firebase.auth().onAuthStateChanged(user => {
           if (d?.setWeightsBaselineFromCurrentDom) await d.setWeightsBaselineFromCurrentDom();
           if (d?.activeTab === 'map') queueMicrotask(() => window.__explorerInitMap?.());
           if (d?.activeTab === 'sql') queueMicrotask(() => window.__explorerInitSql?.());
+          if (d?.activeTab === 'dc') queueMicrotask(() => window.__explorerRefreshDc?.());
         } catch (_) { /* Alpine not ready */ }
       } catch (err) {
         document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;

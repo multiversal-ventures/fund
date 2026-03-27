@@ -7,11 +7,11 @@ import { EditorState, Prec } from 'https://esm.sh/@codemirror/state@6.5.0';
 import { sql } from 'https://esm.sh/@codemirror/lang-sql@6.6.3';
 import { oneDark } from 'https://esm.sh/@codemirror/theme-one-dark@6.1.2';
 
-import { runQuery as duckRunQuery } from '/js/explorer/duckdb.js?v=20260326-4';
-import { getConn, getDb } from '/js/explorer/duckdb.js?v=20260326-4';
-import { VIEW_QUERIES } from '/js/explorer/scenarios.js?v=20260326-4';
-import { getCodemirrorSqlSchema, renderSchemaSidebarHtml } from '/js/explorer/schema.js?v=20260326-4';
-import { renderResultsTable, renderQueryError, exportLastResultCsv, exportLastResultParquet } from '/js/explorer/results.js?v=20260326-4';
+import { runQuery as duckRunQuery } from '/js/explorer/duckdb.js?v=20260327-1';
+import { getConn, getDb } from '/js/explorer/duckdb.js?v=20260327-1';
+import { VIEW_QUERIES } from '/js/explorer/scenarios.js?v=20260327-1';
+import { getCodemirrorSqlSchema, renderSchemaSidebarHtml } from '/js/explorer/schema.js?v=20260327-1';
+import { renderResultsTable, renderQueryError, exportLastResultCsv, exportLastResultParquet } from '/js/explorer/results.js?v=20260327-1';
 
 /** @type {EditorView | null} */
 let _editor = null;

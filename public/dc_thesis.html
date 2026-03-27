@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Center Adjacency Thesis — Multiversal Ventures</title>
+<script src="/__/firebase/12.11.0/firebase-app-compat.js"></script>
+<script src="/__/firebase/12.11.0/firebase-auth-compat.js"></script>
+<script src="/__/firebase/init.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+  .header { background:linear-gradient(135deg,#0f172a 0%,#1e293b 40%,#0f172a 100%); border-bottom:1px solid #334155; padding:40px 28px 32px; text-align:center; }
+  .header h1 { font-size:26px; background:linear-gradient(90deg,#fbbf24,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent; margin-bottom:10px; }
+  .header p { color:#94a3b8; font-size:14px; max-width:760px; margin:0 auto; line-height:1.65; }
+  .container { max-width:900px; margin:0 auto; padding:28px 20px 56px; }
+  h2 { font-size:17px; color:#f1f5f9; margin:28px 0 12px; }
+  h3 { font-size:14px; color:#60a5fa; margin:20px 0 8px; }
+  p, li { font-size:13px; color:#94a3b8; line-height:1.7; margin-bottom:10px; }
+  ul { margin-left:18px; margin-bottom:12px; }
+  a { color:#60a5fa; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  code { background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; font-size:12px; color:#a78bfa; }
+  .callout { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:18px 20px; margin:16px 0; }
+  .footer { text-align:center; padding:24px; color:#475569; font-size:11px; border-top:1px solid #1e293b; }
+</style>
+</head>
+<body>
+
+<div id="auth-gate" style="display:flex; align-items:center; justify-content:center; min-height:100vh; flex-direction:column;">
+  <h1 style="font-size:24px; background:linear-gradient(90deg,#fbbf24,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Multiversal Ventures</h1>
+  <p style="color:#94a3b8; margin-bottom:20px; font-size:14px;">Sign in to view this thesis.</p>
+  <button id="sign-in-btn" style="background:#60a5fa; color:#0f172a; border:none; padding:12px 28px; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;">Sign in with Google</button>
+  <p id="auth-error" style="color:#f87171; margin-top:14px; font-size:13px; display:none;"></p>
+</div>
+
+<div id="app-content" style="display:none;">
+<div class="header">
+  <h1>Data Center Adjacency — Commercial Property Thesis</h1>
+  <p>Position around the data center build-out through <strong style="color:#e2e8f0;">land banking</strong>, <strong style="color:#e2e8f0;">conversion</strong> of industrial/commercial stock, and <strong style="color:#e2e8f0;">adjacency</strong> to clusters — not operating colocation or hyperscale facilities. National screen with emphasis on emerging markets where power and politics align before commercial property fully reprices.</p>
+</div>
+
+<div class="container">
+
+  <div class="callout">
+    <p style="margin:0; font-size:13px; color:#cbd5e1;"><strong style="color:#f1f5f9;">Tier 1 model (live):</strong> County-level <code>dc_market_score</code> (0–100) is computed in <code>scripts/dc/</code>, stored as <code>data/dc/dc_market_scores.parquet</code>, and loaded in <a href="explorer.html?tab=dc">Fund Explorer → DC Markets</a>. Water/connectivity layers use neutral placeholders until Phase 2 geospatial inputs ship; electrical, pipeline, and political signals drive most dispersion today.</p>
+  </div>
+
+  <h2>Methodology — how we score</h2>
+  <p>Each metric is percentile-ranked across counties, then multiplied by category weights (see <code>scripts/dc/dc_weights.default.json</code>). Weights align with third-party frameworks: combined electrical + water/cooling ≈ 40% (compare Kearney and Analytics.loan power-heavy models); pipeline is intentionally <em>lower</em> than Analytics.loan’s 30% pipeline pillar so we do not only chase already-hot markets.</p>
+
+  <h3>Category weights (100 pts before penalties)</h3>
+  <ul>
+    <li><strong style="color:#e2e8f0;">Electrical (30)</strong> — State industrial ¢/kWh (bundled EIA-style CSV in-repo; replace with EIA API when wired). Lower cost = better.</li>
+    <li><strong style="color:#e2e8f0;">Water &amp; cooling (10)</strong> — Placeholder constant until USGS / climate layers land (neutral spread).</li>
+    <li><strong style="color:#e2e8f0;">Political (20)</strong> — Tavily Search API, state-level queries for incentives vs. risk language; see <a href="https://docs.tavily.com/documentation/agent-skills.md">Tavily Agent Skills</a> and <a href="https://docs.tavily.com/llms.txt">docs index</a>.</li>
+    <li><strong style="color:#e2e8f0;">Pipeline (15)</strong> — Census CBP NAICS 518210 employment per 1k population (county).</li>
+    <li><strong style="color:#e2e8f0;">Connectivity (10)</strong> — Placeholder until FCC / IX data merged.</li>
+    <li><strong style="color:#e2e8f0;">Labor &amp; cost (10)</strong> — Workforce resilience index from <code>occupations_2023</code> when present.</li>
+    <li><strong style="color:#e2e8f0;">Unique (5)</strong> — Placeholder for renewable / disaster subscores.</li>
+    <li><strong style="color:#e2e8f0;">Penalties</strong> — Tavily-derived moratorium/opposition signal (capped).</li>
+  </ul>
+
+  <h2>Validation — industry indices &amp; commentary</h2>
+  <p>We cite these when explaining weight choices and market narratives (methodology must stay honest when our proxies differ):</p>
+  <ul>
+    <li><a href="https://www.kearney.com/industry/technology/article/ai-data-center-location-attractiveness-index">Kearney — AI Data Center Location Attractiveness Index</a></li>
+    <li><a href="https://www.analytics.loan/post/data-center-site-readiness-scorecard-ranking-u-s-metros-on-power-land-pipeline">Analytics.loan — Site Readiness (Power / Land / Pipeline)</a></li>
+    <li><a href="https://www.cbre.com/insights/reports/data-center-trends-2025">CBRE — Global Data Center Trends</a></li>
+    <li><a href="https://www.jll.com/en-us/insights/data-center-outlook.html">JLL — Data Center Outlook</a></li>
+    <li><a href="https://www.datacenterenergy.com/news/power-water-and-permits-the-new-pillars-of-data-center-site-selection">Power, water, permits — industry framing</a></li>
+    <li><a href="https://www.gevernova.com/consulting/resources/articles/2025/smart-data-center-site-selection">GE Vernova — Site selection criteria</a></li>
+    <li><a href="https://www.bdo.com/insights/industries/technology/strategic-guide-to-data-center-site-selection">BDO — Strategic guide</a></li>
+    <li><a href="https://www.ramboll.com/en-us/insights/resilient-societies-and-liveability/data-center-site-selection-criteria">Ramboll — Site selection criteria</a></li>
+  </ul>
+
+  <h2>Primary data sources</h2>
+  <ul>
+    <li><a href="https://api.census.gov/data/2023/acs/acs5">Census ACS</a> — county population &amp; base geography</li>
+    <li><a href="https://www.census.gov/data/developers/data-sets/cbp-nonemp-zbp.html">Census CBP</a> — NAICS 518210 employment by county</li>
+    <li><a href="https://www.eia.gov/electricity/data/eia861/">EIA Form 861</a> — reference for future retail/industrial rate pulls</li>
+    <li><a href="https://docs.tavily.com/documentation/agent-skills.md">Tavily</a> — Search API for political / risk intel</li>
+  </ul>
+
+  <h2>Run the pipeline</h2>
+  <p>From repository <code>scripts/</code> (with Census ACS already pulled to <code>data/census/acs_2023.parquet</code>):</p>
+  <p><code style="display:block; padding:12px; margin:10px 0; border-radius:8px; background:#1e293b; border:1px solid #334155;">uv run python dc/run_dc_pipeline.py --skip-tavily</code></p>
+  <p>Omit <code>--skip-tavily</code> when <code>TAVILY_API_KEY</code> is set. Upload <code>data/dc/*.parquet</code> with your existing Firebase upload flow (<code>uv run run.py --upload</code> after files are in <code>data/</code>).</p>
+
+  <p style="margin-top:24px; font-size:12px; color:#64748b;">Design spec: <code>docs/superpowers/specs/2026-03-26-data-center-adjacency-thesis-design.md</code></p>
+
+  <p style="margin-top:16px;"><a href="index.html" style="font-weight:600;">← Research index</a> · <a href="explorer.html?tab=dc" style="font-weight:600;">Fund Explorer (DC)</a> · <a href="dc_market_leaderboard.html" style="font-weight:600;">Leaderboard</a></p>
+</div>
+
+<div class="footer">
+  Informational only — not investment advice.<br>
+  <button onclick="firebase.auth().signOut()" style="margin-top:12px; background:transparent; color:#475569; border:1px solid #334155; padding:6px 14px; border-radius:6px; font-size:11px; cursor:pointer;">Sign Out</button>
+</div>
+</div>
+
+<script>
+  const ALLOWED_EMAILS = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
+  const authGate = document.getElementById('auth-gate');
+  const appContent = document.getElementById('app-content');
+  const authError = document.getElementById('auth-error');
+  firebase.auth().onAuthStateChanged(user => {
+    if (user && ALLOWED_EMAILS.includes(user.email.toLowerCase())) {
+      authGate.style.display = 'none';
+      appContent.style.display = 'block';
+    } else if (user) {
+      firebase.auth().signOut();
+      authError.textContent = 'Access restricted to authorized team members.';
+      authError.style.display = 'block';
+    } else {
+      authGate.style.display = 'flex';
+      appContent.style.display = 'none';
+    }
+  });
+  document.getElementById('sign-in-btn').addEventListener('click', () => {
+    firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(err => {
+      authError.textContent = err.message;
+      authError.style.display = 'block';
+    });
+  });
+</script>
+</body>
+</html>

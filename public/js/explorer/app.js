@@ -37,6 +37,11 @@ document.addEventListener('alpine:init', () => {
           if (typeof window.__explorerSqlInvalidate === 'function') window.__explorerSqlInvalidate();
         });
       }
+      if (tab === 'dc') {
+        queueMicrotask(() => {
+          if (typeof window.__explorerRefreshDc === 'function') window.__explorerRefreshDc();
+        });
+      }
     },
 
     async savePipelineToFirestore() {

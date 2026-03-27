@@ -34,6 +34,8 @@ export async function initDuckDB(user) {
   const storageRef = firebase.storage().ref();
 
   const files = [
+    { path: 'data/dc/dc_market_scores.parquet', table: 'dc_market_scores' },
+    { path: 'data/dc/dc_tavily_state.parquet', table: 'dc_tavily_state' },
     { path: 'data/scored/properties.parquet', table: 'properties' },
     { path: 'data/census/acs_2023.parquet', table: 'census_2023' },
     { path: 'data/census/acs_2022.parquet', table: 'census_2022' },
