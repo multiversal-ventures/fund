@@ -2,6 +2,8 @@
 # scripts/run.py
 """CLI entry point for the fund data pipeline."""
 import os
+import subprocess
+import sys
 import click
 from pathlib import Path
 
@@ -28,10 +30,32 @@ DEFAULT_OUTPUT = str(Path(__file__).parent.parent / "data")
 @click.option("--sensitivity", "run_sensitivity", is_flag=True, help="Run Monte Carlo sensitivity analysis")
 @click.option("--score", "run_score", is_flag=True, help="Run scoring")
 @click.option("--upload", "run_upload", is_flag=True, help="Upload to Firebase Storage")
+@click.option("--dc", "run_dc", is_flag=True, help="Run data center adjacency Tier 1 pipeline (needs census/acs_*.parquet)")
+@click.option(
+    "--dc-skip-tavily",
+    "dc_skip_tavily",
+    is_flag=True,
+    help="Skip Tavily API calls for DC enrichment (neutral state intel)",
+)
 @click.option("--config", "config_source", default=None, help="Config file path or 'firestore'")
 @click.option("--local-only", is_flag=True, help="Skip upload, output locally only")
 @click.option("--output", default=DEFAULT_OUTPUT, help="Local output directory")
-def main(run_all, census, bls, hud, permits, cbp, run_sensitivity, run_score, run_upload, config_source, local_only, output):
+def main(
+    run_all,
+    census,
+    bls,
+    hud,
+    permits,
+    cbp,
+    run_sensitivity,
+    run_score,
+    run_upload,
+    run_dc,
+    dc_skip_tavily,
+    config_source,
+    local_only,
+    output,
+):
     """Fund data pipeline — pull, score, and upload multifamily property data."""
     config = load_config(config_source)
     os.makedirs(output, exist_ok=True)
@@ -91,6 +115,14 @@ def main(run_all, census, bls, hud, permits, cbp, run_sensitivity, run_score, ru
             scored = run_monte_carlo(scored, config)
             scored.to_parquet(scored_path, index=False)
             print(f"  Monte Carlo sensitivity added to {scored_path}")
+
+    if run_all or run_dc:
+        dc_script = Path(__file__).resolve().parent / "dc" / "run_dc_pipeline.py"
+        cmd = [sys.executable, str(dc_script), "--output", output]
+        if dc_skip_tavily:
+            cmd.append("--skip-tavily")
+        print("DC adjacency pipeline...")
+        subprocess.run(cmd, check=True)
 
     if (run_all or run_upload) and not local_only:
         upload_all(data_dir=output, config=config)

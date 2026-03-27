@@ -17,10 +17,23 @@ def collect_parquet_files(data_dir: str) -> list[tuple[str, str]]:
     return sorted(files, key=lambda x: x[1])
 
 
+def _resolve_bucket_name(explicit: str | None) -> str:
+    """Bucket id only (no gs://). Set FIREBASE_STORAGE_BUCKET from Firebase Console → Storage."""
+    import os
+
+    name = explicit or os.environ.get("FIREBASE_STORAGE_BUCKET")
+    if not name:
+        raise ValueError(
+            "Firebase Storage bucket not set. Export FIREBASE_STORAGE_BUCKET=<bucket-id> "
+            "(Console → Storage → copy bucket name, e.g. project-id.firebasestorage.app)"
+        )
+    return name
+
+
 def upload_to_storage(file_pairs: list[tuple[str, str]], bucket_name: str = None):
     if not firebase_admin._apps:
         firebase_admin.initialize_app()
-    bucket = storage.bucket(bucket_name)
+    bucket = storage.bucket(_resolve_bucket_name(bucket_name))
     for local_path, storage_path in file_pairs:
         blob = bucket.blob(storage_path)
         blob.upload_from_filename(local_path, content_type="application/octet-stream")
@@ -30,7 +43,7 @@ def upload_to_storage(file_pairs: list[tuple[str, str]], bucket_name: str = None
 def upload_meta(data_dir: str, config: dict, bucket_name: str = None):
     if not firebase_admin._apps:
         firebase_admin.initialize_app()
-    bucket = storage.bucket(bucket_name)
+    bucket = storage.bucket(_resolve_bucket_name(bucket_name))
     blob = bucket.blob("data/meta/last_run.json")
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
