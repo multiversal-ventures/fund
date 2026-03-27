@@ -132,6 +132,13 @@ def score_deals(
         df["market_score"] = pd.Series(dtype=float)
         return df
 
+    # HUD extract has no county name; join from ACS for Explorer / maps / Zillow context
+    df = df.merge(
+        census_latest[["fips", "county"]].drop_duplicates("fips"),
+        on="fips",
+        how="left",
+    )
+
     # Mortgage maturity: capped at 5, lower = better
     maturity_capped = df["maturity_years"].clip(0, 5).fillna(5)
     df["s_mortgage_maturity"] = normalize_signal(maturity_capped, weights["mortgage_maturity"], higher_is_better=False)

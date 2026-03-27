@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bump explorer-asset-version when changing JS/CSS so clients pull new files (used below + window.__explorerAssetV). -->
-<meta name="explorer-asset-version" content="20260327-2">
+<meta name="explorer-asset-version" content="20260327-10">
+<!-- Optional: <meta name="explorer-dclocalnews-url" content="https://REGION-PROJECT.cloudfunctions.net/dcLocalNews"> -->
 <title>Fund Explorer — Multiversal Ventures</title>
 <script>
 (function () {
@@ -41,6 +42,15 @@
     <div>
       <span class="user" id="user-email"></span>
       <button class="btn btn-sm btn-outline" onclick="firebase.auth().signOut()" style="margin-left:8px;">Sign Out</button>
+    </div>
+  </div>
+
+  <div id="explorer-boot-overlay" class="explorer-boot-overlay" role="status" aria-live="polite" aria-busy="true">
+    <div class="explorer-boot-card">
+      <div class="explorer-boot-spinner" aria-hidden="true"></div>
+      <p class="explorer-boot-title">Loading Fund Explorer</p>
+      <p class="explorer-boot-sub">Initializing the analytics engine and loading datasets from storage…</p>
+      <div class="explorer-boot-progress" aria-hidden="true"><span class="explorer-boot-progress-bar"></span></div>
     </div>
   </div>
 
@@ -327,7 +337,7 @@
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM properties WHERE stability_score >= 70 ORDER BY total_score DESC LIMIT 30">Most Stable</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT c.fips, c.county, c.state, b.hhi, b.top_sector_name, b.top_sector_share, b.num_sectors FROM cbp_2023 b JOIN census_2023 c ON b.fips = c.fips ORDER BY b.hhi ASC LIMIT 30">Most Diversified</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
-            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline, dc_penalty FROM dc_market_scores WHERE dc_eligible = true ORDER BY dc_market_score DESC NULLS LAST LIMIT 40">DC Top 40</button>
+            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline, dc_penalty, zillow_url FROM dc_market_scores WHERE dc_eligible = true ORDER BY dc_market_score DESC NULLS LAST LIMIT 40">DC Top 40</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM dc_tavily_state ORDER BY state_abbr LIMIT 60">DC Tavily (states)</button>
             <div class="sql-editor-export">
               <button type="button" class="btn btn-sm btn-outline" id="sql-export-csv">Export CSV</button>
@@ -355,45 +365,92 @@
     </div>
 
     <div x-show="activeTab === 'dc'" x-cloak class="container dc-tab">
-      <div class="scenario-bar">
-        <span class="scenario-bar-label">Data center adjacency thesis</span>
-        <a href="dc_thesis.html" class="scenario-customize-btn" style="text-decoration:none;">Full methodology →</a>
+      <header class="dc-page-intro">
+        <p class="dc-page-kicker">Research layer</p>
+        <h2 class="dc-page-title">Data center adjacency</h2>
+        <p class="dc-page-lead">County readiness scores and Tavily-backed context for hyperscale-adjacent land and power markets.</p>
+      </header>
+
+      <div class="scenario-bar dc-scenario-bar">
+        <span class="scenario-bar-label">Thesis &amp; methodology</span>
+        <a href="dc_thesis.html" class="scenario-customize-btn dc-thesis-link">Full methodology →</a>
       </div>
 
-      <div class="how-we-score" id="dc-how-we-score">
-        <h3 style="font-size:13px; color:#f1f5f9; margin-bottom:8px;">How we score (Tier 1)</h3>
-        <p style="font-size:12px; color:#94a3b8; line-height:1.65; margin-bottom:10px;">
-          County-level <strong style="color:#e2e8f0;">dc_market_score</strong> (0–100) combines electrical cost (EIA-style state industrial ¢/kWh),
+      <div class="dc-method-card" id="dc-how-we-score">
+        <h3 class="dc-method-card-title">How we score (Tier 1)</h3>
+        <p class="dc-method-card-body">
+          County-level <strong class="dc-em">dc_market_score</strong> (0–100) combines electrical cost (EIA-style state industrial ¢/kWh),
           Census CBP NAICS 518210 density (pipeline), Tavily state-level political signals (incentives vs. risk), and neutral placeholders for water/connectivity until additional layers ship.
           Validation against industry frameworks: Kearney AI DC Index, Analytics.loan Site Readiness, CBRE / JLL outlooks — see thesis page for links.
         </p>
-        <p style="font-size:11px; color:#64748b;">Tavily: <a href="https://docs.tavily.com/documentation/agent-skills.md" style="color:#60a5fa;">Agent Skills</a> ·
-        <a href="https://docs.tavily.com/llms.txt" style="color:#60a5fa;">Docs index</a></p>
+        <p class="dc-method-card-links">
+          Tavily:
+          <a href="https://docs.tavily.com/documentation/agent-skills.md">Agent Skills</a>
+          ·
+          <a href="https://docs.tavily.com/llms.txt">Docs index</a>
+        </p>
       </div>
 
-      <div class="dashboard-stat-row">
-        <div class="stat-card">
+      <div class="dashboard-stat-row dc-stat-row">
+        <div class="stat-card dc-stat-card">
           <div class="stat-card-label">Top DC market score</div>
           <div id="dc-stat-top" class="stat-card-value stat-green">—</div>
           <div id="dc-stat-top-sub" class="stat-card-sub">—</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card dc-stat-card">
           <div class="stat-card-label">Counties scored</div>
           <div id="dc-stat-n" class="stat-card-value stat-blue">—</div>
-          <div class="stat-card-sub">in dc_market_scores</div>
+          <div class="stat-card-sub">Eligible in dc_market_scores</div>
         </div>
       </div>
 
-      <div class="dashboard-section">
+      <div class="dashboard-section dc-markets-section">
         <div class="dashboard-section-head">
-          <h2 class="dashboard-section-title">Top counties</h2>
+          <h2 class="dashboard-section-title dc-section-title">Top counties</h2>
+          <p class="dc-row-click-hint"><span class="dc-hint-icon" aria-hidden="true">◇</span> Click a row for state Tavily intel and live news. Political signal is <strong>state-level</strong> (shared by all counties in that state).</p>
         </div>
         <div id="dc-top-markets"></div>
       </div>
 
-      <p style="font-size:13px; color:#94a3b8; margin-top:12px;">
-        <a href="dc_market_leaderboard.html" style="color:#60a5fa;">Static leaderboard page →</a>
-        · Run <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:#a78bfa;">uv run python dc/run_dc_pipeline.py</code> from <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px;">scripts/</code> after Census pull, then upload <code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px;">data/dc/*.parquet</code>.
+      <div id="dc-tavily-modal" class="dc-tavily-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dc-tavily-modal-title">
+        <div class="dc-tavily-modal-backdrop" tabindex="-1"></div>
+        <div class="dc-tavily-modal-panel">
+          <button type="button" class="dc-tavily-modal-close" aria-label="Close dialog"><span aria-hidden="true">×</span></button>
+          <header class="dc-tavily-modal-header">
+            <p class="dc-tavily-modal-kicker">DC Markets</p>
+            <h3 id="dc-tavily-modal-title" class="dc-tavily-modal-title">Tavily intel</h3>
+            <p id="dc-tavily-modal-sub" class="dc-tavily-modal-sub"></p>
+            <div id="dc-tavily-modal-scores" class="dc-tavily-modal-scores"></div>
+          </header>
+
+          <section class="dc-modal-section dc-modal-section--live" aria-labelledby="dc-live-heading">
+            <div class="dc-modal-section-head">
+              <h4 id="dc-live-heading" class="dc-modal-section-title">Recent news <span class="dc-badge-live">Live</span></h4>
+              <p class="dc-modal-section-desc">Tavily <code>news</code> for this county &amp; state (~3 weeks). Uses your session; not written to Parquet.</p>
+            </div>
+            <div class="dc-tavily-live-actions">
+              <button type="button" id="dc-tavily-live-btn" class="btn btn-sm dc-btn-live">Fetch latest news</button>
+              <span id="dc-tavily-live-status" class="dc-tavily-live-status" role="status"></span>
+            </div>
+            <div id="dc-tavily-live-summary" class="dc-tavily-live-summary" hidden></div>
+            <div id="dc-tavily-live-results" class="dc-tavily-live-results-grid" role="list"></div>
+          </section>
+
+          <section class="dc-modal-section dc-modal-section--snapshot" aria-labelledby="dc-snapshot-heading">
+            <div class="dc-modal-section-head">
+              <h4 id="dc-snapshot-heading" class="dc-modal-section-title">Pipeline snapshot</h4>
+              <p class="dc-modal-section-desc">From the last scored run uploaded to Storage.</p>
+            </div>
+            <h5 class="dc-modal-subheading">Digest</h5>
+            <pre id="dc-tavily-modal-digest" class="dc-tavily-modal-digest"></pre>
+            <h5 class="dc-modal-subheading">Sources</h5>
+            <ul id="dc-tavily-modal-sources" class="dc-tavily-modal-sources"></ul>
+          </section>
+        </div>
+      </div>
+
+      <p class="dc-footer-link-wrap">
+        <a href="dc_market_leaderboard.html" class="dc-footer-link">Open static leaderboard →</a>
       </p>
     </div>
   </div>
@@ -404,24 +461,24 @@
   </div>
 </div>
 
-<script src="/js/explorer/app.js?v=20260327-2"></script>
+<script src="/js/explorer/app.js?v=20260327-10"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <!-- Module specifiers must be string literals — bump ?v= with meta name="explorer-asset-version" -->
 <script type="module">
-import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260327-2';
-import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260327-2';
-import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260327-2';
-import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260327-2';
-import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260327-2';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260327-10';
+import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260327-10';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260327-10';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260327-10';
+import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260327-10';
 import {
   renderResultsTable,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
-} from '/js/explorer/results.js?v=20260327-2';
-import { renderCharts } from '/js/explorer/charts.js?v=20260327-2';
-import { refreshDcDashboard } from '/js/explorer/dc-dashboard.js?v=20260327-2';
+} from '/js/explorer/results.js?v=20260327-10';
+import { renderCharts } from '/js/explorer/charts.js?v=20260327-10';
+import { refreshDcDashboard } from '/js/explorer/dc-dashboard.js?v=20260327-10';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();
@@ -440,6 +497,7 @@ document.addEventListener('alpine:initialized', () => {
   } catch (_) { /* ignore */ }
 });
 
+/* Keep in sync with functions/index.js → ALLOWED_EXPLORER_EMAILS */
 const ALLOWED = ['holly@multiversal.ventures','akshay@multiversal.ventures','kartik@multiversal.ventures'];
 const authGate = document.getElementById('auth-gate');
 const app = document.getElementById('app');
@@ -463,29 +521,42 @@ firebase.auth().onAuthStateChanged(user => {
     app.style.display = 'block';
     document.getElementById('user-email').textContent = user.email;
     (async () => {
+      const boot = document.getElementById('explorer-boot-overlay');
+      const hideBoot = () => {
+        if (boot) {
+          boot.classList.add('is-hidden');
+          boot.setAttribute('aria-busy', 'false');
+        }
+      };
       try {
         const { db, conn, warnings } = await initDuckDB(user);
         applyExplorerDuckState(db, conn, warnings);
+        setActiveScenarioBar('balanced');
+        await runQuery();
+        await refreshDashboard(conn);
+        await refreshDcDashboard(conn);
+        loadRunStatus();
         document.getElementById('loading').style.display = 'none';
         document.getElementById('results').style.display = 'block';
         const dq = document.getElementById('dashboard-query-insights');
         if (dq) dq.style.display = 'block';
         const ch = document.getElementById('charts');
         if (ch) ch.style.display = 'grid';
-        setActiveScenarioBar('balanced');
-        await runQuery();
-        await refreshDashboard(conn);
-        loadRunStatus();
+        hideBoot();
         try {
           const root = document.querySelector('.explorer-root');
           const d = root && typeof Alpine !== 'undefined' && Alpine.$data ? Alpine.$data(root) : null;
           if (d?.setWeightsBaselineFromCurrentDom) await d.setWeightsBaselineFromCurrentDom();
           if (d?.activeTab === 'map') queueMicrotask(() => window.__explorerInitMap?.());
           if (d?.activeTab === 'sql') queueMicrotask(() => window.__explorerInitSql?.());
-          if (d?.activeTab === 'dc') queueMicrotask(() => window.__explorerRefreshDc?.());
         } catch (_) { /* Alpine not ready */ }
       } catch (err) {
-        document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
+        if (boot) {
+          boot.innerHTML = `<div class="explorer-boot-card explorer-boot-card--error"><p class="explorer-boot-title">Couldn’t load Explorer</p><p class="explorer-boot-sub">${String(err.message || err).replace(/</g, '&lt;')}</p></div>`;
+          boot.setAttribute('aria-busy', 'false');
+        } else {
+          document.getElementById('loading').innerHTML = `<p style="color:#f87171;">Error: ${err.message}</p>`;
+        }
         console.error(err);
       }
     })();

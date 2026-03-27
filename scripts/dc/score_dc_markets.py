@@ -18,6 +18,13 @@ if str(_scripts_dc) not in sys.path:
 
 from score import normalize_signal
 from load_eia_state import load_eia_state_industrial
+from zillow import zillow_url_for_county_row
+
+
+def _county_zillow_url_column(df: pd.DataFrame) -> list[str]:
+    return [
+        zillow_url_for_county_row(row["fips"], row.get("county"), row.get("state")) for _, row in df.iterrows()
+    ]
 
 
 def load_weights(path: Path | None = None) -> dict:
@@ -113,6 +120,7 @@ def score_dc_markets(
     df["dc_market_score"] = pd.Series(pd.NA, index=df.index, dtype="Float64")
 
     if not elig.any():
+        df["zillow_url"] = _county_zillow_url_column(df)
         return df
 
     sub = df.loc[elig].copy()
@@ -141,6 +149,8 @@ def score_dc_markets(
 
     for c in score_cols + ["dc_penalty", "dc_market_score"]:
         df.loc[elig, c] = sub[c].astype("Float64")
+
+    df["zillow_url"] = _county_zillow_url_column(df)
 
     return df
 

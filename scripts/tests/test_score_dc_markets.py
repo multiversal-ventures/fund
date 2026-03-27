@@ -83,6 +83,10 @@ def test_score_dc_markets_shape_and_bounds(tmp_path, weights):
     assert out["dc_market_score"].max() <= 100
     assert out["dc_market_score"].min() >= 0
     assert "s_electrical" in out.columns
+    assert "zillow_url" in out.columns
+    by_fips = out.set_index(out["fips"].astype(str).str.zfill(5))["zillow_url"]
+    assert by_fips["06037"].startswith("https://www.zillow.com/")
+    assert by_fips["01001"].startswith("https://www.zillow.com/")
     assert "06037" in out["fips"].values
 
 

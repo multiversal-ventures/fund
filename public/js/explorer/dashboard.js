@@ -8,13 +8,13 @@
  * re-running the pipeline. Preview strategy: scenario pills change ORDER BY for ranked lists and
  * VIEW_QUERIES presets; custom slider weights show “Estimated” until Save & Refresh Pipeline.
  */
-import { runQuery as duckQuery } from '/js/explorer/duckdb.js?v=20260327-2';
-import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-2';
+import { runQuery as duckQuery } from '/js/explorer/duckdb.js?v=20260327-10';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-10';
 import {
   MARKET_WEIGHT_META,
   DEAL_WEIGHT_META,
   SCENARIO_LABELS,
-} from '/js/explorer/scenarios.js?v=20260327-2';
+} from '/js/explorer/scenarios.js?v=20260327-10';
 
 const TOP_N = 6;
 
@@ -125,9 +125,11 @@ export async function refreshDashboard(conn, scenarioKey) {
 
     const topDealsRes = await duckQuery(
       conn,
-      `SELECT property_name, address, city, state, total_score, market_score, deal_score,
-              fips, lat, lng, county, zillow_url
-       FROM properties ORDER BY ${topDealsOrderBy(sk)} LIMIT ${TOP_N}`,
+      `SELECT p.property_name, p.address, p.city, p.state, p.total_score, p.market_score, p.deal_score,
+              p.fips, p.lat, p.lng, coalesce(c.county, '') AS county, p.zillow_url
+       FROM properties p
+       LEFT JOIN census_2023 c ON p.fips = c.fips
+       ORDER BY ${topDealsOrderBy(sk)} LIMIT ${TOP_N}`,
     );
     renderTopDeals(topDealsRes);
 

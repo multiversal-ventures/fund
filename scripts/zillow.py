@@ -1,6 +1,7 @@
 # scripts/zillow.py
 """Generate Zillow deep-link URLs from county FIPS or lat/lng coordinates."""
 import json
+import re
 import pandas as pd
 from urllib.parse import quote
 
@@ -58,6 +59,35 @@ def build_zillow_url(
 
     encoded = quote(json.dumps(search_state, separators=(",", ":")))
     return f"https://www.zillow.com/homes/for_sale/?searchQueryState={encoded}"
+
+
+def build_zillow_county_seo_url(county: str | None, state: str | None) -> str:
+    """County browse URL — matches Explorer `zillow.js` fallback (name + state slug)."""
+    if county is None or state is None or (isinstance(county, float) and pd.isna(county)):
+        return ""
+    if isinstance(state, float) and pd.isna(state):
+        return ""
+    c = str(county).strip()
+    st = str(state).strip()
+    if not c or not st:
+        return ""
+    c = re.sub(r"\s+County$", "", c, flags=re.IGNORECASE)
+    c = re.sub(r"\s+Parish$", "", c, flags=re.IGNORECASE)
+    c = re.sub(r"\s+Municipio$", "", c, flags=re.IGNORECASE)
+    c = c.strip()
+    if not c:
+        return ""
+    part = f"{c}-{st}"
+    return f"https://www.zillow.com/homes/{quote(part, safe='-')}/"
+
+
+def zillow_url_for_county_row(fips, county: str | None, state: str | None) -> str:
+    """Map-bounds URL for curated FIPS; else county/state SEO path."""
+    f = str(fips).replace(".0", "").zfill(5)
+    b = county_bounds(f)
+    if b:
+        return build_zillow_url(**{k: v for k, v in b.items() if k in ("south", "north", "west", "east")})
+    return build_zillow_county_seo_url(county, state)
 
 
 def add_zillow_urls(df, fips_col: str = "fips", lat_col: str = "lat", lng_col: str = "lng") -> list[str]:

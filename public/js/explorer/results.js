@@ -1,7 +1,7 @@
 /**
  * Shared query result rendering for Dashboard + SQL Studio.
  */
-import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-2';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-10';
 
 let _lastResult = null;
 let _lastSql = '';

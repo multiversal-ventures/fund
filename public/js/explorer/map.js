@@ -5,9 +5,9 @@
  * Feature `id` is 5-digit county FIPS (e.g. "01001"); join key matches `market_scores.fips`
  * after `normalizeFips()` (pad to 5 digits).
  */
-import { runQuery } from '/js/explorer/duckdb.js?v=20260327-2';
-import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-2';
-import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260327-2';
+import { runQuery, sqlStringLiteral } from '/js/explorer/duckdb.js?v=20260327-10';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-10';
+import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260327-10';
 
 /** CDN GeoJSON — Plotly public datasets (same file referenced in explorer plan). */
 export const COUNTY_GEOJSON_URL =
@@ -446,10 +446,12 @@ ${zUrl ? `<br/><a href="${esc(zUrl)}" target="_blank" rel="noopener">View listin
     try {
       const deals = await runQuery(
         this.conn,
-        `SELECT property_name, city, state, total_score, market_score, deal_score, lat, lng, county, zillow_url
-         FROM properties
-         WHERE lpad(cast(fips AS VARCHAR), 5, '0') = ${JSON.stringify(fips)}
-         ORDER BY total_score DESC NULLS LAST LIMIT 5`,
+        `SELECT p.property_name, p.city, p.state, p.total_score, p.market_score, p.deal_score, p.lat, p.lng,
+                coalesce(c.county, '') AS county, p.zillow_url
+         FROM properties p
+         LEFT JOIN census_2023 c ON p.fips = c.fips
+         WHERE lpad(cast(p.fips AS VARCHAR), 5, '0') = ${sqlStringLiteral(fips)}
+         ORDER BY p.total_score DESC NULLS LAST LIMIT 5`,
       );
       const drows = deals.toArray();
       dealsHtml =

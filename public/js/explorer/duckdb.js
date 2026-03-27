@@ -14,6 +14,15 @@ export function getConn() {
   return _conn;
 }
 
+/**
+ * SQL string literal for DuckDB (use single quotes; double quotes are identifiers).
+ * @param {string|null|undefined} value
+ */
+export function sqlStringLiteral(value) {
+  if (value == null) return "''";
+  return `'${String(value).replace(/'/g, "''")}'`;
+}
+
 /** @param {*} user Firebase compat user */
 export async function initDuckDB(user) {
   const warnings = [];
