@@ -5,9 +5,9 @@
  * Feature `id` is 5-digit county FIPS (e.g. "01001"); join key matches `market_scores.fips`
  * after `normalizeFips()` (pad to 5 digits).
  */
-import { runQuery } from '/js/explorer/duckdb.js?v=20260327-1';
-import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-1';
-import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260327-1';
+import { runQuery } from '/js/explorer/duckdb.js?v=20260327-2';
+import { buildZillowUrl } from '/js/explorer/zillow.js?v=20260327-2';
+import { MARKET_WEIGHT_META } from '/js/explorer/scenarios.js?v=20260327-2';
 
 /** CDN GeoJSON — Plotly public datasets (same file referenced in explorer plan). */
 export const COUNTY_GEOJSON_URL =

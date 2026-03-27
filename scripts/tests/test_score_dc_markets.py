@@ -30,6 +30,7 @@ def weights(tmp_path):
         "labor_cost": 10,
         "unique": 5,
         "penalty_max": 10,
+        "screen": {"min_population": 5000, "exclude_state_fips_prefix": []},
     }
     p = tmp_path / "w.json"
     p.write_text(json.dumps(w), encoding="utf-8")
@@ -43,6 +44,7 @@ def test_score_dc_markets_shape_and_bounds(tmp_path, weights):
             "county": ["A", "B", "C"],
             "state": ["AL", "AL", "CA"],
             "pop": [10000, 20000, 10_000_000],
+            "total_units": [5000, 12000, 4_000_000],
         }
     )
     cen_p = tmp_path / "acs.parquet"
@@ -77,7 +79,54 @@ def test_score_dc_markets_shape_and_bounds(tmp_path, weights):
     out = score_dc_markets(cen_p, cbp_p, eia, tv_p, None, weights)
 
     assert len(out) == 3
+    assert out["dc_eligible"].all()
     assert out["dc_market_score"].max() <= 100
     assert out["dc_market_score"].min() >= 0
     assert "s_electrical" in out.columns
     assert "06037" in out["fips"].values
+
+
+def test_dc_screen_excludes_puerto_rico(tmp_path):
+    w = {
+        "electrical": 30,
+        "water_cooling": 10,
+        "political": 20,
+        "pipeline": 15,
+        "connectivity": 10,
+        "labor_cost": 10,
+        "unique": 5,
+        "penalty_max": 10,
+        "screen": {
+            "min_population": 50000,
+            "min_housing_units": 20000,
+            "exclude_state_fips_prefix": ["60", "66", "69", "72", "78"],
+        },
+    }
+    cen = pd.DataFrame(
+        {
+            "fips": ["72001", "06037"],
+            "county": ["Adjuntas", "Los Angeles"],
+            "state": ["PR", "CA"],
+            "pop": [80_000, 10_000_000],
+            "total_units": [40_000, 3_500_000],
+        }
+    )
+    cen_p = tmp_path / "acs2.parquet"
+    cen.to_parquet(cen_p, index=False)
+    cbp = pd.DataFrame({"fips": ["72001", "06037"], "naics518_emp": [0, 1000]})
+    cbp_p = tmp_path / "cbp2.parquet"
+    cbp.to_parquet(cbp_p, index=False)
+    eia = pd.DataFrame({"state_abbr": ["PR", "CA"], "industrial_cents_kwh": [8.0, 17.0]})
+    tv = pd.DataFrame(
+        {"state_abbr": ["PR", "CA"], "tavily_political_score": [0.9, 0.5], "tavily_penalty": [0.0, 0.0]}
+    )
+    tv_p = tmp_path / "tv2.parquet"
+    tv.to_parquet(tv_p, index=False)
+
+    out = score_dc_markets(cen_p, cbp_p, eia, tv_p, None, w)
+    pr = out[out["fips"] == "72001"].iloc[0]
+    ca = out[out["fips"] == "06037"].iloc[0]
+    assert not bool(pr["dc_eligible"])
+    assert pd.isna(pr["dc_market_score"])
+    assert bool(ca["dc_eligible"])
+    assert not pd.isna(ca["dc_market_score"])

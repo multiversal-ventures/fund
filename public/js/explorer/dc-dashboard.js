@@ -30,16 +30,21 @@ export async function refreshDcDashboard(conn) {
   const tableMount = document.getElementById('dc-top-markets');
 
   try {
-    const n = await runQuery(conn, 'SELECT COUNT(*)::BIGINT AS n FROM dc_market_scores');
+    const n = await runQuery(
+      conn,
+      'SELECT COUNT(*)::BIGINT AS n FROM dc_market_scores WHERE dc_eligible = true',
+    );
     const top = await runQuery(
       conn,
       `SELECT county, state, dc_market_score FROM dc_market_scores
+       WHERE dc_eligible = true
        ORDER BY dc_market_score DESC NULLS LAST LIMIT 1`,
     );
     const top30 = await runQuery(
       conn,
       `SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline
-       FROM dc_market_scores ORDER BY dc_market_score DESC NULLS LAST LIMIT 25`,
+       FROM dc_market_scores WHERE dc_eligible = true
+       ORDER BY dc_market_score DESC NULLS LAST LIMIT 25`,
     );
 
     if (nEl && n[0]) nEl.textContent = String(n[0].n ?? '—');

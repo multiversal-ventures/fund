@@ -26,6 +26,21 @@ def load_weights(path: Path | None = None) -> dict:
         return json.load(f)
 
 
+def _screen_mask(df: pd.DataFrame, screen: dict) -> pd.Series:
+    """Eligibility for DC leaderboard (percentiles computed on this subset only)."""
+    fips = df["fips"].astype(str).str.replace(r"\.0$", "", regex=True).str.zfill(5)
+    st = fips.str[:2]
+    prefixes = tuple(screen.get("exclude_state_fips_prefix") or ())
+    territory_ok = ~st.isin(prefixes)
+    min_pop = int(screen.get("min_population") or 0)
+    pop_ok = df["pop"].fillna(0) >= min_pop
+    out = territory_ok & pop_ok
+    min_units = screen.get("min_housing_units")
+    if min_units is not None and "total_units" in df.columns:
+        out = out & (df["total_units"].fillna(0) >= int(min_units))
+    return out
+
+
 def score_dc_markets(
     census_path: Path,
     cbp_naics_path: Path,
@@ -34,15 +49,16 @@ def score_dc_markets(
     occupations_path: Path | None,
     weights: dict,
 ) -> pd.DataFrame:
-    """Return county-level DC scores joined to census universe."""
+    """Return county-level DC scores for full census universe; ineligible rows have null scores."""
     cen = pd.read_parquet(census_path)
     need = ["fips", "county", "state", "pop"]
     for c in need:
         if c not in cen.columns:
             raise ValueError(f"census missing {c}: {census_path}")
 
+    extra = ["total_units"] if "total_units" in cen.columns else []
     cbp = pd.read_parquet(cbp_naics_path)
-    df = cen[need].merge(cbp[["fips", "naics518_emp"]], on="fips", how="left")
+    df = cen[need + extra].merge(cbp[["fips", "naics518_emp"]], on="fips", how="left")
     df["naics518_emp"] = df["naics518_emp"].fillna(0)
     df["naics518_per_1k"] = (df["naics518_emp"] / (df["pop"].replace(0, float("nan")) / 1000.0)).fillna(0.0)
 
@@ -76,20 +92,55 @@ def score_dc_markets(
     else:
         df["labor_proxy"] = 0.0
 
-    w = weights
-    # Constant columns → normalize_signal yields half weight (see score.py)
-    df["s_electrical"] = normalize_signal(df["industrial_cents_kwh"], w["electrical"], higher_is_better=False)
-    df["s_water"] = normalize_signal(pd.Series([1.0] * len(df)), w["water_cooling"], higher_is_better=True)
-    df["s_political"] = normalize_signal(df["tavily_political_score"], w["political"], higher_is_better=True)
-    df["s_pipeline"] = normalize_signal(df["naics518_per_1k"], w["pipeline"], higher_is_better=True)
-    df["s_connectivity"] = normalize_signal(pd.Series([1.0] * len(df)), w["connectivity"], higher_is_better=True)
-    df["s_labor"] = normalize_signal(df["labor_proxy"], w["labor_cost"], higher_is_better=True)
-    df["s_unique"] = normalize_signal(pd.Series([1.0] * len(df)), w["unique"], higher_is_better=True)
+    screen = weights.get("screen") or {}
+    elig = _screen_mask(df, screen)
+    df["dc_eligible"] = elig
 
-    parts = [c for c in df.columns if c.startswith("s_")]
-    df["dc_market_score"] = df[parts].sum(axis=1)
-    df["dc_penalty"] = df["tavily_penalty"].clip(0, w.get("penalty_max", 10))
-    df["dc_market_score"] = (df["dc_market_score"] - df["dc_penalty"]).clip(0, 100).round(2)
+    w = weights
+    score_cols = [
+        "s_electrical",
+        "s_water",
+        "s_political",
+        "s_pipeline",
+        "s_connectivity",
+        "s_labor",
+        "s_unique",
+    ]
+    for c in score_cols:
+        df[c] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+
+    df["dc_penalty"] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+    df["dc_market_score"] = pd.Series(pd.NA, index=df.index, dtype="Float64")
+
+    if not elig.any():
+        return df
+
+    sub = df.loc[elig].copy()
+    n_elig = len(sub)
+    n_all = len(df)
+    print(f"  DC screen: {n_elig} / {n_all} counties eligible (min_pop={screen.get('min_population')}, territories excluded)")
+
+    # Percentiles only on eligible counties (see score.py for normalize_signal)
+    sub["s_electrical"] = normalize_signal(sub["industrial_cents_kwh"], w["electrical"], higher_is_better=False)
+    sub["s_water"] = normalize_signal(
+        pd.Series([1.0] * n_elig, index=sub.index), w["water_cooling"], higher_is_better=True
+    )
+    sub["s_political"] = normalize_signal(sub["tavily_political_score"], w["political"], higher_is_better=True)
+    sub["s_pipeline"] = normalize_signal(sub["naics518_per_1k"], w["pipeline"], higher_is_better=True)
+    sub["s_connectivity"] = normalize_signal(
+        pd.Series([1.0] * n_elig, index=sub.index), w["connectivity"], higher_is_better=True
+    )
+    sub["s_labor"] = normalize_signal(sub["labor_proxy"], w["labor_cost"], higher_is_better=True)
+    sub["s_unique"] = normalize_signal(
+        pd.Series([1.0] * n_elig, index=sub.index), w["unique"], higher_is_better=True
+    )
+
+    parts = [c for c in score_cols if c in sub.columns]
+    sub["dc_penalty"] = sub["tavily_penalty"].fillna(0.0).clip(0, w.get("penalty_max", 10))
+    sub["dc_market_score"] = (sub[parts].sum(axis=1) - sub["dc_penalty"]).clip(0, 100).round(2)
+
+    for c in score_cols + ["dc_penalty", "dc_market_score"]:
+        df.loc[elig, c] = sub[c].astype("Float64")
 
     return df
 

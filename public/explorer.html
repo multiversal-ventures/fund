@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bump explorer-asset-version when changing JS/CSS so clients pull new files (used below + window.__explorerAssetV). -->
-<meta name="explorer-asset-version" content="20260327-1">
+<meta name="explorer-asset-version" content="20260327-2">
 <title>Fund Explorer — Multiversal Ventures</title>
 <script>
 (function () {
@@ -327,7 +327,7 @@
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM properties WHERE stability_score >= 70 ORDER BY total_score DESC LIMIT 30">Most Stable</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT c.fips, c.county, c.state, b.hhi, b.top_sector_name, b.top_sector_share, b.num_sectors FROM cbp_2023 b JOIN census_2023 c ON b.fips = c.fips ORDER BY b.hhi ASC LIMIT 30">Most Diversified</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, resilience_index, blue_collar_safe_pct, white_collar_risk_pct, healthcare_pct FROM occupations_2023 ORDER BY resilience_index DESC LIMIT 30">Most AI-Resistant</button>
-            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline, dc_penalty FROM dc_market_scores ORDER BY dc_market_score DESC NULLS LAST LIMIT 40">DC Top 40</button>
+            <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT fips, county, state, dc_market_score, s_electrical, s_political, s_pipeline, dc_penalty FROM dc_market_scores WHERE dc_eligible = true ORDER BY dc_market_score DESC NULLS LAST LIMIT 40">DC Top 40</button>
             <button type="button" class="btn btn-sm btn-outline sql-preset" data-sql="SELECT * FROM dc_tavily_state ORDER BY state_abbr LIMIT 60">DC Tavily (states)</button>
             <div class="sql-editor-export">
               <button type="button" class="btn btn-sm btn-outline" id="sql-export-csv">Export CSV</button>
@@ -404,24 +404,24 @@
   </div>
 </div>
 
-<script src="/js/explorer/app.js?v=20260327-1"></script>
+<script src="/js/explorer/app.js?v=20260327-2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <!-- Module specifiers must be string literals — bump ?v= with meta name="explorer-asset-version" -->
 <script type="module">
-import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260327-1';
-import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260327-1';
-import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260327-1';
-import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260327-1';
-import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260327-1';
+import { initDuckDB, runQuery as duckDbRunQuery, getDb, getConn } from '/js/explorer/duckdb.js?v=20260327-2';
+import { applyScenarioToDom, VIEW_QUERIES, MARKET_WEIGHT_IDS, DEAL_WEIGHT_IDS } from '/js/explorer/scenarios.js?v=20260327-2';
+import { refreshDashboard, setActiveScenarioBar, updateHowWeScorePanelOnly } from '/js/explorer/dashboard.js?v=20260327-2';
+import { initExplorerMapIfNeeded, invalidateExplorerMapSize } from '/js/explorer/map.js?v=20260327-2';
+import { initSqlStudioIfNeeded, notifySqlTabVisible } from '/js/explorer/sql-studio.js?v=20260327-2';
 import {
   renderResultsTable,
   renderQueryError,
   exportLastResultCsv,
   exportLastResultParquet,
-} from '/js/explorer/results.js?v=20260327-1';
-import { renderCharts } from '/js/explorer/charts.js?v=20260327-1';
-import { refreshDcDashboard } from '/js/explorer/dc-dashboard.js?v=20260327-1';
+} from '/js/explorer/results.js?v=20260327-2';
+import { renderCharts } from '/js/explorer/charts.js?v=20260327-2';
+import { refreshDcDashboard } from '/js/explorer/dc-dashboard.js?v=20260327-2';
 
 window.__explorerInitMap = () => initExplorerMapIfNeeded(getConn());
 window.__explorerMapInvalidate = () => invalidateExplorerMapSize();

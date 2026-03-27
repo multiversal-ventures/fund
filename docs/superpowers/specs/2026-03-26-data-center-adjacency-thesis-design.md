@@ -67,6 +67,10 @@ Weights align with industry frameworks: combined **electrical + water/cooling �
 | Unique advantages | 5 | Renewable proximity, disaster risk (FEMA NRI) |
 | **Penalties** | **up to −10** | Moratorium/opposition, congestion/curtailment, interconnection freeze |
 
+### Eligibility (`dc_eligible`)
+
+Percentiles and the 0–100 composite are computed **only** on counties that pass `screen` in `dc_weights.default.json` (defaults: min population 50k, min housing units 20k, exclude island-area state FIPS prefixes 60/66/69/72/78). Other counties remain in `dc_market_scores.parquet` with null scores for joins. Explorer and SQL presets filter `WHERE dc_eligible = true`.
+
 **Validation references (methodology UI must link):**
 
 - [Kearney — AI Data Center Location Attractiveness Index](https://www.kearney.com/industry/technology/article/ai-data-center-location-attractiveness-index)

@@ -43,7 +43,7 @@
 <div class="container">
 
   <div class="callout">
-    <p style="margin:0; font-size:13px; color:#cbd5e1;"><strong style="color:#f1f5f9;">Tier 1 model (live):</strong> County-level <code>dc_market_score</code> (0–100) is computed in <code>scripts/dc/</code>, stored as <code>data/dc/dc_market_scores.parquet</code>, and loaded in <a href="explorer.html?tab=dc">Fund Explorer → DC Markets</a>. Water/connectivity layers use neutral placeholders until Phase 2 geospatial inputs ship; electrical, pipeline, and political signals drive most dispersion today.</p>
+    <p style="margin:0; font-size:13px; color:#cbd5e1;"><strong style="color:#f1f5f9;">Tier 1 model (live):</strong> County-level <code>dc_market_score</code> (0–100) is computed in <code>scripts/dc/</code>, stored as <code>data/dc/dc_market_scores.parquet</code>, and loaded in <a href="explorer.html?tab=dc">Fund Explorer → DC Markets</a>. Percentiles are computed only on <strong style="color:#e2e8f0;">eligible</strong> counties (<code>dc_eligible = true</code>): min population 50k, min housing units 20k, and island territories excluded (PR, VI, GU, AS, MP). Ineligible rows are kept for joins but have null scores. Water/connectivity layers use neutral placeholders until Phase 2; electrical, pipeline, and political signals drive most dispersion among eligibles.</p>
   </div>
 
   <h2>Methodology — how we score</h2>
