@@ -1,7 +1,7 @@
 # Data Center Adjacency Commercial Property Thesis — Design Spec
 
 **Date:** 2026-03-26  
-**Status:** Draft (pending review)  
+**Status:** Draft (internal review complete; pending human approval)  
 **Authors:** Kartik + AI  
 **Prior context:** Multifamily pipeline and Fund Explorer (`2026-03-25-data-pipeline-property-finder-design.md`, `2026-03-26-fund-explorer-ui-design.md`)
 
@@ -34,15 +34,19 @@ Delivery is **hybrid**: static HTML narrative pages (credibility and LP-facing m
 | **B — Conversion** | Existing commercial/industrial stock with strong utility service and footprint suitable for retrofit or secondary lease to DC-adjacent demand. |
 | **C — Adjacency** | Commercial property benefiting from economic spillover near announced or operating DC clusters (services, logistics, limited office). |
 
-Geography: **national screen**, emphasis on **emerging** markets (skip “priced in” Tier 1 hubs as primary targets unless drill-down finds pockets).
+Geography: **national screen**, emphasis on **emerging** markets (skip “priced in” **geographic Tier 1** DC hubs—e.g. saturated core markets—as primary targets unless drill-down finds pockets).
 
 ---
 
 ## Approach: Multi-Resolution Scoring
 
-**Tier 1 — Market score (county/metro):** leaderboard for all US counties (or screened universe consistent with multifamily filters). Drives ranking and Explorer choropleth.
+**Naming note:** “**Tier 1 market score**” means the **first resolution** of the model (county/metro). It is **not** the same as “geographic Tier 1” hubs in the paragraph above.
 
-**Tier 2 — Site suitability (sub-county):** only for **top 20–30** markets from Tier 1; geocoded infrastructure and play-type alignment. Deferred to Phase 2.
+**Tier 1 — Market score (county/metro):** leaderboard for all US counties (or screened universe consistent with multifamily filters). Drives ranking and Fund Explorer choropleth.
+
+**Phase 1 score shape:** Ship **one primary composite** `market_score` (0–100) per county, plus **explanatory subscores** per category column in Parquet (electrical, water, political, pipeline, etc.). Optionally add **lightweight play-affinity columns** in Phase 1 (e.g. `land_signal`, `conversion_signal`, `adjacency_signal` as 0–1 or percentile proxies derived from the same inputs) so the thesis can discuss A/B/C without waiting for Tier 2—exact columns **TBD in implementation plan**. Tier 2 adds **site-level** play fit and geospatial precision.
+
+**Tier 2 — Site suitability (sub-county):** only for **top 20–30** markets from Tier 1; geocoded infrastructure and play-type alignment. Deferred to roadmap Phase 2 (see Phasing table below).
 
 ---
 
@@ -71,7 +75,7 @@ Weights align with industry frameworks: combined **electrical + water/cooling �
 - [JLL — Data Center Outlook](https://www.jll.com/en-us/insights/data-center-outlook.html)
 - [Datacenters.com — Power, water, permits](https://www.datacenterenergy.com/news/power-water-and-permits-the-new-pillars-of-data-center-site-selection) (pillar framing)
 - [GE Vernova — Smart data center site selection](https://www.gevernova.com/consulting/resources/articles/2025/smart-data-center-site-selection)
-- [BDO — Strategic guide to data center site selection](http://www.bdo.com/insights/industries/technology/strategic-guide-to-data-center-site-selection)
+- [BDO — Strategic guide to data center site selection](https://www.bdo.com/insights/industries/technology/strategic-guide-to-data-center-site-selection)
 - [Ramboll — Data center site selection criteria](https://www.ramboll.com/en-us/insights/resilient-societies-and-liveability/data-center-site-selection-criteria)
 
 ---
@@ -139,19 +143,19 @@ Orchestration: `run_dc_pipeline.py` with `--stage pull|enrich|score|export|all` 
 
 ### Static pages
 
-- **`public/dc_thesis.html`** — Executive summary; three plays; full methodology (scoring + inline index links); Tavily subsection with official doc links; data sources; disclaimer.
-- **`public/dc_market_leaderboard.html`** — Sortable national table (or combined thesis page with anchor—implementation choice in plan).
+- **`public/dc_thesis.html`** — Executive summary; three plays; full methodology (scoring + inline index links); Tavily subsection with official doc links; data sources; disclaimer; prominent link to leaderboard.
+- **`public/dc_market_leaderboard.html`** — **Default:** dedicated sortable national table page (matches the pattern of standalone multifamily reports). Alternative: a single long page with leaderboard anchored below the thesis—allowed only if scope is explicitly chosen in the implementation plan to reduce surface area.
 
 ### Hub
 
-- **`public/index.html`** — New section (e.g. “Phase 3 — Data Center Adjacency”) with cards linking thesis, leaderboard, Explorer.
+- **`public/index.html`** — New section labeled **“Research track — Data center adjacency”** (or similar). **Do not** use “Phase 3” here—that label is reserved for the **roadmap** phase “commercial data integrations” in the Phasing table below. Cards link thesis, leaderboard, and Fund Explorer.
 
-### Explorer
+### Fund Explorer
 
 - DC **dashboard** summary, **map layer** for county scores, **SQL Studio** registration of DC tables + example queries.
 - Collapsible **“How we score”** short brief + link to full thesis methodology.
 
-All user-visible numbers must match Parquet (single source of truth).
+All user-visible numbers must match Parquet (single source of truth). Fund Explorer and static pages must not diverge on the same FIPS.
 
 ---
 
@@ -187,6 +191,5 @@ All user-visible numbers must match Parquet (single source of truth).
 
 ## Next Steps
 
-1. Spec review and revision.
-2. User approval of this document.
-3. Invoke **writing-plans** skill to produce implementation plan (scripts, storage paths, HTML/Explorer diffs, tests, verification).
+1. Human review and approval of this document (request changes or approve).
+2. Invoke **writing-plans** skill to produce implementation plan (scripts, storage paths, HTML/Fund Explorer diffs, tests, verification).
