@@ -203,6 +203,8 @@ Natural language + SQL querying with saved analyses.
 5. Results rendered as sortable table
 6. Action buttons: Pin to Map (creates a layer from results), Export XLSX, Save Analysis
 
+**Pin to Map flow:** results must contain a `fips` column (county FIPS) and at least one numeric column to use as the score. Clicking "Pin to Map" prompts for: layer name, which column is the score, and a color. This creates a `layers/` Firestore doc with `analysisId` set, and the layer appears in the Map view. The map re-runs the analysis SQL on each load to get fresh results (no cached snapshot — the SQL is the source of truth).
+
 **Save Analysis dialog:** name, thesis tag (dropdown), description. Stored in Firestore `analyses/` collection.
 
 ### SQL Studio
@@ -225,12 +227,13 @@ Manage all data feeding the system.
 
 **Upload flow:**
 1. Drag XLSX or CSV onto drop zone (or click to browse)
-2. Preview: first 10 rows, column names and inferred types
-3. Name the table (auto-suggested from filename)
-4. Confirm → DuckDB-WASM converts to Parquet in-browser
-5. Parquet uploaded to Firebase Storage (`data/uploads/{tableName}.parquet`)
-6. Metadata record created in Firestore `uploads/` collection
-7. Table immediately available to all team members on page refresh
+2. SheetJS (`xlsx` library) reads the file in-browser and converts to CSV
+3. DuckDB-WASM ingests the CSV; preview shows first 10 rows, column names and inferred types
+4. Name the table (auto-suggested from filename)
+5. Confirm → DuckDB-WASM exports to Parquet in-browser
+6. Parquet uploaded to Firebase Storage (`data/uploads/{tableName}.parquet`)
+7. Metadata record created in Firestore `uploads/` collection
+8. Table immediately available to all team members on page refresh
 
 ### Present
 
@@ -255,6 +258,7 @@ Curate saved analyses and county views into shareable decks for partners.
 - Token validated: if expired or invalid, shows "Link expired" message
 - Renders deck slides in a clean, read-only presentation layout
 - No navigation sidebar, no SQL, no upload — just the curated content
+- **Data strategy:** when a deck is finalized ("Generate Link"), the `createShareLink` Cloud Function snapshots all analysis results and county data into the `decks/{id}.slides` array as `resultSnapshot: object[]`. The share view reads these snapshots — it never loads Parquet or runs DuckDB. This avoids exposing Firebase Storage to unauthenticated users.
 
 ---
 
@@ -278,10 +282,11 @@ updatedAt: timestamp
 ### layers/{id}
 ```
 name: string                    # "Invisible Supply Wall"
-type: "pipeline" | "upload"     # data source type
-sourceTable: string             # DuckDB table name
+type: "pipeline" | "upload" | "analysis"  # data source type
+sourceTable?: string            # DuckDB table name (for pipeline/upload layers)
+analysisId?: string             # ref to analyses/{id} (for pinned analysis layers)
 scoreColumn: string             # column for choropleth color
-fipsColumn: string              # column with FIPS code
+fipsColumn: string              # column with FIPS code (default: "fips")
 color: string                   # hex color for map rendering
 thesis: string                  # thesis tag
 createdAt: timestamp
@@ -313,7 +318,9 @@ name: string                    # "Huntsville Deal Package"
 slides: [{
   type: "analysis" | "county" | "text"
   analysisId?: string           # ref to analyses/{id}
+  resultSnapshot?: object[]     # snapshotted query results (populated at share time)
   fips?: string                 # county FIPS for county slides
+  countySnapshot?: object       # snapshotted county data (populated at share time)
   text?: string                 # markdown for text slides
   order: number
 }]
@@ -352,6 +359,7 @@ src/
 │   ├── DataPage.tsx            # Table selector + DataTable spreadsheet view
 │   ├── CountyPage.tsx          # CountyDetail (route: /county/:fips)
 │   ├── QueryPage.tsx           # QueryBar + results + saved analyses sidebar
+│   ├── AnalysesPage.tsx        # Browse/filter/manage all saved analyses by thesis
 │   ├── SqlStudioPage.tsx       # Full SQL editor + schema browser + presets
 │   ├── DataSourcesPage.tsx     # Pipeline tables + uploads list + UploadDialog
 │   ├── PresentPage.tsx         # Deck list + DeckBuilder
@@ -374,6 +382,30 @@ src/
 
 ### New
 - `createShareLink` — HTTP POST (auth'd). Creates a `shares/{token}` Firestore doc with a crypto-random token, expiry, and deckId. Returns the share URL.
+
+---
+
+## Firestore Security Rules
+
+```
+analyses/, layers/, uploads/, decks/  → auth required (@multiversal.ventures)
+shares/{token}                        → public read (validated by token + expiry in app logic)
+config/                               → auth required (existing)
+```
+
+Firebase Storage: all paths under `data/` require auth. Share views never access Storage — they read snapshotted data from Firestore `decks/` docs.
+
+---
+
+## Performance: Lazy Parquet Loading
+
+DuckDB-WASM registers all Parquet tables at init but does not fetch bytes until a table is first queried. This uses DuckDB's HTTP range request support on signed Firebase Storage URLs. Cold load shows the app shell immediately; tables load on demand as the user navigates views.
+
+---
+
+## Tavily News Scope
+
+The existing `dcLocalNews` Cloud Function is DC-specific (Tavily search scoped to data center context). On the County detail page, Tavily news is only shown for counties that have a DC Adjacency score. For non-DC counties, the news section is omitted. A general `localNews` function could be added later but is out of scope for v1.
 
 ---
 
