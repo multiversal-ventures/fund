@@ -1,0 +1,171 @@
+<h2>Query & Analyses View</h2>
+<p class="subtitle">Natural language + SQL querying across all data. Save, share, and pin results.</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Query View — Gemini NL + SQL + Saved Analyses</div>
+    <div class="mockup-body" style="padding: 0; display: flex; min-height: 540px;">
+      <!-- Left: Saved analyses -->
+      <div style="width: 240px; background: #0f172a; border-right: 1px solid #334155; padding: 16px; flex-shrink: 0; overflow-y: auto;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #475569; font-weight: 600; margin-bottom: 12px;">Saved Analyses</div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; text-transform: uppercase; color: #34d399; font-weight: 600; margin-bottom: 6px;">Invisible Supply Wall</div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #60a5fa; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #f1f5f9; font-weight: 600;">Top 40 Supply-Constrained</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Kartik · 2 days ago</div>
+          </div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #94a3b8;">Midwest Frozen Permits</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Akshay · 5 days ago</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; text-transform: uppercase; color: #60a5fa; font-weight: 600; margin-bottom: 6px;">Broken Capital Stack</div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #94a3b8;">FHA Maturing ≤ 3yr</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Kartik · 1 week ago</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; text-transform: uppercase; color: #fbbf24; font-weight: 600; margin-bottom: 6px;">Operations</div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #94a3b8;">Cost Model by County</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Holly · 3 days ago</div>
+          </div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #94a3b8;">PM Availability Ranking</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Holly · 1 week ago</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; text-transform: uppercase; color: #a78bfa; font-weight: 600; margin-bottom: 6px;">Cross-Thesis</div>
+          <div style="padding: 8px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+            <div style="font-size: 12px; color: #94a3b8;">Triple-Thesis Counties</div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Kartik · today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Query + Results -->
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <!-- Query bar -->
+        <div style="padding: 16px; border-bottom: 1px solid #334155; background: #1e293b;">
+          <div style="font-size: 14px; font-weight: 600; color: #f1f5f9; margin-bottom: 8px;">Top 40 Supply-Constrained Markets</div>
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <div style="flex: 1; position: relative;">
+              <input type="text" placeholder="Ask a question about the data..." style="width: 100%; padding: 10px 12px 10px 36px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #f1f5f9; font-size: 13px; outline: none;" value="Show me counties with frozen construction and 95%+ occupancy, sorted by cap rate">
+              <span style="position: absolute; left: 12px; top: 11px; font-size: 14px;">💬</span>
+            </div>
+            <button style="padding: 10px 16px; background: #60a5fa; border: none; border-radius: 8px; color: #0f172a; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;">Generate SQL</button>
+          </div>
+          <!-- Generated SQL -->
+          <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: #94a3b8; position: relative;">
+            <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+              <button style="padding: 3px 8px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; color: #64748b; font-size: 10px; cursor: pointer;">Edit</button>
+              <button style="padding: 3px 8px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; color: #64748b; font-size: 10px; cursor: pointer;">Run</button>
+            </div>
+            <span style="color: #60a5fa;">SELECT</span> county_name, state, vacancy_rate, rent_growth_3yr, market_score<br>
+            <span style="color: #60a5fa;">FROM</span> market_scores <span style="color: #60a5fa;">JOIN</span> acs_2023 <span style="color: #60a5fa;">USING</span> (fips)<br>
+            <span style="color: #60a5fa;">WHERE</span> vacancy_rate &lt; 0.05 <span style="color: #60a5fa;">AND</span> supply_pressure &lt; 0.02<br>
+            <span style="color: #60a5fa;">ORDER BY</span> market_score <span style="color: #60a5fa;">DESC LIMIT</span> 40
+          </div>
+        </div>
+
+        <!-- Results table -->
+        <div style="flex: 1; overflow: auto; padding: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 12px; color: #64748b;">40 results · 0.12s</span>
+            <div style="display: flex; gap: 6px;">
+              <button style="padding: 4px 10px; background: rgba(52,211,153,0.1); border: 1px solid #334155; border-radius: 6px; color: #34d399; font-size: 11px; font-weight: 600; cursor: pointer;">📍 Pin to Map</button>
+              <button style="padding: 4px 10px; background: rgba(96,165,250,0.1); border: 1px solid #334155; border-radius: 6px; color: #60a5fa; font-size: 11px; font-weight: 600; cursor: pointer;">📥 Export XLSX</button>
+              <button style="padding: 4px 10px; background: rgba(167,139,250,0.1); border: 1px solid #334155; border-radius: 6px; color: #a78bfa; font-size: 11px; font-weight: 600; cursor: pointer;">💾 Save Analysis</button>
+            </div>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="border-bottom: 2px solid #334155;">
+                <th style="text-align: left; padding: 8px; color: #64748b; font-weight: 600;">#</th>
+                <th style="text-align: left; padding: 8px; color: #64748b; font-weight: 600;">County</th>
+                <th style="text-align: left; padding: 8px; color: #64748b; font-weight: 600;">State</th>
+                <th style="text-align: right; padding: 8px; color: #64748b; font-weight: 600;">Vacancy</th>
+                <th style="text-align: right; padding: 8px; color: #64748b; font-weight: 600;">Rent Growth</th>
+                <th style="text-align: right; padding: 8px; color: #64748b; font-weight: 600;">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #475569;">1</td>
+                <td style="padding: 8px; color: #f1f5f9; font-weight: 600;">Madison</td>
+                <td style="padding: 8px; color: #94a3b8;">AL</td>
+                <td style="padding: 8px; color: #34d399; text-align: right;">4.8%</td>
+                <td style="padding: 8px; color: #34d399; text-align: right;">+12.4%</td>
+                <td style="padding: 8px; text-align: right;"><span style="background: rgba(52,211,153,0.15); color: #34d399; padding: 2px 8px; border-radius: 4px; font-weight: 700;">82</span></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #475569;">2</td>
+                <td style="padding: 8px; color: #f1f5f9; font-weight: 600;">Onondaga</td>
+                <td style="padding: 8px; color: #94a3b8;">NY</td>
+                <td style="padding: 8px; color: #34d399; text-align: right;">3.1%</td>
+                <td style="padding: 8px; color: #34d399; text-align: right;">+9.6%</td>
+                <td style="padding: 8px; text-align: right;"><span style="background: rgba(52,211,153,0.15); color: #34d399; padding: 2px 8px; border-radius: 4px; font-weight: 700;">79</span></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #475569;">3</td>
+                <td style="padding: 8px; color: #f1f5f9; font-weight: 600;">Monroe</td>
+                <td style="padding: 8px; color: #94a3b8;">NY</td>
+                <td style="padding: 8px; color: #34d399; text-align: right;">4.2%</td>
+                <td style="padding: 8px; color: #fbbf24; text-align: right;">+7.1%</td>
+                <td style="padding: 8px; text-align: right;"><span style="background: rgba(52,211,153,0.15); color: #34d399; padding: 2px 8px; border-radius: 4px; font-weight: 700;">76</span></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #1e293b; opacity: 0.5;">
+                <td style="padding: 8px; color: #475569;">4–40</td>
+                <td colspan="5" style="padding: 8px; color: #64748b; font-style: italic;">... 37 more rows</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Query Flow</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 8px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 8px;">💬</div>
+      <div style="font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 6px;">1. Ask or Write</div>
+      <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6;">Type a natural language question (Gemini generates SQL) or write SQL directly. Gemini gets table schemas as context via Firebase AI SDK.</p>
+    </div>
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 8px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+      <div style="font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 6px;">2. Review & Run</div>
+      <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6;">Generated SQL is shown and editable before execution. Click Run to execute against DuckDB-WASM. Results render as a sortable table.</p>
+    </div>
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 8px; padding: 16px;">
+      <div style="font-size: 24px; margin-bottom: 8px;">💾</div>
+      <div style="font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 6px;">3. Save & Act</div>
+      <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.6;">Save as a named analysis (tagged to a thesis). Pin results to Map as a layer. Export to XLSX. Add to a partner presentation deck.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Saved Analyses Structure</h3>
+  <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; color: #94a3b8;">
+    <span style="color: #64748b;">// Firestore: analyses/{id}</span><br>
+    {<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"name"</span>: <span style="color: #34d399;">"Top 40 Supply-Constrained"</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"sql"</span>: <span style="color: #34d399;">"SELECT county_name, state, ..."</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"nlPrompt"</span>: <span style="color: #34d399;">"Show me counties with frozen construction..."</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"thesis"</span>: <span style="color: #34d399;">"invisible-supply-wall"</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"owner"</span>: <span style="color: #34d399;">"kartik@multiversal.ventures"</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"createdAt"</span>: <span style="color: #fbbf24;">timestamp</span>,<br>
+    &nbsp;&nbsp;<span style="color: #60a5fa;">"pinToMap"</span>: <span style="color: #fbbf24;">true</span><br>
+    }
+  </div>
+</div>

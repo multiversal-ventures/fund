@@ -1,0 +1,155 @@
+<h2>Architecture Overview</h2>
+<p class="subtitle">Vite + React + Tailwind SPA on Firebase — replaces index.html + explorer.html</p>
+
+<div class="section">
+  <h3>System Architecture</h3>
+  <div class="mockup">
+    <div class="mockup-header">Data Flow</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 13px; line-height: 2; padding: 24px;">
+<pre style="margin:0; color: #94a3b8;">
+┌─────────────────────────────────────────────────────────────────┐
+│  Team uploads (XLSX/CSV)                                        │
+│  Akshay: scoring models, deal pipeline                          │
+│  Holly: cost models, market comparison                          │
+│  Kartik: pipeline config, custom datasets                       │
+└──────────────────────┬──────────────────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Firebase Storage  (gs://mvv-fund/data/)                        │
+│  ├── census/    ── Parquet (pipeline)                           │
+│  ├── bls/       ── Parquet (pipeline)                           │
+│  ├── hud/       ── Parquet (pipeline)                           │
+│  ├── scored/    ── Parquet (pipeline)                           │
+│  ├── dc/        ── Parquet (pipeline)                           │
+│  └── uploads/   ── team XLSX/CSV → converted to Parquet         │
+└──────────────────────┬──────────────────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  DuckDB-WASM  (in-browser)                                      │
+│  Loads ALL Parquet tables (pipeline + uploads) into SQL engine   │
+│  Team members query across everything with SQL or Gemini NL      │
+└──────────────────────┬──────────────────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  React SPA  (Vite + Tailwind)                                   │
+│  ├── Map view ─── Leaflet choropleth, toggle layers per thesis  │
+│  ├── Data view ── spreadsheet (SheetJS), filter/sort/export     │
+│  ├── Analyses ─── saved SQL queries, Gemini NL→SQL, results     │
+│  ├── County ───── drill-down: all scores, all theses, news      │
+│  └── Present ──── curate & share one-time links for partners    │
+└──────────────────────┬──────────────────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Firestore                                                      │
+│  ├── analyses/   ── saved queries (name, SQL, owner, tags)      │
+│  ├── layers/     ── scoring layer configs (weights, filters)    │
+│  ├── shares/     ── one-time partner links (token, expiry, view)│
+│  └── config/     ── pipeline config (existing)                  │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  Firebase AI (Gemini)                                           │
+│  NL → SQL generation using table schemas as context             │
+│  Runs client-side via Firebase AI SDK                            │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  Cloud Functions (existing + new)                               │
+│  ├── triggerPipelineRefresh  (existing)                         │
+│  ├── dcLocalNews             (existing)                         │
+│  └── createShareLink         (new: generates one-time tokens)   │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Navigation Structure</h3>
+  <div class="mockup">
+    <div class="mockup-header">App Shell — Left sidebar + main content</div>
+    <div class="mockup-body" style="padding: 0; display: flex; min-height: 400px;">
+      <!-- Sidebar -->
+      <div style="width: 220px; background: #0f172a; border-right: 1px solid #334155; padding: 20px 0; flex-shrink: 0;">
+        <div style="padding: 0 16px 20px; border-bottom: 1px solid #1e293b;">
+          <div style="font-size: 14px; font-weight: 700; color: #f1f5f9;">MVV Fund</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 2px;">kartik@multiversal.ventures</div>
+        </div>
+        <div style="padding: 12px 0;">
+          <div style="padding: 8px 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #475569; font-weight: 600;">Explore</div>
+          <div style="padding: 10px 16px; color: #60a5fa; font-size: 13px; font-weight: 600; background: rgba(96,165,250,0.08); border-left: 2px solid #60a5fa;">🗺 Map</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">📊 Data</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">🔍 County</div>
+        </div>
+        <div style="padding: 12px 0; border-top: 1px solid #1e293b;">
+          <div style="padding: 8px 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #475569; font-weight: 600;">Analyze</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">💬 Query</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">📁 Saved Analyses</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">⚡ SQL Studio</div>
+        </div>
+        <div style="padding: 12px 0; border-top: 1px solid #1e293b;">
+          <div style="padding: 8px 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #475569; font-weight: 600;">Collaborate</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">📤 Data Sources</div>
+          <div style="padding: 10px 16px; color: #94a3b8; font-size: 13px;">🎯 Present</div>
+        </div>
+      </div>
+      <!-- Main content area -->
+      <div style="flex: 1; padding: 24px; background: #1e293b;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="margin: 0; color: #f1f5f9; font-size: 18px;">Map — Market Scores</h3>
+          <div style="display: flex; gap: 8px;">
+            <span style="padding: 4px 12px; border-radius: 20px; font-size: 11px; background: rgba(52,211,153,0.15); color: #34d399; font-weight: 600;">Market Score</span>
+            <span style="padding: 4px 12px; border-radius: 20px; font-size: 11px; background: rgba(96,165,250,0.15); color: #60a5fa; font-weight: 600;">Akshay Thesis</span>
+            <span style="padding: 4px 12px; border-radius: 20px; font-size: 11px; background: rgba(251,191,36,0.15); color: #fbbf24; font-weight: 600;">Holly Ops</span>
+            <span style="padding: 4px 12px; border-radius: 20px; font-size: 11px; background: rgba(167,139,250,0.15); color: #a78bfa; font-weight: 600;">DC Score</span>
+          </div>
+        </div>
+        <!-- Map placeholder -->
+        <div style="background: #0f172a; border-radius: 12px; height: 260px; display: flex; align-items: center; justify-content: center; border: 1px solid #334155;">
+          <span style="color: #475569; font-size: 14px;">Leaflet choropleth — counties colored by active layer(s)</span>
+        </div>
+        <!-- Bottom bar -->
+        <div style="margin-top: 16px; display: flex; gap: 12px;">
+          <div style="flex: 1; background: #0f172a; border-radius: 8px; padding: 16px; border: 1px solid #334155;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Counties Passing</div>
+            <div style="font-size: 24px; font-weight: 700; color: #34d399;">127</div>
+          </div>
+          <div style="flex: 1; background: #0f172a; border-radius: 8px; padding: 16px; border: 1px solid #334155;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Cross-Thesis Overlap</div>
+            <div style="font-size: 24px; font-weight: 700; color: #fbbf24;">23</div>
+          </div>
+          <div style="flex: 1; background: #0f172a; border-radius: 8px; padding: 16px; border: 1px solid #334155;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Active Layers</div>
+            <div style="font-size: 24px; font-weight: 700; color: #60a5fa;">3</div>
+          </div>
+          <div style="flex: 1; background: #0f172a; border-radius: 8px; padding: 16px; border: 1px solid #334155;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Data Sources</div>
+            <div style="font-size: 24px; font-weight: 700; color: #a78bfa;">12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Key Concepts</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 10px; padding: 20px;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #34d399; font-weight: 600; margin-bottom: 8px;">Layers</div>
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin: 0;">Each scoring model (market score, Akshay's thesis, Holly's ops, DC score) is a <strong style="color:#f1f5f9">layer</strong>. Toggle them on/off on the map. When multiple layers are active, see the intersection — counties that score well across all.</p>
+    </div>
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 10px; padding: 20px;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #60a5fa; font-weight: 600; margin-bottom: 8px;">Analyses</div>
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin: 0;">A saved SQL query with a name, description, and owner. You write SQL or use Gemini NL→SQL. Results can be pinned to map, exported to XLSX, or included in a presentation.</p>
+    </div>
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 10px; padding: 20px;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24; font-weight: 600; margin-bottom: 8px;">Data Sources</div>
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin: 0;">Pipeline Parquet files + team uploads. Anyone can upload XLSX/CSV — it gets converted to Parquet in-browser (via DuckDB) and stored in Firebase Storage. Appears as a queryable table immediately.</p>
+    </div>
+    <div style="background: #1a1a2e; border: 1px solid #334155; border-radius: 10px; padding: 20px;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a78bfa; font-weight: 600; margin-bottom: 8px;">Present</div>
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin: 0;">Curate a set of analyses + map views into a presentation. Generate a one-time link (Cloud Function creates a token with expiry). Partners see a read-only view — no auth, no SQL, just the curated story.</p>
+    </div>
+  </div>
+</div>

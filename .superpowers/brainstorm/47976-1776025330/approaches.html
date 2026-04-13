@@ -1,0 +1,69 @@
+<h2>Dashboard Architecture — 3 Approaches</h2>
+<p class="subtitle">How to unify strategy, operations, and data/AI ops into one collaborative surface</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Evolve the Explorer</h3>
+      <p>Build on the existing Explorer (Alpine.js + DuckDB-WASM). Add new tabs: <strong>Layers</strong> (upload & overlay scoring models), <strong>Analyses</strong> (saved queries with Gemini SQL gen), and <strong>Workbench</strong> (spreadsheet view via SheetJS). The map becomes the hub — toggle layers per person/thesis.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Fastest to ship — extends what works today</li>
+          <li>DuckDB-WASM already loads Parquet + can load uploaded CSV/XLSX</li>
+          <li>Single codebase, same auth, same deploy</li>
+          <li>Partners get the same URL, just a curated view</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Explorer is already 11 JS modules — could get unwieldy</li>
+          <li>Alpine.js may strain under complex state (multi-layer map + spreadsheet + SQL)</li>
+          <li>Mobile/presentation mode harder to bolt on</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>New App Shell, Same Engine</h3>
+      <p>Build a new <code>workspace.html</code> with a proper layout: <strong>left sidebar</strong> (data sources, saved analyses, team layers), <strong>center</strong> (map or spreadsheet view, switchable), <strong>right panel</strong> (county detail + Gemini chat). Reuse DuckDB-WASM + Firebase underneath. Explorer stays as the power-user SQL tool.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Clean separation: Workspace for collaboration, Explorer for power queries</li>
+          <li>Purpose-built layout for map + data + conversation</li>
+          <li>Easier to make partner-friendly (hide sidebar, show curated layers)</li>
+          <li>Can adopt a richer UI framework (e.g., Preact or Svelte) without touching Explorer</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>More upfront work — new page, new JS modules</li>
+          <li>Two apps to maintain (Explorer + Workspace)</li>
+          <li>Need to share DuckDB init logic between them</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Unified Hub — Replace Index + Explorer</h3>
+      <p>Replace <code>index.html</code> and <code>explorer.html</code> with a single SPA. Top-level navigation: <strong>Map</strong> (layers + county drill-down), <strong>Data</strong> (spreadsheet + upload), <strong>Analyses</strong> (saved queries + Gemini), <strong>Present</strong> (partner-facing curated view). All team members land on the same app.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>One app, one mental model for everyone</li>
+          <li>No context-switching between pages</li>
+          <li>Present mode is built-in, not bolted on</li>
+          <li>Cleanest long-term architecture</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Biggest scope — essentially a rewrite</li>
+          <li>Risk of breaking existing workflows during transition</li>
+          <li>Heavier framework likely needed (Svelte/Preact + router)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top: 24px;">My recommendation: <strong>B</strong> — new Workspace alongside Explorer. Gets the collaboration surface right without risking what works today. Explorer becomes the "advanced" tool; Workspace is where the team lives day-to-day.</p>
